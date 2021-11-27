@@ -1,0 +1,44 @@
+name: Build for win and linux
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  dist-win:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      
+      - name: Build executable
+        run: yarn dist
+        
+      - name: Release artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Satisfactory-Mod-Manager-Setup.exe
+          path: build/Satisfactory-Mod-Manager-Setup.exe
+  dist-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      
+      - name: Build executable
+        run: yarn dist
+        
+      - name: Release artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Satisfactory-Mod-Manager.AppImage
+          path: build/Satisfactory-Mod-Manager.AppImage
