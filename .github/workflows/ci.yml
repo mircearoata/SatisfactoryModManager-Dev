@@ -14,11 +14,17 @@ jobs:
         with:
           node-version: 16
       
+      - name: Fix node-gyp
+        run: npm install -g node-gyp@latest
+      
       - name: Install dependencies
         run: yarn install
       
-      - name: Build executable
-        run: yarn dist
+      - name: Build project
+        run: yarn build
+      
+      - name: Package app
+        run: electron-builder build -w nsis -p never
         
       - name: Release artifact
         uses: actions/upload-artifact@v2
@@ -38,8 +44,11 @@ jobs:
       - name: Install dependencies
         run: yarn install
       
-      - name: Build executable
-        run: yarn dist
+      - name: Build project
+        run: yarn build
+      
+      - name: Package app
+        run: electron-builder build -l appImage -p never
         
       - name: Release artifact
         uses: actions/upload-artifact@v2
