@@ -13,6 +13,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16
+          cache: yarn
       
       - name: Fix node-gyp
         run: npm install -g node-gyp@latest
@@ -40,6 +41,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16
+          cache: yarn
       
       - name: Install dependencies
         run: yarn install
