@@ -2,8 +2,7 @@ name: Build for win and linux
 
 on:
   push:
-    tags:
-      - v*
+    branch: *
 
 jobs:
   dist-win:
