@@ -36,11 +36,6 @@ jobs:
             build/Satisfactory-Mod-Manager-Setup.exe.blockmap
             build/latest.yml
       
-      - name: Release artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: Satisfactory-Mod-Manager-Setup.exe
-          path: build/Satisfactory-Mod-Manager-Setup.exe
   dist-linux:
     runs-on: ubuntu-latest
     steps:
