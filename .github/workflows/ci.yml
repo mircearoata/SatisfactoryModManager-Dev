@@ -15,9 +15,6 @@ jobs:
           node-version: 14
           cache: yarn
       
-#       - name: Fix node-gyp
-#         run: npm install -g node-gyp@latest
-      
       - name: Install dependencies
         run: yarn install
       
