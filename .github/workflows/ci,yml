@@ -2,7 +2,7 @@ name: Build for win and linux
 
 on:
   push:
-    branch: *
+    branches: *
 
 jobs:
   dist-win:
