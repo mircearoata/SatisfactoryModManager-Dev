@@ -15,8 +15,8 @@ jobs:
           node-version: 14
           cache: yarn
       
-      - name: Fix node-gyp
-        run: npm install -g node-gyp@latest
+#       - name: Fix node-gyp
+#         run: npm install -g node-gyp@latest
       
       - name: Install dependencies
         run: yarn install
@@ -27,6 +27,15 @@ jobs:
       - name: Package app
         run: yarn electron-builder build -w nsis -p never
         
+      - name: Release artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: SMM-win
+          path: |
+            build/Satisfactory-Mod-Manager-Setup.exe
+            build/Satisfactory-Mod-Manager-Setup.exe.blockmap
+            build/latest.yml
+      
       - name: Release artifact
         uses: actions/upload-artifact@v2
         with:
@@ -55,5 +64,7 @@ jobs:
       - name: Release artifact
         uses: actions/upload-artifact@v2
         with:
-          name: Satisfactory-Mod-Manager.AppImage
-          path: build/Satisfactory-Mod-Manager.AppImage
+          name: SMM-linux
+          path: |
+            build/Satisfactory-Mod-Manager.AppImage
+            build/latest-linux.yml
