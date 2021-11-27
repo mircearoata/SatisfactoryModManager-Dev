@@ -25,7 +25,7 @@ jobs:
         run: yarn build
       
       - name: Package app
-        run: electron-builder build -w nsis -p never
+        run: yarn electron-builder build -w nsis -p never
         
       - name: Release artifact
         uses: actions/upload-artifact@v2
@@ -50,7 +50,7 @@ jobs:
         run: yarn build
       
       - name: Package app
-        run: electron-builder build -l appImage -p never
+        run: yarn electron-builder build -l appImage -p never
         
       - name: Release artifact
         uses: actions/upload-artifact@v2
