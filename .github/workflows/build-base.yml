@@ -1,4 +1,4 @@
-run-name: Build ${{ github.event.inputs.release && 'and release' || '' }}
+run-name: Build ${{ inputs.release && 'and release' || '' }}
 
 on:
   workflow_call:
@@ -23,7 +23,7 @@ jobs:
         id: set-goreleaser-args
         run: |
           GORELEASER_ARGS=""
-          if [ "${{ github.event.inputs.release || '' }}" != "true" ]; then
+          if [ "${{ inputs.release || '' }}" != "true" ]; then
               GORELEASER_ARGS="--snapshot ${GORELEASER_ARGS}"
           fi
           echo "goreleaser_args=${GORELEASER_ARGS}" >> "$GITHUB_OUTPUT"
@@ -119,7 +119,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
 
-      - name: Run GoReleaser ${{ github.event.inputs.release || 'Snapshot' }}
+      - name: Run GoReleaser ${{ inputs.release || 'Snapshot' }}
         run: ./goreleaser release --split --clean ${{ matrix.platform.goreleaser_args }} ${{ needs.configure-build.outputs.goreleaser_args }}
         env:
           GGOOS: ${{ matrix.platform.os }}
@@ -167,10 +167,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
 
-      - name: Run GoReleaser ${{ github.event.inputs.release || 'Snapshot' }} merge
+      - name: Run GoReleaser ${{ inputs.release || 'Snapshot' }} merge
         run: ./goreleaser continue --merge ${{ needs.configure-build.outputs.goreleaser_args }}
         env:
-          GITHUB_TOKEN: ${{ github.event.inputs.release && secrets.GITHUB_TOKEN || '' }}
+          GITHUB_TOKEN: ${{ inputs.release && secrets.GITHUB_TOKEN || '' }}
 
       - name: Archive artifacts
         uses: actions/upload-artifact@v4
