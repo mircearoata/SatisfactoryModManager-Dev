@@ -40,7 +40,9 @@ wails "${ARGS[@]}"
 
 if [ -n "$OUTPUT_FULL_PATH" ]; then
   if [ "$GOOS" == "darwin" ]; then
-    zip -r "build/bin/$OUTPUT_FILENAME.zip" "build/bin/$OUTPUT_FILENAME.app" # zip would add the .zip extension anyway
+    pushd "build/bin" || exit 1
+    zip -r "$OUTPUT_FILENAME.zip" "$OUTPUT_FILENAME.app" # zip would add the .zip extension anyway
+    popd || exit 1
     OUTPUT_FILENAME="$OUTPUT_FILENAME.zip"
   fi
   cp -r "build/bin/$OUTPUT_FILENAME" "$OUTPUT_FULL_PATH"
