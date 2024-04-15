@@ -113,7 +113,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
 
-      - name: Run GoReleaser ${{ inputs.release && '' || 'Snapshot' }}
+      - name: Run GoReleaser ${{ inputs.release && 'Release' || 'Snapshot' }}
         run: goreleaser release --split --clean ${{ matrix.platform.goreleaser_args }} ${{ needs.configure-build.outputs.goreleaser_args }}
         env:
           GGOOS: ${{ matrix.platform.os }}
@@ -161,7 +161,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
 
-      - name: Run GoReleaser ${{ inputs.release && '' || 'Snapshot' }} merge
+      - name: Run GoReleaser ${{ inputs.release && 'Release' || 'Snapshot' }} merge
         run: goreleaser continue --merge ${{ needs.configure-build.outputs.goreleaser_args }}
         env:
           GITHUB_TOKEN: ${{ inputs.release && secrets.GITHUB_TOKEN || '' }}
