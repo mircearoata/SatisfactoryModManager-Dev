@@ -36,11 +36,13 @@ if [ -n "$OUTPUT_FULL_PATH" ]; then
   ARGS+=("$OUTPUT_FILENAME")
 fi
 
-if [ "$GOARCH" == "universal" ]; then
-  ARGS+=("-platform")
-  ARGS+=("$GOOS/universal")
-  GOARCH=""
-fi
+# Ensure that the GOOS and GOARCH do not affect anything else
+# Pass them as the -platform wails argument
+ARGS+=("-platform")
+ARGS+=("$GOOS/$GOARCH")
+GOOS=""
+GOARCH=""
+
 wails "${ARGS[@]}"
 
 if [ -n "$OUTPUT_FULL_PATH" ]; then
