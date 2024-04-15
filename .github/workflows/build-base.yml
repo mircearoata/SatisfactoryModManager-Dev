@@ -161,17 +161,8 @@ jobs:
           path: dist
 
       - name: Download goreleaser
-        if: startsWith(matrix.platform.runs-on, 'ubuntu')
         run: |
           gh release download --repo mircearoata/goreleaser --pattern goreleaser-linux --output goreleaser
-          chmod +x goreleaser
-        env:
-          GH_TOKEN: ${{ github.token }}
-
-      - name: Download goreleaser
-        if: startsWith(matrix.platform.runs-on, 'macos')
-        run: |
-          gh release download --repo mircearoata/goreleaser --pattern goreleaser-darwin --output goreleaser
           chmod +x goreleaser
         env:
           GH_TOKEN: ${{ github.token }}
