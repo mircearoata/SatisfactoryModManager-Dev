@@ -1,4 +1,4 @@
-name: Build ${{ github.event.inputs.release && 'and release' || '' }}
+run-name: Build ${{ github.event.inputs.release && 'and release' || '' }}
 
 on:
   workflow_call:
