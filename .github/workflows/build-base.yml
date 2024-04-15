@@ -97,25 +97,19 @@ jobs:
       - name: Install Wails
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
 
-      - uses: actions/checkout@v4
-        with:
-          repository: mircearoata/goreleaser
-          ref: split-merge
-          path: goreleaser-src
-
       - name: Download goreleaser
         if: startsWith(matrix.platform.runs-on, 'ubuntu')
         run: |
-          gh release download --repo mircearoata/goreleaser --pattern goreleaser-linux --output goreleaser
-          chmod +x goreleaser
+          gh release download --repo mircearoata/goreleaser --pattern goreleaser-linux --output $(go env GOPATH)/bin/goreleaser
+          chmod +x $(go env GOPATH)/bin/goreleaser
         env:
           GH_TOKEN: ${{ github.token }}
 
       - name: Download goreleaser
         if: startsWith(matrix.platform.runs-on, 'macos')
         run: |
-          gh release download --repo mircearoata/goreleaser --pattern goreleaser-darwin --output goreleaser
-          chmod +x goreleaser
+          gh release download --repo mircearoata/goreleaser --pattern goreleaser-darwin --output $(go env GOPATH)/bin/goreleaser
+          chmod +x $(go env GOPATH)/bin/goreleaser
         env:
           GH_TOKEN: ${{ github.token }}
 
@@ -162,8 +156,8 @@ jobs:
 
       - name: Download goreleaser
         run: |
-          gh release download --repo mircearoata/goreleaser --pattern goreleaser-linux --output goreleaser
-          chmod +x goreleaser
+          gh release download --repo mircearoata/goreleaser --pattern goreleaser-linux --output $(go env GOPATH)/bin/goreleaser
+          chmod +x $(go env GOPATH)/bin/goreleaser
         env:
           GH_TOKEN: ${{ github.token }}
 
