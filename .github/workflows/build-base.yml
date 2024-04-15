@@ -23,7 +23,7 @@ jobs:
         id: set-goreleaser-args
         run: |
           GORELEASER_ARGS=""
-          if [ ${{ github.event.inputs.release }} == "true" ]; then
+          if [ ${{ github.event.inputs.release || '' }} != "true" ]; then
               GORELEASER_ARGS="--snapshot ${GORELEASER_ARGS}"
           fi
           echo "goreleaser_args=${GORELEASER_ARGS}" >> "$GITHUB_OUTPUT"
