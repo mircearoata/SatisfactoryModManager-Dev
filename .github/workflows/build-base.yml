@@ -90,7 +90,7 @@ jobs:
           # so it would need to be set up the same way regular runner images are
           # And I sure know which of these options is the least effort
           
-          sudo echo "deb http://archive.ubuntu.com/ubuntu/ mantic main universe" >> /etc/apt/sources.list
+          sudo echo "deb http://archive.ubuntu.com/ubuntu/ mantic main universe" >> /etc/apt/sources.list.d/nsis-ubuntu-23.10.list
           sudo apt update
           sudo apt -y install nsis
 
