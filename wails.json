@@ -1,6 +1,6 @@
 {
   "$schema": "https://wails.io/schemas/config.v2.json",
-  "name": "Satisfactory Mod Manager",
+  "name": "SatisfactoryModManager",
   "outputfilename": "SatisfactoryModManager",
   "frontend:install": "pnpm install",
   "frontend:build": "pnpm build",
