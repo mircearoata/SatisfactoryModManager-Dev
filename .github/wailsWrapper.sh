@@ -39,5 +39,8 @@ fi
 wails "${ARGS[@]}"
 
 if [ -n "$OUTPUT_FULL_PATH" ]; then
-  cp "build/bin/$OUTPUT_FILENAME" "$OUTPUT_FULL_PATH"
+  if [ "$GOOS" == "darwin" ]; then
+    zip -r "build/bin/$OUTPUT_FILENAME" "build/bin/$OUTPUT_FILENAME.app"
+  fi
+  cp -r "build/bin/$OUTPUT_FILENAME" "$OUTPUT_FULL_PATH"
 fi
