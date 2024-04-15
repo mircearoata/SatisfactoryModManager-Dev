@@ -40,13 +40,15 @@ fi
 # Pass them as the -platform wails argument
 ARGS+=("-platform")
 ARGS+=("$GOOS/$GOARCH")
+GGOOS=$GOOS
+GGOARCH=$GOARCH
 GOOS=""
 GOARCH=""
 
 wails "${ARGS[@]}"
 
 if [ -n "$OUTPUT_FULL_PATH" ]; then
-  if [ "$GOOS" == "darwin" ]; then
+  if [ "$GGOOS" == "darwin" ]; then
     pushd "build/bin" || exit 1
     zip -r "$OUTPUT_FILENAME.zip" "$OUTPUT_FILENAME.app" # zip would add the .zip extension anyway
     popd || exit 1
