@@ -105,6 +105,11 @@ func (a *DarwinAppApply) Apply(file io.Reader, checksum []byte) error {
 		return fmt.Errorf("failed to remove darwin update tmp: %w", err)
 	}
 
+	err = selfupdate.CommitBinary(options)
+	if err != nil {
+		return fmt.Errorf("failed to commit darwin update: %w", err)
+	}
+
 	return nil
 }
 
