@@ -91,7 +91,7 @@ func (a *DarwinAppApply) Apply(file io.Reader, checksum []byte) error {
 	}
 
 	// The extracted .app dir should be ${tmpDir}/${config.AppName}.app
-	extractedAppDir := filepath.Join(tmpDir, a.config.AppName)
+	extractedAppDir := filepath.Join(tmpDir, fmt.Sprintf("%s.app", a.config.AppName))
 
 	// Move the extracted .app dir to .basename.new
 	err = os.Rename(extractedAppDir, newPath)
