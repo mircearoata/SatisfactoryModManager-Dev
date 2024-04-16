@@ -18,7 +18,8 @@ runs:
     - name: Download goreleaser
       if: runner.os == 'Linux'
       run: |
-        gh release download --repo mircearoata/goreleaser --pattern "goreleaser-linux.exe" --output "$(go env GOPATH)/bin/goreleaser.exe"
+        gh release download --repo mircearoata/goreleaser --pattern "goreleaser-linux" --output "$(go env GOPATH)/bin/goreleaser"
+        chmod +x $(go env GOPATH)/bin/goreleaser
       shell: powershell
       env:
         GH_TOKEN: ${{ github.token }}
