@@ -1,7 +1,7 @@
 on:
   workflow_call:
-    goreleaser_args:
-      release:
+    inputs:
+      goreleaser_args:
         required: false
         type: string
         default: --snapshot
