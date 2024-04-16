@@ -10,16 +10,24 @@ runs:
     - name: Download goreleaser
       if: runner.os == 'Windows'
       run: |
-        gh release download --repo mircearoata/goreleaser --pattern "goreleaser-${{matrix.platform.os}}.exe" --output "$(go env GOPATH)/bin/goreleaser.exe"
+        gh release download --repo mircearoata/goreleaser --pattern "goreleaser-windows.exe" --output "$(go env GOPATH)/bin/goreleaser.exe"
       shell: powershell
       env:
         GH_TOKEN: ${{ github.token }}
 
     - name: Download goreleaser
-      if: runner.os != 'Windows'
+      if: runner.os == 'Linux'
+      run: |
+        gh release download --repo mircearoata/goreleaser --pattern "goreleaser-linux.exe" --output "$(go env GOPATH)/bin/goreleaser.exe"
+      shell: powershell
+      env:
+        GH_TOKEN: ${{ github.token }}
+
+    - name: Download goreleaser
+      if: runner.os == 'macOS'
       shell: bash
       run: |
-        gh release download --repo mircearoata/goreleaser --pattern "goreleaser-${{matrix.platform.os}}" --output "$(go env GOPATH)/bin/goreleaser"
+        gh release download --repo mircearoata/goreleaser --pattern "goreleaser-darwin" --output "$(go env GOPATH)/bin/goreleaser"
         chmod +x $(go env GOPATH)/bin/goreleaser
       env:
         GH_TOKEN: ${{ github.token }}
