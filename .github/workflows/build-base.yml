@@ -76,14 +76,16 @@ jobs:
           version: 3.x
 
       - name: Download goreleaser
+        if: ${{ startsWith(matrix.platform.runs-on, 'windows') }}
         run: |
-          gh release download --repo mircearoata/goreleaser --pattern goreleaser-${{matrix.platform.os}} --output $(go env GOPATH)/bin/goreleaser
+          gh release download --repo mircearoata/goreleaser --pattern goreleaser-${{matrix.platform.os}}.exe --output $(go env GOPATH)/bin/goreleaser.exe
         env:
           GH_TOKEN: ${{ github.token }}
 
-      - name: Make goreleaser executable
+      - name: Download goreleaser
         if: ${{ !startsWith(matrix.platform.runs-on, 'windows') }}
         run: |
+          gh release download --repo mircearoata/goreleaser --pattern goreleaser-${{matrix.platform.os}} --output $(go env GOPATH)/bin/goreleaser
           chmod +x $(go env GOPATH)/bin/goreleaser
 
       - name: Run GoReleaser ${{ inputs.release && 'Release' || 'Snapshot' }}
@@ -128,14 +130,16 @@ jobs:
           path: dist
 
       - name: Download goreleaser
+        if: ${{ startsWith(matrix.platform.runs-on, 'windows') }}
         run: |
-          gh release download --repo mircearoata/goreleaser --pattern goreleaser-${{matrix.platform.os}} --output $(go env GOPATH)/bin/goreleaser
+          gh release download --repo mircearoata/goreleaser --pattern goreleaser-${{matrix.platform.os}}.exe --output $(go env GOPATH)/bin/goreleaser.exe
         env:
           GH_TOKEN: ${{ github.token }}
 
-      - name: Make goreleaser executable
+      - name: Download goreleaser
         if: ${{ !startsWith(matrix.platform.runs-on, 'windows') }}
         run: |
+          gh release download --repo mircearoata/goreleaser --pattern goreleaser-${{matrix.platform.os}} --output $(go env GOPATH)/bin/goreleaser
           chmod +x $(go env GOPATH)/bin/goreleaser
 
       - name: Run GoReleaser ${{ inputs.release && 'Release' || 'Snapshot' }} merge
