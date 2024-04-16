@@ -25,7 +25,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: ./github/actions/setup
+      - uses: ./.github/actions/setup
 
       - name: Install additional dependencies
         if: matrix.platform.os == 'linux'
@@ -62,7 +62,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: ./github/actions/setup
+      - uses: ./.github/actions/setup
         with:
           go-only: true
 
