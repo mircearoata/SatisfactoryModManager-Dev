@@ -132,16 +132,8 @@ jobs:
           path: dist
 
       - name: Download goreleaser
-        if: ${{ startsWith(matrix.platform.runs-on, 'windows') }}
         run: |
-          gh release download --repo mircearoata/goreleaser --pattern "goreleaser-${{matrix.platform.os}}.exe" --output "$(go env GOPATH)/bin/goreleaser.exe"
-        env:
-          GH_TOKEN: ${{ github.token }}
-
-      - name: Download goreleaser
-        if: ${{ !startsWith(matrix.platform.runs-on, 'windows') }}
-        run: |
-          gh release download --repo mircearoata/goreleaser --pattern "goreleaser-${{matrix.platform.os}}" --output "$(go env GOPATH)/bin/goreleaser"
+          gh release download --repo mircearoata/goreleaser --pattern "goreleaser-linux" --output "$(go env GOPATH)/bin/goreleaser"
           chmod +x $(go env GOPATH)/bin/goreleaser
         env:
           GH_TOKEN: ${{ github.token }}
