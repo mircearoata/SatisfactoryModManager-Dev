@@ -20,7 +20,7 @@ runs:
       run: |
         gh release download --repo mircearoata/goreleaser --pattern "goreleaser-linux" --output "$(go env GOPATH)/bin/goreleaser"
         chmod +x $(go env GOPATH)/bin/goreleaser
-      shell: powershell
+      shell: bash
       env:
         GH_TOKEN: ${{ github.token }}
 
