@@ -82,7 +82,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
 
       - name: Make goreleaser executable
-        if: !startsWith(matrix.platform.runs-on, 'windows')
+        if: ${{ !startsWith(matrix.platform.runs-on, 'windows') }}
         run: |
           chmod +x $(go env GOPATH)/bin/goreleaser
 
@@ -134,7 +134,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
 
       - name: Make goreleaser executable
-        if: !startsWith(matrix.platform.runs-on, 'windows')
+        if: ${{ !startsWith(matrix.platform.runs-on, 'windows') }}
         run: |
           chmod +x $(go env GOPATH)/bin/goreleaser
 
