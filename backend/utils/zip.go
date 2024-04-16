@@ -73,10 +73,10 @@ func ExtractZip(zipPath string, dst string) error {
 			defer dstFile.Close()
 
 			fileInArchive, err := f.Open()
-			defer fileInArchive.Close()
 			if err != nil {
 				return fmt.Errorf("failed to open file in archive: %w", err)
 			}
+			defer fileInArchive.Close()
 
 			if _, err := io.Copy(dstFile, fileInArchive); err != nil {
 				return fmt.Errorf("failed to copy file: %w", err)
