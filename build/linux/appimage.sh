@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x
+
 APPNAME="SatisfactoryModManager"
 export ARCH="x86_64" # Export because linuxdeploy gtk plugin copies i386 libraries too, so linuxdeploy can't decide on architecture
 SCRIPT_DIR=$(dirname "$0")

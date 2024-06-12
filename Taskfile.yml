@@ -38,7 +38,7 @@ tasks:
           {{ end }}
 
   build:linux:appimage:
-    silent: true
+#    silent: true
     platforms: [linux]
     vars:
       OUTPUT_FULL_PATH: '{{ $args := (splitArgs .CLI_ARGS) }}{{ range $i, $a := $args }}{{ if eq $a "-o" }}{{ index $args (add $i 1) }}{{ end }}{{ end }}'
@@ -57,7 +57,7 @@ tasks:
     cmds:
       - GOOS="" GOARCH="" wails build {{.WAILS_ARGS}}
       - chmod +x "build/bin/{{.OUTPUT_FILENAME}}"
-      - mv "build/bin/{{.OUTPUT_FILENAME}}" "build/bin/appimage-bin-tmp"
+      - mv -f "build/bin/{{.OUTPUT_FILENAME}}" "build/bin/appimage-bin-tmp"
       - build/linux/appimage.sh "build/bin/appimage-bin-tmp" "{{.OUTPUT_FULL_PATH}}"
 
   lint:
