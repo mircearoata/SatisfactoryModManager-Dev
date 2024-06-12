@@ -58,6 +58,7 @@ tasks:
       - GOOS="" GOARCH="" wails build {{.WAILS_ARGS}}
       - chmod +x "build/bin/{{.OUTPUT_FILENAME}}"
       - mv -f "build/bin/{{.OUTPUT_FILENAME}}" "build/bin/appimage-bin-tmp"
+      - chmod +x "build/linux/appimage.sh" # Make sure the script is executable
       - build/linux/appimage.sh "build/bin/appimage-bin-tmp" "{{.OUTPUT_FULL_PATH}}"
 
   lint:
