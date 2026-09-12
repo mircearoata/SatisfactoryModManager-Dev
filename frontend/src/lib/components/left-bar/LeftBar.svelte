@@ -1,5 +1,6 @@
 <script lang="ts">
   import { mdiAlert, mdiCheckCircle, mdiCloseCircle, mdiDownload, mdiFolderOpen, mdiHelp, mdiHelpCircle, mdiLoading, mdiMonitor, mdiPencil, mdiPlusCircle, mdiServer, mdiServerNetwork, mdiTrashCan, mdiUpload, mdiWeb } from '@mdi/js';
+  import { getTranslate } from '@tolgee/svelte';
   import _ from 'lodash';
   import { siDiscord, siGithub } from 'simple-icons/icons';
 
@@ -34,6 +35,8 @@
   import { BrowserOpenURL } from '$wailsjs/runtime/runtime';
   
   const modalStore = getModalStore();
+
+  const { t } = getTranslate();
 
   const selectedInstallPathInit = selectedInstall.isInit;
   const selectedProfileInit = selectedProfile.isInit;
@@ -136,6 +139,17 @@
   } as PopupSettings]).reduce((acc, [k, v]) => ({ ...acc, [k as string]: v as PopupSettings }), {} as Record<string, PopupSettings>);
 
 
+  function installType(type?: common.InstallType) {
+    switch (type) {
+      case common.InstallType.WINDOWS:
+        return 'client';
+      case common.InstallType.WINDOWS_SERVER:
+      case common.InstallType.LINUX_SERVER:
+        return 'server';
+    }
+    return undefined;
+  }
+
   function iconForInstallType(type?: common.InstallType) {
     switch (type) {
       case common.InstallType.WINDOWS:
@@ -146,6 +160,24 @@
       default:
         return mdiHelp;
     }
+  }
+
+  function installInfoString(info?: common.Installation) {
+    if (!info) {
+      return undefined;
+    }
+    const type = installType(info.type);
+    if (!type) {
+      return undefined;
+    }
+    let components = [];
+    if (type === 'server') {
+      components.push($t('left-bar.install-info.server', 'Server'));
+    }
+    if (info.branch !== common.GameBranch.STABLE) {
+      components.push(info.branch);
+    }
+    return components.join(' - ');
   }
 
   const queueLockoutPopupId = 'queue-lockout-popup';
@@ -187,8 +219,8 @@
                 </span>
                 <span class="shrink-0 ml-1">
                   {#if $installsMetadata[item]?.info?.location === common.LocationType.LOCAL}
-                    {#if $installsMetadata[item]?.info?.branch !== common.GameBranch.STABLE}
-                      ({$installsMetadata[item]?.info?.branch})
+                    {#if installInfoString($installsMetadata[item]?.info)}
+                      ({installInfoString($installsMetadata[item]?.info)})
                     {/if}
                   {:else}
                     (CL{$installsMetadata[item]?.info?.version})
