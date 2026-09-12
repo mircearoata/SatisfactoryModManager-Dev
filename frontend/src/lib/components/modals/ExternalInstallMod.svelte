@@ -4,7 +4,7 @@
   import T from '$lib/components/T.svelte';
   import { GetModSummaryDocument } from '$lib/generated';
   import { addQueuedModAction, queuedMods } from '$lib/store/actionQueue';
-  import { manifestMods } from '$lib/store/ficsitCLIStore';
+  import { lockfileMods, manifestMods } from '$lib/store/ficsitCLIStore';
   import { error } from '$lib/store/generalStore';
   import { offline } from '$lib/store/settingsStore';
   import { InstallMod, InstallModVersion } from '$wailsjs/go/ficsitcli/ficsitCLI';
@@ -30,7 +30,7 @@
   $: mod = $modQuery.fetching ? null : $modQuery.data?.mod;
   
   $: queued = $queuedMods.some((q) => q.mod === modReference);
-  $: isInstalled = !!modReference && modReference in $manifestMods;
+  $: isInstalled = !!modReference && (modReference in $manifestMods || modReference in $lockfileMods);
 
   function install() {
     const action = async () => (version ? InstallModVersion(modReference, version) : InstallMod(modReference)).catch((e) => $error = e);
