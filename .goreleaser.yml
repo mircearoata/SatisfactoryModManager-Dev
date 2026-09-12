@@ -28,12 +28,13 @@ builds:
     gobinary: task
     ldflags:
       # The default args
-      - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}
+      - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.CommitDate}}
       # Auto-update mode
       - -X main.updateMode=standalone
 
     flags:
       - -- # Marker for task to interpret remaining arguments as CLI_ARGS
+      - -trimpath
       - -s
       - -skipbindings
       - -devtools
@@ -58,12 +59,13 @@ builds:
     command: build:linux:appimage
     ldflags:
       # The default args
-      - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}
+      - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.CommitDate}}
       # Auto-update mode
       - -X main.updateMode=appimage
 
     flags:
       - -- # Marker for task to interpret remaining arguments as CLI_ARGS
+      - -trimpath
       - -s
       - -skipbindings
       - -devtools
@@ -83,12 +85,13 @@ builds:
     gobinary: task
     ldflags:
       # The default args
-      - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}
+      - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.CommitDate}}
       # Auto-update mode
       - -X main.updateMode=nsis
 
     flags:
       - -- # Marker for task to interpret remaining arguments as CLI_ARGS
+      - -trimpath
       - -s
       - -skipbindings
       - -nsis
