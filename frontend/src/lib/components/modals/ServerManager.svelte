@@ -57,6 +57,8 @@
   let addInProgress = false;
   let maskPassword = true;
 
+  let showRemotePathPicker = false;
+
   $: authString = encodeURIComponent(newServerUsername) + (newServerPassword ? ':' + encodeURIComponent(newServerPassword) : '');
   $: actualPort = newRemoteType.type === 'remote' ? (newServerPort.length > 0 ? newServerPort : newRemoteType.defaultPort) : '';
 
@@ -107,6 +109,11 @@
     }
     return newServerUsername.length > 0 && newServerHost.length > 0;
   })();
+
+  $: {
+    baseServerPath; // Watch
+    showRemotePathPicker = false;
+  }
 
   let isPathValid = false;
 
@@ -340,20 +347,28 @@
             placeholder={$t('server-manager.port-placeholder', 'port (default: {default})', { default: newRemoteType.defaultPort })}
             type="text"
             bind:value={newServerPort}/>
-          <input
-            class="input px-4 h-full sm:col-start-2 col-span-2"
-            placeholder={$t('server-manager.path-placeholder', 'path')}
-            type="text"
-            on:change={validatePath}
-            bind:value={newServerPath}/>
-          <div class="sm:col-start-2 col-span-2">
-            <RemoteServerPicker
-              basePath={baseServerPath}
+          {#if isBaseValid && showRemotePathPicker}
+            <input
+              class="input px-4 h-full sm:col-start-2 col-span-2"
+              placeholder={$t('server-manager.path-placeholder', 'path')}
+              type="text"
+              on:change={validatePath}
+              bind:value={newServerPath}/>
+            <div class="sm:col-start-2 col-span-2">
+              <RemoteServerPicker
+                basePath={baseServerPath}
+                bind:path={newServerPath}
+                bind:valid={isPathValid}
+              />
+            </div>
+          {:else}
+            <button
+              class="btn w-full sm:col-start-2 col-span-2 bg-primary-600 text-secondary-900"
               disabled={!isBaseValid}
-              bind:path={newServerPath}
-              bind:valid={isPathValid}
-            />
-          </div>
+              on:click={() => showRemotePathPicker = true}>
+              <T defaultValue="Connect and select server folder" keyName="server-manager.connect-and-select-folder" />
+            </button>
+          {/if}
         {/if}
         <button class="btn sm:col-start-1 col-span-1 row-start-2 text-sm whitespace-break-spaces bg-surface-200-700-token" on:click={() => advancedMode = !advancedMode}>
           {#if advancedMode}
