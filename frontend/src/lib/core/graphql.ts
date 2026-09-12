@@ -20,6 +20,8 @@ export function initializeGraphQLClient(apiEndpointURL: string): Client {
           UserRoles: () => null,
           Compatibility: () => null,
           CompatibilityInfo: () => null,
+          ControllerCompatibility: () => null,
+          AIUseDisclosureInfo: () => null,
           VersionDependency: () => null,
           VersionTarget: () => null,
           Mod: (data) => data.mod_reference as string,
