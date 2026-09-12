@@ -1,5 +1,5 @@
 import { Client } from '@urql/svelte';
-import { coerce, satisfies } from 'semver';
+import { coerce, compare, satisfies } from 'semver';
 import { get } from 'svelte/store';
 
 import {
@@ -156,7 +156,14 @@ async function getModVersions(modReference: string, urqlClient: Client): Promise
       return (await OfflineGetMod(modReference)).versions.map((ver) => ({
         ...ver,
         targets: ver.targets.map((target) => ({ ...target, targetName: target.target_name as TargetName })),
-      }));
+      })).sort((a, b) => {
+        const aVer = coerce(a.version);
+        const bVer = coerce(b.version);
+        if (!aVer || !bVer) {
+          return 0;
+        }
+        return compare(bVer, aVer);
+      });
     } catch {
       return undefined;
     }
