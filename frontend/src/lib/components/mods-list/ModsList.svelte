@@ -30,6 +30,7 @@
 
   let fetchingMods = false;
   let onlineMods: PartialSMRMod[] = [];
+  let fetchAttempts = 0;
   async function fetchAllModsOnline() {
     try {
       const result = await client.query(GetModCountDocument, {}, { requestPolicy: 'network-only' }).toPromise();
@@ -38,11 +39,22 @@
         fetchingMods = true;
         const pages = Math.ceil(count / MODS_PER_PAGE);
 
-        onlineMods = (await Promise.all(Array.from({ length: pages }).map(async (_, i) => {
+        let receivedMods = (await Promise.all(Array.from({ length: pages }).map(async (_, i) => {
           const offset = i * MODS_PER_PAGE;
           const modsPage = await client.query(GetModsDocument, { offset, limit: MODS_PER_PAGE }, { requestPolicy: 'network-only' }).toPromise();
           return modsPage.data?.getMods.mods ?? [];
         }))).flat();
+        receivedMods = _.uniqBy(receivedMods, 'mod_reference');
+        if (receivedMods.length !== count) {
+          console.warn(`Expected ${count} mods, but received ${receivedMods.length}. Will refetch`);
+          fetchAttempts++;
+          if (fetchAttempts < 3) {
+            setTimeout(fetchAllModsOnline, 1000);
+          } else {
+            console.error('Failed to fetch all mods after 3 attempts');
+          }
+        }
+        onlineMods = receivedMods;
       }
     } finally {
       fetchingMods = false;
@@ -113,7 +125,7 @@
     return mod;
   });
 
-  $: mods = [...knownMods, ...missingMods];
+  $: mods = _.uniqBy([...knownMods, ...missingMods], 'mod_reference');
 
   $: availableTags = _.sortBy(_.uniqBy(onlineMods?.map((mod) => mod.tags ?? []).flat() ?? [], 'id'), 'name');
 
