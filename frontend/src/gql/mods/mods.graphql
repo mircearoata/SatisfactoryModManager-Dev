@@ -3,51 +3,7 @@ query GetMods($offset: Int!, $limit: Int!) {
     count
     mods {
       ...ModKey
-      mod_reference
-      name
-      logo
-      logo_thumbhash
-      short_description
-      hidden
-      popularity
-      hotness
-      views
-      downloads
-      last_version_date
-      tags {
-        id
-        name
-      }
-      authors {
-        user {
-          id
-          username
-        }
-        role
-      }
-      compatibility {
-        EA {
-          state
-          note
-        }
-        EXP {
-          state
-          note
-        }
-      }
-      versions {
-        id
-        version
-        game_version
-        required_on_remote
-        dependencies {
-          mod_reference
-          condition
-        }
-        targets {
-          targetName
-        }
-      }
+      ...ModListData
     }
   }
 }

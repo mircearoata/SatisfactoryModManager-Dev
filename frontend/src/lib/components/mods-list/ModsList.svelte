@@ -10,7 +10,7 @@
   import T from '$lib/components/T.svelte';
   import VirtualList from '$lib/components/VirtualList.svelte';
   import AnnouncementsBar from '$lib/components/announcements/AnnouncementsBar.svelte';
-  import { GetModCountDocument, GetModsDocument } from '$lib/generated';
+  import { GetHiddenModDocument, GetModCountDocument, GetModsDocument } from '$lib/generated';
   import { queuedMods } from '$lib/store/actionQueue';
   import { favoriteMods, lockfileMods, manifestMods, selectedProfileTargets } from '$lib/store/ficsitCLIStore';
   import { expandedMod, hasFetchedMods } from '$lib/store/generalStore';
@@ -77,12 +77,31 @@
     }
   }
 
-  $: knownMods = $offline ? offlineMods : onlineMods;
+  $: visibleMods = $offline ? offlineMods : onlineMods;
 
-  $: unknownModReferences = Object.keys($manifestMods)
+  $: unknownMods = $hasFetchedMods ? Object.keys($lockfileMods).filter((modReference) => !visibleMods.find((mod) => mod.mod_reference === modReference)) : [];
+
+  let hiddenMods: PartialSMRMod[] = [];
+
+  $: (async () => {
+    if ($offline) return;
+
+    hiddenMods = await Promise.all(unknownMods.map(async (modReference) => {
+      const result = await client.query(GetHiddenModDocument, { modReference }).toPromise();
+      const mod = result.data?.getModByReference;
+      if (mod) {
+        return mod;
+      }
+      return null;
+    })).then((mods) => mods.filter((mod): mod is PartialSMRMod => mod !== null));
+  })();
+
+  $: knownMods = [...visibleMods, ...hiddenMods];
+
+  $: missingModReferences = Object.keys($manifestMods)
     .filter((modReference) => !knownMods.find((knownMod) => knownMod.mod_reference === modReference));
 
-  $: unknownMods = unknownModReferences.map((modReference) => {
+  $: missingMods = missingModReferences.map((modReference) => {
     const offlineMod = offlineMods.find((mod) => mod.mod_reference === modReference);
     const mod = {
       mod_reference: modReference,
@@ -94,7 +113,7 @@
     return mod;
   });
 
-  $: mods = [...knownMods, ...unknownMods];
+  $: mods = [...knownMods, ...missingMods];
 
   $: availableTags = _.sortBy(_.uniqBy(onlineMods?.map((mod) => mod.tags ?? []).flat() ?? [], 'id'), 'name');
 

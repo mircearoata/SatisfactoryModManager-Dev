@@ -1,0 +1,6 @@
+query GetHiddenMod($modReference: ModReference!) {
+  getModByReference(modReference: $modReference) {
+    ...ModKey
+    ...ModListData
+  }
+}
