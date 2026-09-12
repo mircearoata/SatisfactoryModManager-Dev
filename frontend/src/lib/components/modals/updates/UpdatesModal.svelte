@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { mdiDownload } from '@mdi/js';
+  import { mdiCheckboxBlankOutline, mdiDownloadBoxOutline } from '@mdi/js';
   import { getTranslate } from '@tolgee/svelte';
   import { getContextClient, queryStore } from '@urql/svelte';
   import { onMount } from 'svelte';
@@ -125,7 +125,9 @@
       <button class="btn p-2 grid grid-cols-12 {$selectedUpdates.includes(update.item) ? '!outline !outline-2 !outline-primary-500 bg-surface-400-500-token' : ''}" on:click={() => toggleSelected(update)}>
         <div>
           {#if $selectedUpdates.includes(update.item)}
-            <SvgIcon class="h-full w-8 mx-auto" icon={mdiDownload} />
+            <SvgIcon class="h-full w-8 mx-auto" icon={mdiDownloadBoxOutline} />
+          {:else}
+            <SvgIcon class="h-full w-8 mx-auto" icon={mdiCheckboxBlankOutline} />
           {/if}
         </div>
         <div class="col-span-7 text-left flex-auto flex flex-col content-center">
