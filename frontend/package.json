@@ -59,6 +59,7 @@
     "@graphql-codegen/typescript-urql": "^4.0.1",
     "@graphql-codegen/urql-introspection": "3.0.0",
     "@mdi/js": "^7.4.47",
+    "@parcel/watcher": "^2.6.0",
     "@skeletonlabs/skeleton": "^2.11.0",
     "@skeletonlabs/tw-plugin": "^0.3.1",
     "@stylistic/eslint-plugin": "^1.8.1",
