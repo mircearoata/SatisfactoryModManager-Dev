@@ -194,7 +194,7 @@
             <SvgIcon
               class="h-5 w-5"
               icon={item.isValidInstall ? mdiServerNetwork : mdiFolder} />
-            <span>{item.name}</span>
+            <span class="whitespace-normal break-all">{item.name}</span>
             <div class="grow"/>
           </button>
         {/each}

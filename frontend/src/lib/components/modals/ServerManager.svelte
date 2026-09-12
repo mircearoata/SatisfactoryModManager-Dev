@@ -193,7 +193,7 @@
 </script>
 
 
-<div style="max-height: calc(100vh - 3rem); max-width: calc(100vw - 3rem);" class="card flex flex-col gap-2">
+<div style="max-height: calc(100vh - 3rem); max-width: calc(100vw - 3rem);" class="w-5/12 min-w-[45rem] lg:min-w-[70rem] card flex flex-col gap-2">
   <header class="card-header font-bold text-2xl text-center">
     <T defaultValue="Dedicated Servers" keyName="server-manager.title" />
   </header>
@@ -286,7 +286,7 @@
     <p class="font-mono">{err}</p>
   </section>
   <section class="p-4 overflow-y-auto">
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 items-start auto-rows-[minmax(2.5rem,_max-content)] [&_input]:font-mono">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 items-start auto-rows-[minmax(2.5rem,_max-content)] [&_input]:font-mono">
       <Select
         name="newServerProtocol"
         class="col-span-1 h-full"
@@ -303,17 +303,17 @@
       {#if newRemoteType.type === 'remote'}
         {#if advancedMode}
           <input
-            class="input px-4 h-full sm:col-start-2 col-span-2"
+            class="input px-4 h-full lg:col-start-2 col-span-2"
             placeholder={$t('server-manager.advanced-path-placeholder', 'user:pass@host:port/path')}
             type="text"
             on:change={validatePath}
             bind:value={newServerPath}/>
-          <p class="sm:col-start-2 col-span-2">
+          <p class="lg:col-start-2 col-span-2">
             <T defaultValue="Note that you might have to escape certain characters in the username and password" keyName="server-manager.advanced-note" />
           </p>
         {:else}
           <input
-            class="input px-4 h-full sm:col-start-2"
+            class="input px-4 h-full lg:col-start-2"
             placeholder={$t('server-manager.username-placeholder', 'username')}
             type="text"
             bind:value={newServerUsername}/>
@@ -337,7 +337,7 @@
             </button>
           </div>
           <input
-            class="input px-4 h-full sm:col-start-2"
+            class="input px-4 h-full lg:col-start-2"
             placeholder={$t('server-manager.host-placeholder', 'host')}
             type="text"
             on:change={validateHost}
@@ -349,12 +349,12 @@
             bind:value={newServerPort}/>
           {#if isBaseValid && showRemotePathPicker}
             <input
-              class="input px-4 h-full sm:col-start-2 col-span-2"
+              class="input px-4 h-full lg:col-start-2 col-span-2"
               placeholder={$t('server-manager.path-placeholder', 'path')}
               type="text"
               on:change={validatePath}
               bind:value={newServerPath}/>
-            <div class="sm:col-start-2 col-span-2">
+            <div class="lg:col-start-2 col-span-2">
               <RemoteServerPicker
                 basePath={baseServerPath}
                 bind:path={newServerPath}
@@ -363,14 +363,14 @@
             </div>
           {:else}
             <button
-              class="btn w-full sm:col-start-2 col-span-2 bg-primary-600 text-secondary-900"
+              class="btn w-full lg:col-start-2 col-span-2 bg-primary-600 text-secondary-900"
               disabled={!isBaseValid}
               on:click={() => showRemotePathPicker = true}>
               <T defaultValue="Connect and select server folder" keyName="server-manager.connect-and-select-folder" />
             </button>
           {/if}
         {/if}
-        <button class="btn sm:col-start-1 col-span-1 row-start-2 text-sm whitespace-break-spaces bg-surface-200-700-token" on:click={() => advancedMode = !advancedMode}>
+        <button class="btn lg:col-start-1 col-span-1 row-start-2 text-sm whitespace-break-spaces bg-surface-200-700-token" on:click={() => advancedMode = !advancedMode}>
           {#if advancedMode}
             <T defaultValue="Switch to simple mode" keyName="server-manager.switch-to-simple" />
           {:else}
@@ -379,12 +379,12 @@
         </button>
       {:else}
         <input
-          class="input px-4 h-full sm:col-start-2 col-span-2"
+          class="input px-4 h-full lg:col-start-2 col-span-2"
           placeholder={$t('server-manager.local-path-placeholder', 'C:\\Path\\To\\Server')}
           type="text"
           on:change={validatePath}
           bind:value={newServerPath}/>
-        <div class="sm:col-start-2 col-span-2 row-span-2">
+        <div class="lg:col-start-2 col-span-2 row-span-2">
           <RemoteServerPicker
             basePath=""
             bind:path={newServerPath}
@@ -393,12 +393,12 @@
         </div>
       {/if}
       <input
-        class="input px-4 h-full col-start-4 row-start-1 !font-sans"
+        class="input px-4 h-full col-start-2 lg:col-start-4 row-start-1 !font-sans"
         placeholder={$t('server-manager.name-placeholder', 'Name (default: {default})', { default: defaultRemoteName })}
         type="text"
         bind:value={remoteName}/>
       <button
-        class="btn h-full text-sm bg-primary-600 text-secondary-900 col-start-2 sm:col-start-4 row-start-2"
+        class="btn h-full text-sm bg-primary-600 text-secondary-900 col-start-2 lg:col-start-4 row-start-2"
         disabled={addInProgress || !isValid}
         on:click={() => addNewRemoteServer()}>
         <span>
