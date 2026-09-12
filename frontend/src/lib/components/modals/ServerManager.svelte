@@ -279,7 +279,7 @@
     <p class="font-mono">{err}</p>
   </section>
   <section class="p-4 overflow-y-auto">
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 items-start auto-rows-[minmax(2.5rem,_max-content)]">
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 items-start auto-rows-[minmax(2.5rem,_max-content)] [&_input]:font-mono">
       <Select
         name="newServerProtocol"
         class="col-span-1 h-full"
@@ -378,7 +378,7 @@
         </div>
       {/if}
       <input
-        class="input px-4 h-full col-start-4 row-start-1"
+        class="input px-4 h-full col-start-4 row-start-1 !font-sans"
         placeholder={$t('server-manager.name-placeholder', 'Name (default: {default})', { default: defaultRemoteName })}
         type="text"
         bind:value={remoteName}/>

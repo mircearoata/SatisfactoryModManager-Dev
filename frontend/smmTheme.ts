@@ -5,8 +5,8 @@ export const myCustomTheme: CustomThemeConfig = {
   name: 'smm',
   properties: {
   // =~= Theme Properties =~=
-    '--theme-font-family-base': '\'Roboto\', Helvetica Neue, sans-serif',
-    '--theme-font-family-heading': '\'Roboto\', Helvetica Neue, sans-serif',
+    '--theme-font-family-base': '\'Roboto\', \'Noto Color Emoji\', \'Helvetica Neue\', sans-serif',
+    '--theme-font-family-heading': '\'Roboto\', \'Noto Color Emoji\', \'Helvetica Neue\', sans-serif',
     '--theme-font-color-base': '0 0 0',
     '--theme-font-color-dark': '255 255 255',
     '--theme-rounded-base': '4px',
