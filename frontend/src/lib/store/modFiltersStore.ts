@@ -1,5 +1,5 @@
 import type { Client } from '@urql/svelte';
-import { get, writable } from 'svelte/store';
+import { derived, get, writable } from 'svelte/store';
 
 import { bindingTwoWayNoExcept } from './wailsStoreBindings';
 
@@ -9,49 +9,78 @@ import { favoriteMods, lockfileMods, manifestMods, selectedInstallMetadata } fro
 import { getCompatibility } from '$lib/utils/modCompatibility';
 import { GetModFiltersFilter, GetModFiltersOrder, SetModFiltersFilter, SetModFiltersOrder } from '$wailsjs/go/settings/settings';
 
-export type OrderByField = 'name' | 'last-updated' | 'popularity' | 'hotness' | 'views' | 'downloads';
+export type OrderByField = 'name' | 'last-updated' | 'popularity' | 'hotness' | 'views' | 'downloads' | 'search';
 export type FilterField = 'all' | 'compatible' | 'favorite' | 'queued' | 'installed' | 'dependency' | 'not-installed' | 'enabled' | 'disabled';
 
 export interface OrderBy {
-  id: OrderByField;
-  func: (mod: PartialMod) => unknown,
+  func: (mod: PartialMod) => unknown;
+  hidden?: boolean;
+  skipSave?: boolean;
 }
 
 export interface Filter {
-  id: FilterField;
-  func: (mod: PartialMod, urqlClient: Client) => Promise<boolean> | boolean,
+  func: (mod: PartialMod, urqlClient: Client) => Promise<boolean> | boolean;
 }
 
-export const orderByOptions: OrderBy[] = [
-  { id: 'name', func: (mod: PartialMod) => mod.name.trim().toLowerCase() },
-  { id: 'last-updated', func: (mod: PartialMod) => 'last_version_date' in mod ? Date.now() - Date.parse(mod.last_version_date) : 0 },
-  { id: 'popularity', func: (mod: PartialMod) => 'popularity' in mod ? -mod.popularity : 0 },
-  { id: 'hotness', func: (mod: PartialMod) => 'hotness' in mod ? -mod.hotness : 0 },
-  { id: 'views', func: (mod: PartialMod) => 'views' in mod ? -mod.views : 0 },
-  { id: 'downloads', func: (mod: PartialMod) => 'downloads' in mod ? -mod.downloads : 0 },
-];
+export const search = writable('');
 
-export const filterOptions: Filter[] = [
-  { id: 'all', func: () => true },
-  { 
-    id: 'compatible',
-    func: async (mod: PartialMod, urqlClient: Client) => { 
-      const installInfo = get(selectedInstallMetadata).info;
-      if(!installInfo) {
-        return false;
-      }
-      const compatibility = await getCompatibility(mod.mod_reference, urqlClient);
-      return compatibility.state !== CompatibilityState.Broken;
-    }, 
-  },
-  { id: 'favorite', func: (mod: PartialMod) => get(favoriteMods).includes(mod.mod_reference) },
-  { id: 'queued', func: (mod: PartialMod) => get(queuedMods).some((q) => q.mod === mod.mod_reference) },
-  { id: 'installed', func: (mod: PartialMod) => mod.mod_reference in get(manifestMods) },
-  { id: 'dependency', func: (mod: PartialMod) => !(mod.mod_reference in get(manifestMods)) && mod.mod_reference in get(lockfileMods) },
-  { id: 'not-installed', func: (mod: PartialMod) => !(mod.mod_reference in get(manifestMods)) },
-  { id: 'enabled', func: (mod: PartialMod) => get(manifestMods)[mod.mod_reference]?.enabled ?? mod.mod_reference in get(lockfileMods) },
-  { id: 'disabled', func: (mod: PartialMod) => mod.mod_reference in get(manifestMods) && !(mod.mod_reference in get(lockfileMods)) },
-];
+export const orderByOptions = derived(
+  [search],
+  ([$search]) => (
+    {
+      search: { func: () => 0, skipSave: true, hidden: !$search },
+      name: { func: (mod: PartialMod) => mod.name.trim().toLowerCase() },
+      'last-updated': { func: (mod: PartialMod) => 'last_version_date' in mod ? Date.now() - Date.parse(mod.last_version_date) : 0 },
+      popularity: { func: (mod: PartialMod) => 'popularity' in mod ? -mod.popularity : 0 },
+      hotness: { func: (mod: PartialMod) => 'hotness' in mod ? -mod.hotness : 0 },
+      views: { func: (mod: PartialMod) => 'views' in mod ? -mod.views : 0 },
+      downloads: { func: (mod: PartialMod) => 'downloads' in mod ? -mod.downloads : 0 },
+    } as Record<OrderByField, OrderBy>
+  ),
+);
+
+export const visibleOrderByOptions = derived(
+  [orderByOptions],
+  ([$orderByOptions]) => Object.fromEntries(Object.entries($orderByOptions).filter(([_, o]) => !o.hidden)) as Record<OrderByField, OrderBy>,
+);
+
+export const filterOptions = derived(
+  [favoriteMods, queuedMods, manifestMods, lockfileMods, selectedInstallMetadata], 
+  ([$favoriteMods, $queuedMods, $manifestMods, $lockfileMods, $selectedInstallMetadata]) => (
+    {
+      all: { func: () => true },
+      compatible: {
+        func: async (mod: PartialMod, urqlClient: Client) => { 
+          const installInfo = $selectedInstallMetadata.info;
+          if(!installInfo) {
+            return false;
+          }
+          const compatibility = await getCompatibility(mod.mod_reference, urqlClient);
+          return compatibility.state !== CompatibilityState.Broken;
+        }, 
+      },
+      favorite: { func: (mod: PartialMod) => $favoriteMods.includes(mod.mod_reference) },
+      queued: { func: (mod: PartialMod) => $queuedMods.some((q) => q.mod === mod.mod_reference) },
+      installed: { func: (mod: PartialMod) => mod.mod_reference in $manifestMods },
+      dependency: { func: (mod: PartialMod) => !(mod.mod_reference in $manifestMods) && mod.mod_reference in $lockfileMods },
+      'not-installed': { func: (mod: PartialMod) => !(mod.mod_reference in $manifestMods) },
+      enabled: { func: (mod: PartialMod) => $manifestMods[mod.mod_reference]?.enabled ?? mod.mod_reference in $lockfileMods },
+      disabled: { func: (mod: PartialMod) => mod.mod_reference in $manifestMods && !(mod.mod_reference in $lockfileMods) },
+    } as Record<FilterField, Filter>
+  ),
+);
+
+let previousSearch = '';
+let previousOrderBy: OrderByField | undefined = undefined;
+search.subscribe((value) => {
+  if (value && !previousSearch) {
+    previousOrderBy = get(order);
+    order.set('search');
+  } else if(!value && previousSearch && previousOrderBy && get(order) === 'search') {
+    order.set(previousOrderBy);
+  }
+  previousSearch = value;
+});
 
 export type PartialSMRMod = GetModsQuery['getMods']['mods'][number];
 export interface OfflineMod {
@@ -70,17 +99,13 @@ export interface MissingMod {
 }
 export type PartialMod = PartialSMRMod | OfflineMod | MissingMod;
 
-export const search = writable('');
-
 export const selectedTags = writable<string[]>([]);
 
-export const order = bindingTwoWayNoExcept(orderByOptions[1], { 
-  initialGet: async () => GetModFiltersOrder().then((i) => orderByOptions.find((o) => o.id === i) || orderByOptions[1]),
-}, {
-  updateFunction: async (o) => SetModFiltersOrder(o.id),
-});
-export const filter = bindingTwoWayNoExcept(filterOptions[0], {
-  initialGet: async () => GetModFiltersFilter().then((i) => filterOptions.find((o) => o.id === i) || filterOptions[0]),
-}, {
-  updateFunction: async (f) => SetModFiltersFilter(f.id),
-});
+export const order = bindingTwoWayNoExcept<OrderByField>('last-updated', 
+  { initialGet: GetModFiltersOrder as () => Promise<OrderByField> }, 
+  { updateFunction: async (o) => { if (!get(orderByOptions)[o]?.skipSave) { await SetModFiltersOrder(o); } } },
+);
+export const filter = bindingTwoWayNoExcept<FilterField>('compatible',
+  { initialGet: GetModFiltersFilter as () => Promise<FilterField> },
+  { updateFunction: SetModFiltersFilter },
+);

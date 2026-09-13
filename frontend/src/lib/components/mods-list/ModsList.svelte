@@ -11,11 +11,10 @@
   import VirtualList from '$lib/components/VirtualList.svelte';
   import AnnouncementsBar from '$lib/components/announcements/AnnouncementsBar.svelte';
   import { GetHiddenModDocument, GetModCountDocument, GetModsDocument } from '$lib/generated';
-  import { queuedMods } from '$lib/store/actionQueue';
-  import { favoriteMods, lockfileMods, manifestMods, selectedProfileTargets } from '$lib/store/ficsitCLIStore';
+  import { lockfileMods, manifestMods } from '$lib/store/ficsitCLIStore';
   import { expandedMod, hasFetchedMods } from '$lib/store/generalStore';
   import {
-    type OfflineMod, type PartialMod, type PartialSMRMod, filter, filterOptions, order, search,
+    type OfflineMod, type PartialMod, type PartialSMRMod, filter, filterOptions, order, orderByOptions, search,
     selectedTags,
   } from '$lib/store/modFiltersStore';
   import { offline, startView, tagSearchMode } from '$lib/store/settingsStore';
@@ -131,18 +130,10 @@
 
   let filteredMods: PartialMod[] = [];
   let filteringMods = false;
-  $: {
-    // Watch the required store states
-    $manifestMods;
-    $lockfileMods;
-    $favoriteMods;
-    $queuedMods;
-    $selectedProfileTargets;
-    $selectedTags;
-    $tagSearchMode;
 
+  $: {
     filteringMods = true;
-    Promise.all(mods.map((mod) => $filter.func(mod, client)))
+    Promise.all(mods.map((mod) => $filterOptions[$filter].func(mod, client)))
       .then((results) => mods.filter((_, i) => results[i]))
       .then((filtered) => {
         filteredMods = (filtered.filter((mod) => !('tags' in mod) || !mod.tags || matchTags(mod.tags.map((t) => t.id), $selectedTags)));
@@ -150,33 +141,23 @@
       });
   }
 
-  function matchTags(modTags: string[], tagIds: string[]): boolean {
+  $: matchTags = (modTags: string[], tagIds: string[]): boolean => {
     if (tagIds.length === 0) return true;
     const modTagsSet = new Set(modTags);
     if ($tagSearchMode === settings.TagSearchMode.ALL) {
       return tagIds.every((id) => modTagsSet.has(id));
     }
     return tagIds.some((id) => modTagsSet.has(id));
-  }
+  };
 
-  let sortedMods: PartialMod[] = [];
-  $: {
-    // Watch the required store states
-    $manifestMods;
-    $lockfileMods;
-    $favoriteMods;
-    $queuedMods;
-    
-    sortedMods = _.sortBy(filteredMods, $order.func) as PartialMod[];
-  }
+  let searchedMods: PartialMod[] = [];
 
-  let displayMods: PartialMod[] = [];
   $: if(!$search) {
-    displayMods = sortedMods;
+    searchedMods = filteredMods;
   } else {
     const modifiedSearchString = $search.replace(/(?:author:"(.+?)"|author:([^\s"]+))/g, '="$1$2"');
     
-    const fuse = new Fuse(sortedMods, {
+    const fuse = new Fuse(filteredMods, {
       keys: [
         {
           name: 'name',
@@ -199,8 +180,12 @@
       threshold: 0.2,
       ignoreLocation: true,
     });
-    displayMods = fuse.search(modifiedSearchString).map((result) => result.item);
+    searchedMods = fuse.search(modifiedSearchString).map((result) => result.item);
   }
+
+  $: sortedMods = _.sortBy(searchedMods, $orderByOptions[$order].func) as PartialMod[];
+  
+  $: displayMods = sortedMods;
 
   let hasCheckedStartView = false;
   $: if($startView && mods.length > 0 && !hasCheckedStartView) {
@@ -213,14 +198,14 @@
   }
 
   $: userHasSearchText = $search != '';
-  $: userHasSearchFilters = $filter != filterOptions[0];
+  $: userHasSearchFilters = $filter != 'all';
   $: userHasTagFilter = $selectedTags.length > 0;
 
   const removeSearchText = () => {
     $search = '';
   };
   const removeSearchFilters = () => {
-    $filter = filterOptions[0];
+    $filter = 'all';
     $selectedTags = [];
   };
 

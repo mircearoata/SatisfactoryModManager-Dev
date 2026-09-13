@@ -7,7 +7,7 @@
   import SvgIcon from '$lib/components/SVGIcon.svelte';
   import Select from '$lib/components/Select.svelte';
   import { type PopupSettings, popup } from '$lib/skeletonExtensions';
-  import { type FilterField, type OrderByField, filter, filterOptions, order, orderByOptions, search, selectedTags } from '$lib/store/modFiltersStore';
+  import { type FilterField, type OrderByField, filter, filterOptions, order, search, selectedTags, visibleOrderByOptions } from '$lib/store/modFiltersStore';
   import { tagSearchMode } from '$lib/store/settingsStore';
   import { settings } from '$wailsjs/go/models';
 
@@ -47,6 +47,7 @@
   const { t } = getTranslate();
 
   $: orderByNames = {
+    search: $t('mods-list-filter.order-by.search', 'Search'),
     name: $t('mods-list-filter.order-by.name', 'Name'),
     'last-updated': $t('mods-list-filter.order-by.last-updated', 'Last updated'),
     popularity: $t('mods-list-filter.order-by.popularity', 'Popularity'),
@@ -66,6 +67,9 @@
     enabled: $t('mods-list-filter.filter.enabled', 'Enabled'),
     disabled: $t('mods-list-filter.filter.disabled', 'Disabled'),
   } as Record<FilterField, string>;
+
+  $: orderByOptionIds = Object.keys($visibleOrderByOptions) as OrderByField[];
+  $: filterOptionIds = Object.keys($filterOptions) as FilterField[];
 </script>
 
 <div class="px-5 py-1 flex @container/mod-list-filters items-center">
@@ -156,8 +160,7 @@
     buttonClass="px-2 text-sm space-x-1"
     itemActiveClass="!bg-surface-300/20"
     itemClass="bg-surface-50-900-token"
-    itemKey="id"
-    items={filterOptions}
+    items={filterOptionIds}
     menuClass="min-w-[10rem]"
     bind:value={$filter}
   >
@@ -165,10 +168,10 @@
       <div class="h-5 w-5">
         <SvgIcon icon={mdiFilter} />
       </div>
-      <Marquee class="text-primary-600 hidden @lg/mod-list-filters:!block w-24 text-left">{filterNames[item.id]}</Marquee>
+      <Marquee class="text-primary-600 hidden @lg/mod-list-filters:!block w-24 text-left">{filterNames[item]}</Marquee>
     </svelte:fragment>
     <svelte:fragment slot="item" let:item>
-      <span>{filterNames[item.id]}</span>
+      <span>{filterNames[item]}</span>
     </svelte:fragment>
   </Select>
   <Select
@@ -177,8 +180,7 @@
     buttonClass="px-2 text-sm space-x-1"
     itemActiveClass="!bg-surface-300/20"
     itemClass="bg-surface-50-900-token"
-    itemKey="id"
-    items={orderByOptions}
+    items={orderByOptionIds}
     menuClass="min-w-[10rem]"
     bind:value={$order}
   >
@@ -186,10 +188,10 @@
       <div class="h-5 w-5">
         <SvgIcon icon={mdiSort} />
       </div>
-      <Marquee class="text-primary-600 hidden @lg/mod-list-filters:!block w-24 text-left">{orderByNames[item.id]}</Marquee>
+      <Marquee class="text-primary-600 hidden @lg/mod-list-filters:!block w-24 text-left">{orderByNames[item]}</Marquee>
     </svelte:fragment>
     <svelte:fragment slot="item" let:item>
-      <span>{orderByNames[item.id]}</span>
+      <span>{orderByNames[item]}</span>
     </svelte:fragment>
   </Select>
 </div>
