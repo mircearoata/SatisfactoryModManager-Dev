@@ -176,7 +176,7 @@ func main() {
 				})
 			}
 		}
-		backend.ProcessArguments(os.Args[1:]) //nolint:contextcheck
+		app.App.ProcessArguments(os.Args[1:]) //nolint:contextcheck
 		autoupdate.Updater.CheckInterval(5 * time.Minute)
 	})
 
@@ -196,7 +196,7 @@ func main() {
 			UniqueId: "SatisfactoryModManager_b04ab4c3-450f-48f4-ab14-af6d7adc5416",
 			OnSecondInstanceLaunch: func(secondInstanceData options.SecondInstanceData) {
 				app.App.Show()
-				backend.ProcessArguments(secondInstanceData.Args)
+				app.App.ProcessArguments(secondInstanceData.Args)
 			},
 		},
 		Windows: &windows.Options{

@@ -5,6 +5,7 @@
   import { FormatIcu } from '@tolgee/format-icu';
   import { DevTools, FormatSimple, Tolgee, TolgeeProvider } from '@tolgee/svelte';
   import { setContextClient } from '@urql/svelte';
+  import { onMount } from 'svelte';
 
   import T from '$lib/components/T.svelte';
   import TitleBar from '$lib/components/TitleBar.svelte';
@@ -27,7 +28,7 @@
   import { error, expandedMod, siteURL } from '$lib/store/generalStore';
   import { cacheDir, konami, language, updateCheckMode } from '$lib/store/settingsStore';
   import { smmUpdate, smmUpdateReady } from '$lib/store/smmUpdateStore';
-  import { ExpandMod, UnexpandMod } from '$wailsjs/go/app/app';
+  import { ExpandMod, FrontendReady, UnexpandMod } from '$wailsjs/go/app/app';
   import { NeedsSmm2Migration } from '$wailsjs/go/migration/migration';
   import { GetCacheDirDiskSpaceLeft, GetNewUserSetupComplete } from '$wailsjs/go/settings/settings';
   import { Environment, EventsOn } from '$wailsjs/runtime';
@@ -267,6 +268,10 @@
     if (keyQueue.length === code.length && keyQueue.every((val, idx) => code[idx] === val)) {
       $konami = !$konami;
     }
+  });
+
+  onMount(() => {
+    FrontendReady();
   });
 </script>
 
