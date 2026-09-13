@@ -127,6 +127,12 @@ func (s *serverPicker) TryPick(id string, pickPath string) (PickerResult, error)
 		return result, nil
 	}
 
+	if !d.isLocal && strings.HasPrefix(pickPath, "~") {
+		// When ficsit-cli uses the full URL, it will use /~/ as the path, which is invalid
+		// This will be fixed by the better remote server configuration eventually
+		return PickerResult{}, fmt.Errorf("remote paths cannot start with ~")
+	}
+
 	var err error
 
 	result.IsValidInstall, err = isValidInstall(d.disk, pickPath)
