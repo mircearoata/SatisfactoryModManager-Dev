@@ -9,6 +9,7 @@ import (
 	"github.com/satisfactorymodding/SatisfactoryModManager/backend/installfinders/common"
 	"github.com/satisfactorymodding/SatisfactoryModManager/backend/installfinders/launchers"
 	"github.com/satisfactorymodding/SatisfactoryModManager/backend/installfinders/launchers/epic"
+	"github.com/satisfactorymodding/SatisfactoryModManager/backend/utils"
 )
 
 type FaugusGame struct {
@@ -24,13 +25,9 @@ var faugusGamesRelativePath = filepath.Join("faugus-launcher", "games.json")
 
 func init() {
 	launchers.Add("Faugus", func() ([]*common.Installation, []error) {
-		dataDir, ok := os.LookupEnv("XDG_DATA_HOME")
-		if !ok {
-			homeDir, err := os.UserHomeDir()
-			if err != nil {
-				return nil, []error{fmt.Errorf("failed to get user home dir: %w", err)}
-			}
-			dataDir = filepath.Join(homeDir, ".local", "share")
+		dataDir, err := utils.UserDataDir()
+		if err != nil {
+			return nil, []error{fmt.Errorf("failed to get user data dir: %w", err)}
 		}
 
 		return findInstallationsFaugus(dataDir, "Faugus", []string{"faugus-launcher"})
