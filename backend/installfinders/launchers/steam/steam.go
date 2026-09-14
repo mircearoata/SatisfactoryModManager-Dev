@@ -118,14 +118,14 @@ func FindInstallationsSteam(steamPath string, launcher string, platform common.L
 					}
 				}
 
-				if betakey == "" || betakey == "public" {
+				switch strings.ToLower(betakey) {
+				case "", "public":
 					branch = common.BranchStable
-				} else {
-					if betakey == "experimental" {
-						branch = common.BranchExperimental
-					} else {
-						findErrors = append(findErrors, fmt.Errorf("unknown beta key %s", betakey))
-					}
+				case "experimental":
+					branch = common.BranchExperimental
+				default:
+					findErrors = append(findErrors, fmt.Errorf("unknown beta key %s", betakey))
+					continue
 				}
 
 				installs = append(installs, &common.Installation{
