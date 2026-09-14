@@ -1,0 +1,330 @@
+{
+  "announcement" : {
+    "go-offline" : "進入離線模式",
+    "go-online" : "進入在線模式",
+    "healthcheck" : "無法連線到 ficsit.app。檢查您的網路連接或考慮使用離線模式。（模組管理器設定>進入離線模式）",
+    "offline" : "目前處於離線狀態。某些功能可能不可用。（若想重新連接，請使用 模組管理器設定>進入在線模式）"
+  },
+  "common" : {
+    "add" : "添加",
+    "cancel" : "取消",
+    "close" : "關閉",
+    "delete" : "刪除",
+    "import" : "匯入",
+    "loading" : "載入中...",
+    "rename" : "重新命名"
+  },
+  "error" : {
+    "failed_to_generate_debug" : "生成偵錯檔時出錯。請手動檢查你的滿意工廠模組管理器日誌檔以獲取更多資訊，並在 Discord 上報告。使用下面的按鈕打開文檔並瞭解如何操作。",
+    "generate_debug_info" : "生成偵錯資訊",
+    "help" : "似乎發生問題了？按下下面的按鈕，然後將生成的 zip 檔發送到 <1>modding Discord</1> 中的 #help-using-mods。",
+    "invalid_installs" : "{invalidInstalls, plural, other {發現 {invalidInstalls} 個無效的滿意工廠}}",
+    "no_installs" : "找不要已安裝的滿意工廠",
+    "open_log_docs" : "打開紀錄文件",
+    "open_modding_discord" : "打開 Modding Discord",
+    "open_modding_discord.must_generate_debug_first" : "你必須先生成偵錯資訊",
+    "reporting_directions" : "似乎發生問題了？點擊下面的按鈕收集日誌，然後將生成的 zip 檔發送到 Modding Discord 中的 #help-using-mods 上。",
+    "title" : "出錯了！"
+  },
+  "external-install-mod" : {
+    "already-installed" : "已安裝",
+    "error-loading" : "載入模組詳細資訊時出錯",
+    "in-queue" : "在隊列中",
+    "install" : "安裝",
+    "latest-version" : "最新版本",
+    "title" : "安裝模組",
+    "version" : "版本 {version}"
+  },
+  "first_time_setup" : {
+    "acknowledge" : "開始使用！",
+    "change_later_hint" : "隨時都可以在\"模組管理器設定\"中修改這些設定",
+    "intro" : "在開始前，請選擇您的使用偏好",
+    "open_welcome_guide" : "開啟歡迎指南",
+    "option" : {
+      "language" : {
+        "title" : "使用下列可用的語言："
+      },
+      "queue-auto-start" : {
+        "disabled" : "等待我按下 \"套用\"",
+        "enabled" : "立即套用變更",
+        "title" : "當我新增、刪除一個模組，或是切換設定檔時..."
+      }
+    },
+    "title" : "歡迎使用滿意工廠模組管理器！"
+  },
+  "launch-button" : {
+    "apply-profile-change" : "套用 {profile}",
+    "apply-queued" : "套用 {queued} 個更新",
+    "are-you-sure-warning" : "您確定要啟動嗎？",
+    "cant-launch" : "SMM 無法啟動此遊戲",
+    "cant-launch-tooltip" : "模組管理器無法啟動該遊戲版本，但仍然會管理您的模組。您可以從遊戲啟動器正常啟動滿意工廠。",
+    "changes-queued" : "模組尚未進行變更。點擊下方套用按鈕以套用已選擇的變更。",
+    "game-running" : "遊戲啟動器顯示遊戲正在執行（或正在關閉）",
+    "incompatible-mods" : "{versionIncompatible, plural, other {{versionIncompatible} 個不相容的模組，遊戲可能無法載入或崩潰}}",
+    "launch-in-progress" : "正在啟動...",
+    "operation-in-progress" : "操作正在執行中",
+    "play" : "遊玩滿意工廠",
+    "possibly-incompatible-mods" : "{versionPossiblyCompatible, plural, other {# 個模組可能與您的遊戲不相容}}",
+    "profile-change-queued" : "變更尚未套用，點擊套用按鈕以套用新設定",
+    "ready" : "準備就緒！\n\n注意： 模組管理器已經為您完成了模組的安裝。您可以使用遊戲啟動器啟動遊戲，模組仍會載入。",
+    "reported-incompatible-mods" : "{reportedIncompatible}個模組被回報可能不相容於這個遊戲版本，請閱讀{versionIncompatible}模組的描述或相容性說明。\n",
+    "reported-possibly-compatible-mods" : "{reportedIncompatible}個模組被回報在這個遊戲版本中無法使用，請閱讀{versionIncompatible}模組的描述或相容性說明。\n",
+    "you-have-warning-mods" : "您有："
+  },
+  "left-bar" : {
+    "export" : "匯出",
+    "ficsit-app" : "ficsit.app（模組儲存庫）",
+    "game-version" : "選擇已安裝遊戲",
+    "help" : "幫助",
+    "install-invalid" : "無效",
+    "install-invalid-tooltip" : "狀態：SMM無法管理這個遊戲版本",
+    "install-loading" : "載入中...",
+    "install-loading-tooltip" : "狀態：載入中...",
+    "install-unknown" : "未知",
+    "install-unknown-tooltip" : "狀態：無法取得有關此遊戲版本的訊息",
+    "links" : "連結",
+    "manage-servers" : "伺服器管理",
+    "mods-off" : "停用模組",
+    "mods-on" : "啟用模組",
+    "other" : "其他",
+    "profile" : "設定檔",
+    "queue-blocking-switching-tooltip" : "{number, plural, other {你有{number}個操作整在等待執行。在切換遊戲版本或設定檔前，請先套用或取消這些操作。}}",
+    "satisfactory-modding-discord" : "滿意工廠 Modding Discord",
+    "smm-github" : "SMM GitHub",
+    "updates" : "更新"
+  },
+  "mod-changelog" : {
+    "title" : "<1>{mod}</1>變更日誌"
+  },
+  "mod-details" : {
+    "ai-disclosure" : null,
+    "ai-disclosure-no-usage" : null,
+    "ai-disclosure-runtime-usage" : null,
+    "ai-disclosure-unspecified" : null,
+    "ai-disclosure-usage" : null,
+    "change-version" : "變更版本",
+    "change-version-any" : "任意",
+    "change-version-or-newer" : "或更新",
+    "changelogs" : "變更日誌",
+    "compatibility" : "相容性",
+    "compatibility-branch" : "這個模組在{branch}被回報為{state}",
+    "compatibility-controller" : null,
+    "compatibility-unknown" : "未知",
+    "compatibility-unknown-tooltip" : "目前沒有已知的相容性資訊。請測試它並在 Discord 上聯絡我們，讓他們可以被更新！",
+    "contributors" : "貢獻者<1>（{authors}）</1>",
+    "created" : "創造於",
+    "downloads" : "下載量",
+    "installed-version" : "已安裝版本",
+    "latest-version" : "最新版本",
+    "mod-author" : "作者：",
+    "network-disclosure-no-usage" : null,
+    "network-disclosure-usage" : null,
+    "network-use-disclosure" : null,
+    "network-use-disclosure-unspecified" : null,
+    "offline-mode" : "離線模式已啟用，更改日誌及描述不可用。",
+    "size" : "大小",
+    "updated" : "更新於",
+    "view-on-ficsit-app" : "在 ficsit.app 上查看",
+    "views" : "瀏覽量"
+  },
+  "mod-list-item" : {
+    "by-author" : "by",
+    "compatibility-note" : "這個模組在當前遊戲版本中被回報為{state}",
+    "compatibility-note-none" : "（無詳情）",
+    "compatibility-warning" : "這個模組被報告存在問題，但您依舊可以嘗試安裝它。詳細資料：",
+    "dependency" : "此模組是其他模組的依賴。它不能單獨安裝或移除。",
+    "disable" : "這個模組在此設定檔中被啟用。點擊以停用模組，啟動遊戲時將不載入此模組，但它仍然保留在此設定檔中。",
+    "disable-queued" : "此模組正在等待停用，點擊以取消操作。",
+    "disabled-tooltip" : "此模組已被停用，點擊暫停按鈕來啟用它。",
+    "enable" : "點擊啟用此模組。",
+    "enable-queued" : "此模組將被啟用，點擊以取消此操作。",
+    "favorite" : "點擊以添加到我的最愛，將模組標記為我的最愛僅為在當前設定檔中，與是否安裝無關。",
+    "hidden" : "此模組已被作者隱藏。",
+    "install" : "點擊以安裝此模組。",
+    "no-tags" : null,
+    "not-installable" : "無法安裝該模組。原因：",
+    "queued" : null,
+    "queued-install" : null,
+    "queued-uninstall" : null,
+    "unavailable" : null,
+    "unfavorite" : null,
+    "uninstall" : null,
+    "wait" : null
+  },
+  "mod" : {
+    "compatibility-no-notes" : null
+  },
+  "mods-list-filter" : {
+    "filter" : {
+      "all" : null,
+      "compatible" : null,
+      "dependency" : null,
+      "disabled" : null,
+      "enabled" : null,
+      "favorite" : null,
+      "installed" : null,
+      "not-installed" : null,
+      "queued" : null
+    },
+    "order-by" : {
+      "downloads" : null,
+      "hotness" : null,
+      "last-updated" : null,
+      "name" : null,
+      "popularity" : null,
+      "views" : null
+    },
+    "search" : null,
+    "tag" : {
+      "button-label" : null,
+      "match-all" : null,
+      "match-any" : null,
+      "match-mode" : null,
+      "none-available" : null
+    }
+  },
+  "mods-list" : {
+    "no-mods-filtered" : null,
+    "no-mods-found" : null,
+    "remove-search-filters" : null,
+    "remove-search-text" : null,
+    "show-all" : null
+  },
+  "profiles" : {
+    "add" : {
+      "profile-name" : "設定檔名稱",
+      "profile-name-placeholder" : null,
+      "title" : null
+    },
+    "delete" : {
+      "profile-name" : "設定檔名稱",
+      "title" : null
+    },
+    "import" : {
+      "profile-file" : "設定檔檔案",
+      "profile-name" : "設定檔名稱",
+      "profile-name-placeholder" : null,
+      "profile-version-warning" : null,
+      "title" : null
+    },
+    "rename" : {
+      "new-profile" : null,
+      "new-profile-placeholder" : null,
+      "old-profile" : null,
+      "old-profile-placeholder" : null,
+      "title" : null
+    }
+  },
+  "server-manager" : {
+    "add" : null,
+    "advanced-note" : null,
+    "advanced-path-placeholder" : null,
+    "existing-servers" : {
+      "none-yet" : null,
+      "title" : null
+    },
+    "failed-to-connect" : null,
+    "get-help" : "取得連線至伺服器的協助",
+    "host-placeholder" : null,
+    "invalid" : null,
+    "loading" : null,
+    "local-path-placeholder" : "伺服器路徑 C:\\...",
+    "name-placeholder" : null,
+    "new-server" : {
+      "title" : null
+    },
+    "password-placeholder" : null,
+    "path-placeholder" : null,
+    "port-placeholder" : null,
+    "switch-to-advanced" : null,
+    "switch-to-simple" : null,
+    "title" : null,
+    "username-placeholder" : null,
+    "validating" : null
+  },
+  "server-picker" : {
+    "failed-list-dir" : null,
+    "failed-valid-check" : null
+  },
+  "settings" : {
+    "cache" : {
+      "cache-location" : null,
+      "reset" : null,
+      "save" : null,
+      "title" : null
+    },
+    "change-cache-location" : null,
+    "copy-mod-list" : null,
+    "debug" : null,
+    "generate-debug-info" : null,
+    "go-online-offline" : null,
+    "language" : null,
+    "launch-button" : null,
+    "launch-button.button" : null,
+    "launch-button.cat" : null,
+    "launch-button.normal" : null,
+    "proxy" : {
+      "proxy" : null,
+      "remove" : null,
+      "save" : null,
+      "title" : null
+    },
+    "queue" : null,
+    "queue.start-immediately" : null,
+    "queue.start-manually" : null,
+    "save-window-position" : null,
+    "secret-settings" : null,
+    "set-proxy" : null,
+    "settings" : null,
+    "smm-debug-logging" : null,
+    "start-view" : null,
+    "start-view.compact" : null,
+    "start-view.expanded" : null,
+    "title" : null,
+    "update-check" : null,
+    "update-check.ask" : null,
+    "update-check.on-exit" : null,
+    "update-check.on-start" : null
+  },
+  "smm-update" : {
+    "downloading" : null,
+    "downloading-stats" : null,
+    "title" : null
+  },
+  "smm2_migration" : {
+    "feature" : {
+      "performance" : null,
+      "performance.description" : null,
+      "platform_support" : null,
+      "platform_support.description" : null,
+      "profile_format" : null,
+      "profile_format.description" : null,
+      "queue" : null,
+      "queue.description" : null,
+      "servers" : null,
+      "servers.description" : null,
+      "translation" : null,
+      "translation.description" : null,
+      "ui" : null,
+      "ui.description" : null
+    },
+    "intro" : null,
+    "open_guide" : null,
+    "title" : null
+  },
+  "updates" : {
+    "changelog" : "變更日誌",
+    "check-for-updates" : null,
+    "checking-for-updates" : null,
+    "hide-ignored" : null,
+    "ignore" : null,
+    "mod-update-available" : null,
+    "no-updates" : null,
+    "show-ignored" : null,
+    "smm-update-available" : null,
+    "title" : null,
+    "unignore" : null,
+    "update-all" : null,
+    "update-selected" : null
+  }
+}

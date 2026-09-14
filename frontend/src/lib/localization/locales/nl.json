@@ -1,0 +1,330 @@
+{
+  "announcement" : {
+    "go-offline" : "Ga Offline",
+    "go-online" : "Ga Online",
+    "healthcheck" : "Kon ficsit.app niet bereiken. Controleer je internetverbinding of probeer offline modus. (Mod Manager Instellingen > Ga Offline)",
+    "offline" : "Je bent momenteel offline. Sommige functies zijn mogelijks onbeschikbaar. (Om terug te verbinden, gebruik Mod Manager Instellingen > Ga Online)"
+  },
+  "common" : {
+    "add" : "Toevoegen",
+    "cancel" : "Annuleer",
+    "close" : "Sluiten",
+    "delete" : "Verwijder",
+    "import" : "Importeer",
+    "loading" : "Laden...",
+    "rename" : "Hernoemen"
+  },
+  "error" : {
+    "failed_to_generate_debug" : "Er trad een probleem op met het generen van het debug bestand. Gelieve manueel je Satisfactory Mod Manager log bestanden te controleren voor meer informatie en raporteer dit op de Discord. Gebruik de onderstaande knop om de documentatie te openen om te bekijken hoe dit moet.",
+    "generate_debug_info" : "Genereer debug info",
+    "help" : "Lijkt dit niet te kloppen? Klik op de onderstaande knop en stuur het gegenereerde zip-bestand naar de <1>modding discord</1> in #help-using-mods.",
+    "invalid_installs" : "{invalidInstalls, plural, one {{invalidInstalls} ongeldige Satisfactory installatie gevonden} other {{invalidInstalls} ongeldige Satisfactory installaties gevonden}}",
+    "no_installs" : "Geen Satisfactory installatie gevonden",
+    "open_log_docs" : "Open de Logging Documentatie",
+    "open_modding_discord" : "Open de Modding Discord",
+    "open_modding_discord.must_generate_debug_first" : "Je moet eerst debug informatie genereren",
+    "reporting_directions" : "Lijkt dit niet te kloppen? Klik op de onderstaande knop om logbestanden te verzamelen en stuur het gegenereerde zip-bestand naar de modding Discord in #help-using-mods.",
+    "title" : "Er is iets fout gegaan"
+  },
+  "external-install-mod" : {
+    "already-installed" : "Reeds geïnstalleerd",
+    "error-loading" : "Fout bij het laden van mod-gegevens",
+    "in-queue" : "In wachtrij",
+    "install" : "Installeer",
+    "latest-version" : "Laatste versie",
+    "title" : "Installeer mod",
+    "version" : "Versie {version}"
+  },
+  "first_time_setup" : {
+    "acknowledge" : "Start!",
+    "change_later_hint" : "Verander deze instelling op eender welk moment in het \"Mod Manager Instellingen\" menu.",
+    "intro" : "Selecteer je voorkeuren om van start te gaan.",
+    "open_welcome_guide" : "Open de Welkomstgids ",
+    "option" : {
+      "language" : {
+        "title" : "Gebruik deze taal indien beschikbaar:"
+      },
+      "queue-auto-start" : {
+        "disabled" : "Wacht voor mij om op \"Toepassen\" te klikken",
+        "enabled" : "Pas wijzigingen onmiddellijk toe",
+        "title" : "Wanneer ik een mod toevoeg of verwijder, of van profiel verander..."
+      }
+    },
+    "title" : "Welkom bij de Satisfactory Mod Manager!"
+  },
+  "launch-button" : {
+    "apply-profile-change" : "{profile} toepassen",
+    "apply-queued" : "Pas {queued, plural, one {1 aanpassing} other {# aanpassingen}} toe",
+    "are-you-sure-warning" : "Ben je zeker dat je wilt starten?",
+    "cant-launch" : "SMM kan deze installatie niet starten",
+    "cant-launch-tooltip" : "De Mod Manager kan dit type installatie niet starten, maar beheert wel de mod-bestanden voor je. Start Satisfactory met je gebruikelijke game launcher.",
+    "changes-queued" : "Er zijn nog geen wijzigingen aangebracht in uw mod-bestanden. Klik op de onderstaande knop om de wijzigingen die u in de wachtrij hebt geplaatst toe te passen.\n\n(U bevindt zich in de wachtrij “Handmatig starten”-modus)",
+    "game-running" : "Je game launcher meldt dat de game al actief is (of nog bezig is met afsluiten).",
+    "incompatible-mods" : "{versionIncompatible, plural, one {{versionIncompatible} incompatibele mod zal niet laten laden, of de game doen crashen} other {{versionIncompatible}incompatibele mods zullen niet laten laden, of de game doen crashen}}",
+    "launch-in-progress" : "Aan het starten...",
+    "operation-in-progress" : "Er wordt al een handeling uitgevoerd.",
+    "play" : "Speel Satisfactory",
+    "possibly-incompatible-mods" : "{versionPossiblyCompatible, plural, one {Een mod dat {versionPossiblyCompatible, plural, one {is} other {zijn}} waarschijnlijk niet compatibel met je game } other {# mods die {versionPossiblyCompatible, plural, one {is} other {zijn}} waarschijnlijk niet compatibel met je game }}",
+    "profile-change-queued" : "Er zijn nog geen wijzigingen aangebracht in uw mod-bestanden. Klik op de onderstaande knop om het nieuwe profiel toe te passen.\n\n(U bevindt zich in de wachtrij “Handmatig starten”-modus)",
+    "ready" : "Je bent klaar om te beginnen!\n\nOpmerking: De Mod Manager heeft de mod-bestanden al voor je geïnstalleerd. Je kunt het spel starten met je gebruikelijke game launcher en de mods worden nog steeds geladen.",
+    "reported-incompatible-mods" : "{reportedIncompatible, plural, one {Een mod} other {# mods}} die {reportedIncompatible, plural, one {is} other {zijn}} als defect gemeld voor deze gameversie. Lees de {versionIncompatible, plural, one {mod zijn} other {mods hun}} beschrijving of compatibiliteit notities voor meer informatie",
+    "reported-possibly-compatible-mods" : "{reportedPossiblyCompatible, plural, one {Een mod} other {# mods}} die {reportedPossiblyCompatible, plural, one {is} other {zijn}} als deels functioneel gemeld voor deze gameversie. Lees de {versionIncompatible, plural, one {mod zijn} other {mods hun}} beschrijving of compatibiliteit notities voor meer informatie",
+    "you-have-warning-mods" : "Je hebt:"
+  },
+  "left-bar" : {
+    "export" : "Exporteer",
+    "ficsit-app" : "ficsit.app (Mod-bibliotheek)",
+    "game-version" : "Selecteer Game Installatie",
+    "help" : "Help",
+    "install-invalid" : "Ongeldig",
+    "install-invalid-tooltip" : "Status: SMM kan deze installatie niet beheren",
+    "install-loading" : "Laden...",
+    "install-loading-tooltip" : "Status: Laden...",
+    "install-unknown" : "Onbekend",
+    "install-unknown-tooltip" : "Status: Er kon geen informatie over deze installatie worden verkregen",
+    "links" : "Links",
+    "manage-servers" : "Beheer Servers",
+    "mods-off" : "Mods uit",
+    "mods-on" : "Mods aan",
+    "other" : "Andere",
+    "profile" : "Profiel",
+    "queue-blocking-switching-tooltip" : "{number, plural, one {U hebt {number} actie in de wachtrij staan. Pas deze toe of annuleer ze voordat u van installatie of profiel wisselt.} other {U hebt {number} acties in de wachtrij staan. Pas deze toe of annuleer ze voordat u van installatie of profiel wisselt.}}",
+    "satisfactory-modding-discord" : "Satisfactory Modding Discord",
+    "smm-github" : "SMM GitHub",
+    "updates" : "Updates"
+  },
+  "mod-changelog" : {
+    "title" : "<1>{mod}</1> Wijzigingen"
+  },
+  "mod-details" : {
+    "ai-disclosure" : null,
+    "ai-disclosure-no-usage" : null,
+    "ai-disclosure-runtime-usage" : null,
+    "ai-disclosure-unspecified" : null,
+    "ai-disclosure-usage" : null,
+    "change-version" : "Versie wijzigen",
+    "change-version-any" : "Alle",
+    "change-version-or-newer" : "of nieuwer",
+    "changelogs" : "Wijzigingen",
+    "compatibility" : "Compatibiliteit",
+    "compatibility-branch" : "Deze mod is geraporteerd als {state} op {branch}.",
+    "compatibility-controller" : null,
+    "compatibility-unknown" : "Onbekend",
+    "compatibility-unknown-tooltip" : "Er is nog geen compatibiliteitsinformatie voor deze mod gemeld. Probeer het uit en neem contact met ons op via Discord, zodat we de informatie kunnen bijwerken!",
+    "contributors" : "Bijdragers <1>({authors})</1>",
+    "created" : "Aangemaakt",
+    "downloads" : "Totale downloads",
+    "installed-version" : "Geïnstalleerde versie",
+    "latest-version" : "Laatste versie",
+    "mod-author" : "Een mod door:",
+    "network-disclosure-no-usage" : null,
+    "network-disclosure-usage" : null,
+    "network-use-disclosure" : null,
+    "network-use-disclosure-unspecified" : null,
+    "offline-mode" : "Offline modus is ingeschakeld. Wijzigingen en beschrijvingen zijn niet beschikbaar.",
+    "size" : "Grootte",
+    "updated" : "Bijgewerkt",
+    "view-on-ficsit-app" : "Bekijk op ficsit.app",
+    "views" : "Weergaven"
+  },
+  "mod-list-item" : {
+    "by-author" : "door",
+    "compatibility-note" : "Deze mod is geraporteerd als {state} op deze game versie.",
+    "compatibility-note-none" : "(Niet gespecificeerd)",
+    "compatibility-warning" : "Er zijn problemen gemeld met deze mod, maar je kunt hem toch proberen te installeren. Details:",
+    "dependency" : "Deze mod is al geïnstalleerd als een afhankelijkheid van een andere mod. Hij kan niet worden verwijderd zolang andere mods ervan afhankelijk zijn.",
+    "disable" : "Deze mod is ingeschakeld voor dit profiel. Klik om deze uit te schakelen, waardoor deze niet wordt geladen wanneer je het spel start, maar nog steeds deel uitmaakt van dit profiel.",
+    "disable-queued" : "Deze mod staat in de wachtrij om te worden uitgeschakeld. Klik om de actie te annuleren.",
+    "disabled-tooltip" : "Deze mod is uitgeschakeld. Klik op het pauze-icoontje om hem in te schakelen.",
+    "enable" : "Klik om deze mod in te schakelen.",
+    "enable-queued" : "Deze mod staat in de wachtrij om te worden ingeschakeld. Klik om de actie te annuleren.",
+    "favorite" : "Klik om deze mod aan je favorieten toe te voegen. Het toevoegen van een mod aan je favorieten heeft niets te maken met het al dan niet installeren ervan. Het is een manier om een mod bij te houden voor later, ongeacht welk profiel je hebt geselecteerd.",
+    "hidden" : "Deze mod is verborgen door de auteur.",
+    "install" : "Klik op deze mod te installeren.",
+    "no-tags" : "(geen beschikbaar)",
+    "not-installable" : "Je kan deze mod niet installeren. Reden:",
+    "queued" : "Deze mod staat al in de wachtrij voor een andere actie.",
+    "queued-install" : "Deze mod staat in de wachtrij om te worden geïnstalleerd. Klik om de actie te annuleren.",
+    "queued-uninstall" : "Deze mod staat in de wachtrij om te worden verwijderd. Klik om de actie te annuleren.",
+    "unavailable" : "Deze mod is niet langer beschikbaar op ficsit.app. Je wilt deze misschien verwijderen.",
+    "unfavorite" : "Klik op deze mod te verwijderen van je Favorieten.",
+    "uninstall" : "Deze mod is op dit profiel geïnstalleerd. Klik om deze mod te verwijderen.",
+    "wait" : "Wacht tot de huidige actie is voltooid."
+  },
+  "mod" : {
+    "compatibility-no-notes" : "(Geen verdere opmerkingen verstrekt)"
+  },
+  "mods-list-filter" : {
+    "filter" : {
+      "all" : "Alle mods",
+      "compatible" : "Compatiebel",
+      "dependency" : "Afhankelijkheid",
+      "disabled" : "Uitgeschakeld",
+      "enabled" : "Ingeschakeld",
+      "favorite" : "Favorieten",
+      "installed" : "Geïnstalleerd",
+      "not-installed" : "Niet geïnstalleerd",
+      "queued" : "In de wachtrij"
+    },
+    "order-by" : {
+      "downloads" : "Downloads",
+      "hotness" : "Trending",
+      "last-updated" : "Laatste bijgewerkt",
+      "name" : "Naam",
+      "popularity" : "Populariteit",
+      "views" : "Weergaven"
+    },
+    "search" : "Zoek mods",
+    "tag" : {
+      "button-label" : null,
+      "match-all" : null,
+      "match-any" : null,
+      "match-mode" : null,
+      "none-available" : null
+    }
+  },
+  "mods-list" : {
+    "no-mods-filtered" : "Er zijn geen mods die aan je filters voldoen.",
+    "no-mods-found" : "Geen mods gevonden",
+    "remove-search-filters" : null,
+    "remove-search-text" : null,
+    "show-all" : "Toon alle"
+  },
+  "profiles" : {
+    "add" : {
+      "profile-name" : "Profielnaam",
+      "profile-name-placeholder" : "Nieuwe Profielnaam",
+      "title" : "Profiel toevoegen"
+    },
+    "delete" : {
+      "profile-name" : "Profielnaam",
+      "title" : "Profiel verwijderen"
+    },
+    "import" : {
+      "profile-file" : "Profiel bestand",
+      "profile-name" : "Profielnaam",
+      "profile-name-placeholder" : "Nieuwe Profielnaam",
+      "profile-version-warning" : "Dit profiel is gemaakt met een nieuwere versie van het spel. Het is mogelijk dat het niet compatibel is met deze versie.",
+      "title" : "Profiel importeren"
+    },
+    "rename" : {
+      "new-profile" : "Nieuwe profielnaam",
+      "new-profile-placeholder" : "Nieuw Profiel",
+      "old-profile" : "Oude profielnaam",
+      "old-profile-placeholder" : "Oud Profiel",
+      "title" : "Profiel hernoemen"
+    }
+  },
+  "server-manager" : {
+    "add" : "Toevoegen",
+    "advanced-note" : "Let op: het kan zijn dat u bepaalde tekens in de gebruikersnaam en het wachtwoord moet escapen",
+    "advanced-path-placeholder" : "gebruikersnaam:wachtwoord@host:poort/pad",
+    "existing-servers" : {
+      "none-yet" : "Er zijn nog geen servers toegevoegd. Voeg er hieronder een toe!",
+      "title" : "Bestaande Servers Beheren"
+    },
+    "failed-to-connect" : "Kan geen verbinding maken met de server, klik om opnieuw te proberen",
+    "get-help" : "Hulp bij het verbinden met servers",
+    "host-placeholder" : "host",
+    "invalid" : "SMM kan deze installatie niet beheren",
+    "loading" : "Laden...",
+    "local-path-placeholder" : "C:\\Pad\\Naar\\Server",
+    "name-placeholder" : "Naam (standaard: {default})",
+    "new-server" : {
+      "title" : "Nieuwe Server Toevoegen"
+    },
+    "password-placeholder" : "wachtwoord",
+    "path-placeholder" : "pad",
+    "port-placeholder" : "poort (standaard: {default})",
+    "switch-to-advanced" : "Overschakelen naar geavanceerde modus",
+    "switch-to-simple" : "Overschakelen naar simpele modus",
+    "title" : "Dedicated Servers",
+    "username-placeholder" : "gebruikersnaam",
+    "validating" : "Valideren..."
+  },
+  "server-picker" : {
+    "failed-list-dir" : "Kan map niet weergeven",
+    "failed-valid-check" : "Kan niet controleren of het geselecteerde pad een geldige server is"
+  },
+  "settings" : {
+    "cache" : {
+      "cache-location" : "Cache-locatie",
+      "reset" : "Terug naar standaardinstellingen",
+      "save" : "Opslaan en verplaatsen",
+      "title" : "Wijzig download cache-locatie"
+    },
+    "change-cache-location" : "Wijzig cache-locatie",
+    "copy-mod-list" : "Mod-lijst kopiëren",
+    "debug" : "Debug",
+    "generate-debug-info" : "Genereer debug info",
+    "go-online-offline" : "Ga {offline, select, true {online} other {offline}}",
+    "language" : "Taal",
+    "launch-button" : "Startknop",
+    "launch-button.button" : "Knop",
+    "launch-button.cat" : "Nyan",
+    "launch-button.normal" : "Normaal",
+    "proxy" : {
+      "proxy" : "Proxy",
+      "remove" : "Proxy verwijderen",
+      "save" : "Opslaan en opnieuw opstarten",
+      "title" : "Proxy Instellen"
+    },
+    "queue" : "Wachtrij",
+    "queue.start-immediately" : "Start onmiddelijk",
+    "queue.start-manually" : "Handmatig starten",
+    "save-window-position" : "Vensterpositie opslaan",
+    "secret-settings" : "Geheime instellingen",
+    "set-proxy" : "Proxy instellen",
+    "settings" : "Instellingen",
+    "smm-debug-logging" : "SMM debug logging",
+    "start-view" : "Startweergave",
+    "start-view.compact" : "Compact",
+    "start-view.expanded" : "Uitgebreid",
+    "title" : "Mod Manager Instellingen",
+    "update-check" : "Controle op updates",
+    "update-check.ask" : "Vragen wanneer gevonden",
+    "update-check.on-exit" : "Bij sluiten",
+    "update-check.on-start" : "Bij starten"
+  },
+  "smm-update" : {
+    "downloading" : "Downloaden op de achtergrond",
+    "downloading-stats" : "Update downloaden: {current} / {total}, {speed}/s, {eta} resterend",
+    "title" : "SMM Update Beschikbaar - {version}"
+  },
+  "smm2_migration" : {
+    "feature" : {
+      "performance" : "Verbeterde prestaties",
+      "performance.description" : "Houd je efficiënt",
+      "platform_support" : "Native Linux Heroic, Steam Snap, Mac-ondersteuning",
+      "platform_support.description" : "Download een build van GitHub releases als je dat nog niet hebt gedaan!",
+      "profile_format" : "Nieuw profielformaat",
+      "profile_format.description" : "SMM2-profielen zijn niet compatibel met SMM3! Uw bestaande profielen zijn automatisch gemigreerd, maar u kunt geen profielen importeren die met SMM2 zijn gemaakt.",
+      "queue" : "Acties in de wachtrij plaatsen",
+      "queue.description" : "Voeg meerdere mod-downloads/verwijderingen tegelijk toe aan de wachtrij.",
+      "servers" : "Dedicated server beheer",
+      "servers.description" : "Beheer servers eenvoudig via het bestandssysteem, SFTP, FTP en SMB!",
+      "translation" : "Vertaalondersteuning",
+      "translation.description" : "Join onze Discord om SMM naar jouw taal te vertalen!",
+      "ui" : "Vernieuwde gebruikersinterface",
+      "ui.description" : "Een nieuw likje verf om Satisfactory 1.0 te vieren!"
+    },
+    "intro" : "We hebben veel verbeteringen aangebracht in deze versie. Hier zijn enkele hoogtepunten:",
+    "open_guide" : "Open de SMM3-documentatie",
+    "title" : "Welkom bij Satisfactory Mod Manager Versie 3!"
+  },
+  "updates" : {
+    "changelog" : "Wijzigingen",
+    "check-for-updates" : "Controleer op updates",
+    "checking-for-updates" : "Controleren op updates...",
+    "hide-ignored" : "Genegeerde updates verbergen",
+    "ignore" : "Negeer",
+    "mod-update-available" : "{updates, plural, one {{updates} mod update beschikbaar} other {{updates} mod updates beschikbaar}}",
+    "no-updates" : "Momenteel geen mod/SMM beschikbaar",
+    "show-ignored" : "Toon genegeerde updates",
+    "smm-update-available" : "SMM update beschikbaar",
+    "title" : "Updates",
+    "unignore" : "Niet negeren",
+    "update-all" : "Update Alle",
+    "update-selected" : "Update Geselecteerde"
+  }
+}

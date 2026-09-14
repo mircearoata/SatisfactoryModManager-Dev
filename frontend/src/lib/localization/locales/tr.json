@@ -1,0 +1,330 @@
+{
+  "announcement" : {
+    "go-offline" : "Çevrimdışı Moda Geç",
+    "go-online" : "Çevrimiçi Moda Geç",
+    "healthcheck" : "ficsit.app adresine ulaşılamadı. İnternet bağlantınızı kontrol edin veya çevrimdışı modu kullanmayı deneyin. (Mod Yöneticisi Ayarları > Çevrimdışı Moda Geç)",
+    "offline" : "Şu anda çevrimdışısınız. Bazı özellikler kullanılamayabilir. (Yeniden bağlanmak için Mod Yöneticisi Ayarları > Çevrimiçi Moda Geç seçeneğini kullanın.)"
+  },
+  "common" : {
+    "add" : "Ekle",
+    "cancel" : "İptal",
+    "close" : "Kapat",
+    "delete" : "Sil",
+    "import" : "İçe Aktar",
+    "loading" : "Yükleniyor...",
+    "rename" : "Yeniden Adlandır"
+  },
+  "error" : {
+    "failed_to_generate_debug" : "Hata ayıklama dosyası oluşturulurken bir hata oluştu. Daha fazla bilgi için Satisfactory Mod Manager günlük dosyalarını manuel olarak kontrol edin ve bu durumu Discord üzerinden bildirin. Nasıl yapılacağını öğrenmek ve dökümantasyonu açmak için aşağıdaki düğmeyi kullanın.",
+    "generate_debug_info" : "Hata Ayıklama Bilgisi Oluştur",
+    "help" : "Bir sorun mu var? Aşağıdaki düğmeye tıklayın ve oluşturulan ZIP dosyasını modlama Discord'undaki #help-using-mods kanalına gönderin.",
+    "invalid_installs" : "{invalidInstalls, plural, other {{invalidInstalls} geçersiz Satisfactory kurulumu bulundu} }",
+    "no_installs" : "Satisfactory kurulumu bulunamadı",
+    "open_log_docs" : "Günlük Kaydı Belgelerini Aç",
+    "open_modding_discord" : "Modlama Discord'unu Aç",
+    "open_modding_discord.must_generate_debug_first" : "Önce hata ayıklama bilgisi oluşturmalısınız",
+    "reporting_directions" : "Bir sorun mu var? Günlük kayıtlarını toplamak için aşağıdaki düğmeye tıklayın, ardından oluşturulan ZIP dosyasını modlama Discord'undaki #help-using-mods kanalına gönderin.",
+    "title" : "Bir şeyler ters gitti"
+  },
+  "external-install-mod" : {
+    "already-installed" : "Zaten yüklü",
+    "error-loading" : "Mod ayrıntıları yüklenirken hata oluştu",
+    "in-queue" : "Sırada",
+    "install" : "Yükle",
+    "latest-version" : "En son sürüm",
+    "title" : "Mod yükle",
+    "version" : "Sürüm {version}"
+  },
+  "first_time_setup" : {
+    "acknowledge" : "Başlayalım!",
+    "change_later_hint" : "Bu ayarları daha sonra istediğiniz zaman \"Mod Yöneticisi Ayarları\" menüsünden değiştirebilirsiniz.",
+    "intro" : "Başlamak için tercihlerinizi seçin.",
+    "open_welcome_guide" : "Karşılama Rehberini Aç",
+    "option" : {
+      "language" : {
+        "title" : "Mümkün olan yerlerde bu dili kullan:"
+      },
+      "queue-auto-start" : {
+        "disabled" : "\"Uygula\" düğmesine basmamı bekle",
+        "enabled" : "Değişiklikleri hemen uygula",
+        "title" : "Bir mode eklediğimde veya kaldırdığımda ya da profil değiştirdiğimde..."
+      }
+    },
+    "title" : "Satisfactory Mod Manager'a Hoş Geldiniz!"
+  },
+  "launch-button" : {
+    "apply-profile-change" : "{profile} Profilini Uygula",
+    "apply-queued" : "{queued, plural, one {# değişikliği uygula} other {# değişikliği uygula}}",
+    "are-you-sure-warning" : "Başlatmak istediğinizden emin misiniz?",
+    "cant-launch" : "SMM bu kurulumu başlatamıyor",
+    "cant-launch-tooltip" : "Mod Yöneticisi bu kurulum türünü başlatamaz ancak mod dosyalarını yine de sizin için yönetir. Satisfactory'i kullandığınız oyun başlatıcısı üzerinden başlatın.",
+    "changes-queued" : "Değişiklikler henüz mod dosyalarınıza uygulanmadı. Sıraya aldığınız değişiklikleri uygulamak için aşağıdaki düğmeye tıklayın.\n\n(Kuyruk “Elle başlat” modundasınız.)",
+    "game-running" : "Oyun başlatıcınız, oyunun zaten çalıştığını veya hâlâ kapanma aşamasında olduğunu bildiriyor.",
+    "incompatible-mods" : "{versionIncompatible, plural, one {Oyununuzla uyumsuz olan ve yüklenmeyebilecek ya da oyunun çökmesine neden olabilecek {versionIncompatible} mod var} other {Oyununuzla uyumsuz olan ve yüklenmeyebilecek ya da oyunun çökmesine neden olabilecek {versionIncompatible} modlar var}}",
+    "launch-in-progress" : "Başlatılıyor...",
+    "operation-in-progress" : "Zaten devam eden bir işlem var.",
+    "play" : "Satisfactory Oyna",
+    "possibly-incompatible-mods" : "{versionPossiblyCompatible, plural, one {Oyununuzla büyük olasılıkla uyumsuz olan bir mod var} other {Oyununuzla büyük olasılıkla uyumsuz olan {versionPossiblyCompatible} mod var}}",
+    "profile-change-queued" : "Değişiklikler henüz mod dosyalarınıza uygulanmadı. Yeni profili uygulamak için aşağıdaki düğmeye tıklayın.\n\n(Kuyruk “Elle başlat” modundasınız.)",
+    "ready" : "Başlamaya hazırsınız!\n\nNot: Mod Yöneticisi mod dosyalarını yüklemeyi zaten tamamladı. Oyunu kullandığınız oyun başlatıcısından da başlatabilirsiniz; modlar yine yüklenecektir.",
+    "reported-incompatible-mods" : "Bu oyun sürümünde {reportedIncompatible, plural, one {# mod} other {# mod}} bozuk olarak bildirilmiş. Daha fazla bilgi için {versionIncompatible, plural, one {modun} other {modların}} açıklamasını veya uyumluluk notlarını okuyun.",
+    "reported-possibly-compatible-mods" : "Bu oyun sürümünde {reportedPossiblyCompatible, plural, one {# mod} other {# mod}} hasarlı olarak bildirilmiş. Daha fazla bilgi için {versionIncompatible, plural, one {modun} other {modların}} açıklamasını veya uyumluluk notlarını okuyun.",
+    "you-have-warning-mods" : "Şunlara sahipsiniz:"
+  },
+  "left-bar" : {
+    "export" : "Dışa Aktar",
+    "ficsit-app" : "ficsit.app (Mod Deposu)",
+    "game-version" : "Oyun Kurulumunu Seç",
+    "help" : "Yardım",
+    "install-invalid" : "Geçersiz",
+    "install-invalid-tooltip" : "Durum: SMM bu kurulumu yönetemiyor",
+    "install-loading" : "Yükleniyor...",
+    "install-loading-tooltip" : "Durum: Yükleniyor...",
+    "install-unknown" : "Bilinmiyor",
+    "install-unknown-tooltip" : "Durum: Bu kurulum hakkında bilgi alınamadı",
+    "links" : "Bağlantılar",
+    "manage-servers" : "Sunucuları Yönet",
+    "mods-off" : "Modlar kapalı",
+    "mods-on" : "Modlar açık",
+    "other" : "Diğer",
+    "profile" : "Profil",
+    "queue-blocking-switching-tooltip" : "{number, plural, one {Sırada {number} işlem var. Kurulum veya profil değiştirmeden önce işlemi uygulayın ya da iptal edin.} other {Sırada {number} işlem var. Kurulum veya profil değiştirmeden önce işlemleri uygulayın ya da iptal edin.}}",
+    "satisfactory-modding-discord" : "Satisfactory Modding Discord",
+    "smm-github" : "SMM GitHub",
+    "updates" : "Güncellemeler"
+  },
+  "mod-changelog" : {
+    "title" : "<1>{mod}</1> Değişiklik Günlüğü"
+  },
+  "mod-details" : {
+    "ai-disclosure" : null,
+    "ai-disclosure-no-usage" : null,
+    "ai-disclosure-runtime-usage" : null,
+    "ai-disclosure-unspecified" : null,
+    "ai-disclosure-usage" : null,
+    "change-version" : "Sürümü Değiştir",
+    "change-version-any" : "Herhangi Biri",
+    "change-version-or-newer" : "veya daha yenisi",
+    "changelogs" : "Değişiklik Günlükleri",
+    "compatibility" : "Uyumluluk",
+    "compatibility-branch" : "Bu mod, {branch} dalında {state} olarak bildirilmiş.",
+    "compatibility-controller" : null,
+    "compatibility-unknown" : "Bilinmiyor",
+    "compatibility-unknown-tooltip" : "Bu mod için henüz uyumluluk bilgisi bildirilmemiş. Modu deneyip bilginin güncellenemebilmesi için Discord üzerinden bizimle iletişime geçebilirsiniz!",
+    "contributors" : "Katkıda Bulunanlar <1>({authors})</1>",
+    "created" : "Oluşturulma Tarihi",
+    "downloads" : "Toplam İndirme",
+    "installed-version" : "Yüklü Sürüm",
+    "latest-version" : "En Son Sürüm",
+    "mod-author" : "Mod geliştiricisi:",
+    "network-disclosure-no-usage" : null,
+    "network-disclosure-usage" : null,
+    "network-use-disclosure" : null,
+    "network-use-disclosure-unspecified" : null,
+    "offline-mode" : "Çevrimdışı mod etkin. Değişiklik günlükleri ve açıklamalar kullanılamıyor.",
+    "size" : "Boyut",
+    "updated" : "Güncellenme Tarihi",
+    "view-on-ficsit-app" : "ficsit.app'te Görüntüle",
+    "views" : "Görüntülenme"
+  },
+  "mod-list-item" : {
+    "by-author" : "Tarafından",
+    "compatibility-note" : "Bu mod, bu oyun sürümünde {state} olarak bildirilmiş.",
+    "compatibility-note-none" : "(Belirtilmemiş)",
+    "compatibility-warning" : "Bu modla ilgili sorunlar bildirilmiş, ancak yine de yüklemeyi deneyebilirsiniz. Ayrıntılar:",
+    "dependency" : "Bu mod, başka bir modun bağımlılığı olarak zaten yüklü. Diğer modlar buna bağlı olduğu sürece kaldırılamaz.",
+    "disable" : "Bu mod bu profilde etkin. Devre dışı bırakmak için tıklayın. Bu işlem, oyunu başlattığınızda modun yüklenmesini engeller ancak modu profilin bir parçası olarak tutar.",
+    "disable-queued" : "Bu mod devre dışı bırakılmak üzere sıraya alındı. İşlemi iptal etmek için tıklayın.",
+    "disabled-tooltip" : "Bu mod devre dışı. Etkinleştirmek için duraklatma simgesine tıklayın.",
+    "enable" : "Bu modu etkinleştirmek için tıklayın.",
+    "enable-queued" : "Bu mod etkinleştirilmek üzere sıraya alındı. İşlemi iptal etmek için tıklayın.",
+    "favorite" : "Bu modu favorilerinize eklemek için tıklayın. Bir modun favorilere eklenmesi, yüklü olup olmamasından bağımsızdır; seçili profiliniz ne olursa olsun modu daha sonra kolayca bulmanızı sağlar.",
+    "hidden" : "Bu mod geliştiricisi tarafından gizlendi.",
+    "install" : "Bu modu yüklemek için tıklayın.",
+    "no-tags" : "(etiket yok)",
+    "not-installable" : "Bu modu yükleyemezsiniz. Nedeni:",
+    "queued" : "Bu mod başka bir işlem için zaten sıraya alınmış.",
+    "queued-install" : "Bu mod yüklenmek üzere sıraya alındı. İşlemi iptal etmek için tıklayın.",
+    "queued-uninstall" : "Bu mod kaldırılmak üzere sıraya alındı. İşlemi iptal etmek için tıklayın.",
+    "unavailable" : null,
+    "unfavorite" : null,
+    "uninstall" : null,
+    "wait" : null
+  },
+  "mod" : {
+    "compatibility-no-notes" : null
+  },
+  "mods-list-filter" : {
+    "filter" : {
+      "all" : null,
+      "compatible" : null,
+      "dependency" : null,
+      "disabled" : null,
+      "enabled" : null,
+      "favorite" : null,
+      "installed" : null,
+      "not-installed" : null,
+      "queued" : null
+    },
+    "order-by" : {
+      "downloads" : null,
+      "hotness" : null,
+      "last-updated" : null,
+      "name" : null,
+      "popularity" : null,
+      "views" : null
+    },
+    "search" : null,
+    "tag" : {
+      "button-label" : null,
+      "match-all" : null,
+      "match-any" : null,
+      "match-mode" : null,
+      "none-available" : null
+    }
+  },
+  "mods-list" : {
+    "no-mods-filtered" : null,
+    "no-mods-found" : null,
+    "remove-search-filters" : null,
+    "remove-search-text" : null,
+    "show-all" : null
+  },
+  "profiles" : {
+    "add" : {
+      "profile-name" : null,
+      "profile-name-placeholder" : null,
+      "title" : null
+    },
+    "delete" : {
+      "profile-name" : null,
+      "title" : null
+    },
+    "import" : {
+      "profile-file" : null,
+      "profile-name" : null,
+      "profile-name-placeholder" : null,
+      "profile-version-warning" : null,
+      "title" : null
+    },
+    "rename" : {
+      "new-profile" : null,
+      "new-profile-placeholder" : null,
+      "old-profile" : null,
+      "old-profile-placeholder" : null,
+      "title" : null
+    }
+  },
+  "server-manager" : {
+    "add" : null,
+    "advanced-note" : null,
+    "advanced-path-placeholder" : null,
+    "existing-servers" : {
+      "none-yet" : null,
+      "title" : null
+    },
+    "failed-to-connect" : null,
+    "get-help" : null,
+    "host-placeholder" : null,
+    "invalid" : null,
+    "loading" : null,
+    "local-path-placeholder" : null,
+    "name-placeholder" : null,
+    "new-server" : {
+      "title" : null
+    },
+    "password-placeholder" : null,
+    "path-placeholder" : null,
+    "port-placeholder" : null,
+    "switch-to-advanced" : null,
+    "switch-to-simple" : null,
+    "title" : null,
+    "username-placeholder" : null,
+    "validating" : null
+  },
+  "server-picker" : {
+    "failed-list-dir" : null,
+    "failed-valid-check" : null
+  },
+  "settings" : {
+    "cache" : {
+      "cache-location" : null,
+      "reset" : null,
+      "save" : null,
+      "title" : null
+    },
+    "change-cache-location" : null,
+    "copy-mod-list" : null,
+    "debug" : null,
+    "generate-debug-info" : null,
+    "go-online-offline" : null,
+    "language" : null,
+    "launch-button" : null,
+    "launch-button.button" : null,
+    "launch-button.cat" : null,
+    "launch-button.normal" : null,
+    "proxy" : {
+      "proxy" : null,
+      "remove" : null,
+      "save" : null,
+      "title" : null
+    },
+    "queue" : null,
+    "queue.start-immediately" : null,
+    "queue.start-manually" : null,
+    "save-window-position" : null,
+    "secret-settings" : null,
+    "set-proxy" : null,
+    "settings" : null,
+    "smm-debug-logging" : null,
+    "start-view" : null,
+    "start-view.compact" : null,
+    "start-view.expanded" : null,
+    "title" : null,
+    "update-check" : null,
+    "update-check.ask" : null,
+    "update-check.on-exit" : null,
+    "update-check.on-start" : null
+  },
+  "smm-update" : {
+    "downloading" : null,
+    "downloading-stats" : null,
+    "title" : null
+  },
+  "smm2_migration" : {
+    "feature" : {
+      "performance" : null,
+      "performance.description" : null,
+      "platform_support" : null,
+      "platform_support.description" : null,
+      "profile_format" : null,
+      "profile_format.description" : null,
+      "queue" : null,
+      "queue.description" : null,
+      "servers" : null,
+      "servers.description" : null,
+      "translation" : null,
+      "translation.description" : null,
+      "ui" : null,
+      "ui.description" : null
+    },
+    "intro" : null,
+    "open_guide" : null,
+    "title" : null
+  },
+  "updates" : {
+    "changelog" : null,
+    "check-for-updates" : null,
+    "checking-for-updates" : null,
+    "hide-ignored" : null,
+    "ignore" : null,
+    "mod-update-available" : null,
+    "no-updates" : null,
+    "show-ignored" : null,
+    "smm-update-available" : null,
+    "title" : null,
+    "unignore" : null,
+    "update-all" : null,
+    "update-selected" : null
+  }
+}

@@ -22,7 +22,7 @@
   import { isUpdateOnStart } from '$lib/components/modals/smmUpdate/smmUpdate';
   import ModsList from '$lib/components/mods-list/ModsList.svelte';
   import { initializeGraphQLClient } from '$lib/core/graphql';
-  import { i18n } from '$lib/generated';
+  import { i18n } from '$lib/localization';
   import { getModalStore, initializeModalStore } from '$lib/skeletonExtensions';
   import { installs, invalidInstalls, progress } from '$lib/store/ficsitCLIStore';
   import { error, expandedMod, siteURL } from '$lib/store/generalStore';

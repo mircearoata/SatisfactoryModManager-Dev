@@ -1,6 +1,13 @@
-import { i18n } from '$lib/generated';
+export interface StringTable extends Record<string, null | string | StringTable> {}
 
-interface StringTable extends Record<string, null | string | StringTable> {}
+const localeFiles = import.meta.glob<StringTable>('./locales/*.json', { eager: true, import: 'default' });
+
+export const i18n: Record<string, StringTable> = Object.fromEntries(
+  Object.entries(localeFiles).map(([path, content]) => {
+    const lang = path.match(/([^/]+)\.json$/)?.[1] ?? path;
+    return [lang, content];
+  }),
+);
 
 function allStrings(stringTable: StringTable): (string | null)[] {
   return Object.values(stringTable).map((entry) => {
