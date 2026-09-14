@@ -18,12 +18,12 @@ To create a new published release:
 1. Ensure all intended changes are merged into the `master` branch.
 2. Ensure someone with Signpath access is around to approve the release in the next few minutes.
    At the time of writing, that's Vilsol and Mircea.
-3. Fetch the latest localization data from tolgee by running `pnpm translations` in the `frontend` directory, then commit the changes (if there are any).
-4. Make a `Bump version` commit on the master branch to increase the `productVersion` field in `wails.json`. Version numbers should follow [Semantic Versioning](https://semver.org/).
-5. Manually create and push a tag of the format `vX.Y.Z` to that commit, which triggers a
-   [GitHub Action to make a release](https://github.com/satisfactorymodding/SatisfactoryModManager/blob/master/.github/workflows/release.yml).
-   - Create a tag on HEAD: `git tag tag_name_here`
-   - Push a single tag: `git push origin tag tag_name_here`
+3. Run `task prepare-release VERSION=vX.Y.Z` (version numbers should follow [Semantic Versioning](https://semver.org/)). This will:
+   - pull the latest translations and commit them if necessary
+   - bump the version in `wails.json` and commit the change
+   - tag the result with the specified version
+4. Push the changes to the `master` branch.
+5. Push the tag to trigger a [GitHub Action to make a release](https://github.com/satisfactorymodding/SatisfactoryModManager/blob/master/.github/workflows/release.yml): `git push origin tag tag_name_here`
 6. The action will automatically request signing approval, sending an email to approvers and including the link in the action output.
    The action will busy-wait until approval is granted.
 7. Review the draft release automatically created by Goreleaser and edit its description as needed.

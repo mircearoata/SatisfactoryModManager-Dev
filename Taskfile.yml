@@ -70,3 +70,34 @@ tasks:
       - GOOS=windows  golangci-lint run
       - GOOS=linux    golangci-lint run
       - GOOS=darwin   golangci-lint run
+  
+  prepare-release:
+    vars:
+      RAW_VERSION: '{{with or .CLI_ARGS .VERSION}}{{trimPrefix "v" .}}{{end}}'
+      V_VERSION: 'v{{.RAW_VERSION}}'
+    preconditions:
+      - sh: '[ "$(git branch --show-current)" = "master" ]'
+        msg: "Must be on master branch"
+      - sh: '[ "$(git status --porcelain)" = "" ]'
+        msg: "Working directory must be clean"
+      - sh: '[ "$(git rev-list --count HEAD..@{u})" -eq 0 ]'
+        msg: "Local branch is behind remote. Please pull the latest changes."
+      - sh: '! git show-ref --exists refs/tags/{{.V_VERSION}}'
+        msg: "Tag {{.V_VERSION}} already exists"
+      - sh: '[ -n "{{.RAW_VERSION}}" ]'
+        msg: "Version required. Usage: task prepare-release VERSION=<version>"
+      - sh: 'which jq'
+        msg: "jq is required to run this task"
+    cmds:
+      - pnpm -C frontend translations
+      - |
+        if ! git diff --exit-code; then
+          git add frontend/src/lib/localization/locales
+          git commit -m "Update translations"
+        fi
+      - jq '.info.productVersion = "{{.RAW_VERSION}}"' wails.json > wails.json.tmp && mv wails.json.tmp wails.json
+      - git add wails.json
+      - git commit -m "Bump version"
+
+      - git tag {{.V_VERSION}}
+      - echo 'Release {{.V_VERSION}} prepared. Run "git push" and "git push origin tag {{.V_VERSION}}" to create the release.'
