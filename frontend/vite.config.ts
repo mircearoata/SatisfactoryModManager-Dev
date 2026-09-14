@@ -7,7 +7,6 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   plugins: [
     svelte({
-      hot: true,
       onwarn: (warning, defaultHandler) => {
         if (warning.code === 'a11y-click-events-have-key-events') {
           return;
@@ -32,6 +31,7 @@ export default defineConfig({
   build: {
     outDir: 'build',
     target: 'esnext',
+    chunkSizeWarningLimit: 2000,
   },
   server: {
     port: 3000,
