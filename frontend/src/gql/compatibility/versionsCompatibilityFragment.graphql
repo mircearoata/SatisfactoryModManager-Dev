@@ -1,0 +1,11 @@
+fragment ModVersionCompatibility on Mod {
+  versions {
+    id
+    version
+    game_version
+    required_on_remote
+    targets {
+      targetName
+    }
+  }
+}

@@ -2,10 +2,9 @@
   import { mdiArchiveCheck, mdiDownload, mdiEye, mdiLinkLock, mdiPause, mdiPauseCircle, mdiPlay, mdiPlayCircle, mdiStar, mdiStarMinus, mdiStarOutline, mdiStarPlus, mdiSync, mdiTagMultiple, mdiTrashCan, mdiTrayFull, mdiTrayMinus } from '@mdi/js';
   import { ProgressBar } from '@skeletonlabs/skeleton';
   import { getTranslate } from '@tolgee/svelte';
-  import { getContextClient } from '@urql/svelte';
   import { createEventDispatcher } from 'svelte';
 
-  import Markdown from '$lib/components/Markdown.svelte';
+  import CompatibilityText from '$lib/components/CompatibilityText.svelte';
   import ResponsiveButton, { type ButtonDisplay } from '$lib/components/ResponsiveButton.svelte';
   import SvgIcon from '$lib/components/SVGIcon.svelte';
   import T from '$lib/components/T.svelte';
@@ -22,14 +21,12 @@
     progress,
     progressMessage,
     progressPercent,
-    selectedInstallMetadata,
-    selectedProfileTargets,
   } from '$lib/store/ficsitCLIStore';
   import { error, siteURL } from '$lib/store/generalStore';
-  import { type PartialMod, search } from '$lib/store/modFiltersStore';
+  import { type PartialMod, modCompatibilityQueryFor, search } from '$lib/store/modFiltersStore';
   import { largeNumberFormat } from '$lib/utils/dataFormats';
   import { getAuthor } from '$lib/utils/getModAuthor';
-  import { type CompatibilityWithSource, getCompatibility } from '$lib/utils/modCompatibility';
+  import { compatibilityStore } from '$lib/utils/modCompatibility';
   import { DisableMod, EnableMod, InstallMod, RemoveMod } from '$wailsjs/go/ficsitcli/ficsitCLI';
   import { ficsitcli } from '$wailsjs/go/models';
   import { FavoriteMod, UnFavoriteMod } from '$wailsjs/go/settings/settings';
@@ -38,8 +35,6 @@
   export let index: number;
 
   const { t } = getTranslate();
-
-  const client = getContextClient();
 
   const dispatch = createEventDispatcher();
 
@@ -72,6 +67,7 @@
   $: queued = $queuedMods.some((q) => q.mod === mod.mod_reference);
   $: queuedInstall = $queuedMods.some((q) => q.mod === mod.mod_reference && (q.action === 'install' || q.action === 'remove'));
   $: queuedEnable = $queuedMods.some((q) => q.mod === mod.mod_reference && (q.action === 'enable' || q.action === 'disable'));
+  $: explicitlyDisabled = isInstalled && !isEnabled;
 
   $: installButtonDisplay = ((): ButtonDisplay => {
     if (inProgress) {
@@ -113,14 +109,14 @@
         iconHoverClass: 'text-red-500',
         tooltip: $t('mod-list-item.uninstall', 'This mod is installed on this profile. Click to uninstall this mod.'),
       };
-    } else if (compatibility.state !== CompatibilityState.Works) {
-      if (compatibility.state === CompatibilityState.Broken && compatibility.source === 'version') {
+    } else if ($compatibility.state !== CompatibilityState.Works) {
+      if ($compatibility.state === CompatibilityState.Broken && $compatibility.source === 'version') {
         display.tooltip = $t('mod-list-item.not-installable', 'You can\'t install this mod. Reason:');
       } else {
         display.tooltip = $t('mod-list-item.compatibility-warning', 'There are problems reported with this mod, but you can try to install it anyways. Details:');
       }
-      if (compatibility.note) {
-        display.tooltipMarkdown = '<br/>' + compatibility.note;
+      if ($compatibility.note) {
+        display.tooltipMarkdown = '<br/>' + $compatibility.note;
       } else {
         // TODO compatibility.note should always be non-null here, what should our fallback text be if it's not?
         display.tooltip += $t('mod-list-item.compatibility-note-none', ' (None specified)');
@@ -164,7 +160,7 @@
     return display;
   })();
 
-  $: controlButtonsDisabled = !$canInstallMods || isDependency || (compatibility.state === CompatibilityState.Broken && compatibility.source === 'version' && !isInstalled);
+  $: controlButtonsDisabled = !$canInstallMods || isDependency || ($compatibility.state === CompatibilityState.Broken && $compatibility.source === 'version' && !isInstalled);
   $: installButtonDisabled = controlButtonsDisabled || queuedEnable || inProgress;
   $: enableButtonDisabled = controlButtonsDisabled || queuedInstall || inProgress;
 
@@ -187,40 +183,7 @@
     };
   })();
 
-  let compatibility: CompatibilityWithSource = { state: CompatibilityState.Works, source: 'reported' };
-  $: {
-    const info = $selectedInstallMetadata?.info;
-    $selectedProfileTargets;
-    if(info) {
-      if(!('offline' in mod) && !('missing' in mod)) {
-        if(mod.hidden && !isDependency) {
-          compatibility = { state: CompatibilityState.Broken, note: $t('mod-list-item.hidden', 'This mod was hidden by the author.'), source: 'reported' };
-        } else {
-          getCompatibility(mod.mod_reference, client).then((result) => {
-            if (result.source === 'reported') {
-              compatibility = {
-                state: result.state,
-                note: $t('mod-list-item.compatibility-note', 'This mod has been reported as {state} on this game version.', { state: result.state })
-                  + (result.note ? ('<br>' + result.note) : (' ' + $t('mod.compatibility-no-notes', '(No further notes provided)'))),
-                source: 'reported',
-              };
-            } else {
-              compatibility = result;
-            }
-          });
-        }
-      } else if('missing' in mod) {
-        compatibility = { state: CompatibilityState.Broken, note: $t('mod-list-item.unavailable', 'This mod is no longer available on ficsit.app. You may want to remove it.'), source: 'version' };
-      } else {
-        getCompatibility(mod.mod_reference, client, true).then((result) => {
-          compatibility = {
-            ...result,
-            source: 'version',
-          };
-        });
-      }
-    }
-  }
+  $: compatibility = compatibilityStore(modCompatibilityQueryFor(mod));
 
   async function toggleModInstalled() {
     // Svelte does not recreate the component, but reuse it, so the associated mod reference might change
@@ -305,7 +268,7 @@
   <div class="flex relative h-full space-x-2" class:-top-full={inProgress}>
     <div
       class="logo h-full @md/mods-list:w-[5.5rem] w-[4.25rem]"
-      class:grayscale={isInstalled && !isEnabled}
+      class:grayscale={explicitlyDisabled}
     >
       <Thumbhash
         alt="{mod.name} Logo"
@@ -313,12 +276,12 @@
         thumbhash={renderedThumbhash}
       />
     </div>
-    <div class="flex flex-col h-full grow w-0" class:opacity-30={isInstalled && !isEnabled}>
+    <div class="flex flex-col h-full grow w-0" class:opacity-30={explicitlyDisabled}>
       <div class="flex items-center" use:popup={popupHover}>
         <span
           class="shrink min-w-[7rem] truncate text-lg font-medium !leading-6"
-          class:text-error-600={compatibility.state === CompatibilityState.Broken}
-          class:text-warning-500={compatibility.state === CompatibilityState.Damaged}>
+          class:text-error-600={$compatibility.state === CompatibilityState.Broken}
+          class:text-warning-500={$compatibility.state === CompatibilityState.Damaged}>
           {mod.name}
         </span>
         <div class="shrink-0 hidden @lg/mods-list:block truncate w-[7rem] grow">
@@ -399,11 +362,14 @@
   </div>
 </div>
 
-<Tooltip disabled={!(isInstalled && !isEnabled) && compatibility.state === CompatibilityState.Works} {popupId}>
-  {#if isInstalled && !isEnabled}
+<Tooltip disabled={!explicitlyDisabled && $compatibility.state === CompatibilityState.Works} {popupId}>
+  {#if explicitlyDisabled}
     <T defaultValue="This mod is Disabled. Click the pause icon to Enable it." keyName="mod-list-item.disabled-tooltip" />
-  {:else if compatibility.state !== CompatibilityState.Works}
-    <Markdown class="[&>p]:my-0" markdown={compatibility.note ?? ''}/>
+  {:else if 'hidden' in mod && mod.hidden && !isDependency}
+    <T defaultValue="This mod was hidden by the author." keyName="mod-list-item.hidden" />
+  {:else if 'missing' in mod}
+    <T defaultValue="This mod is no longer available on ficsit.app. You may want to remove it." keyName="mod-list-item.unavailable" />
+  {:else if $compatibility.state !== CompatibilityState.Works}
+    <CompatibilityText compatibility={$compatibility} />
   {/if}
 </Tooltip>
-

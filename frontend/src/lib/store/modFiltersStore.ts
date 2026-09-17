@@ -1,12 +1,12 @@
-import type { Client } from '@urql/svelte';
 import { derived, get, writable } from 'svelte/store';
 
 import { bindingTwoWayNoExcept } from './wailsStoreBindings';
 
-import { CompatibilityState, type GetModsQuery } from '$lib/generated';
+import { CompatibilityState, type GetModsQuery, TargetName } from '$lib/generated';
 import { queuedMods } from '$lib/store/actionQueue';
-import { favoriteMods, lockfileMods, manifestMods, selectedInstallMetadata } from '$lib/store/ficsitCLIStore';
-import { getCompatibility } from '$lib/utils/modCompatibility';
+import { favoriteMods, lockfileMods, manifestMods } from '$lib/store/ficsitCLIStore';
+import { type ModCompatibilityQuery, compatibilityContext, getCompatibility } from '$lib/utils/modCompatibility';
+import type { resolver } from '$wailsjs/go/models';
 import { GetModFiltersFilter, GetModFiltersOrder, SetModFiltersFilter, SetModFiltersOrder } from '$wailsjs/go/settings/settings';
 
 export type OrderByField = 'name' | 'last-updated' | 'popularity' | 'hotness' | 'views' | 'downloads' | 'search';
@@ -19,7 +19,7 @@ export interface OrderBy {
 }
 
 export interface Filter {
-  func: (mod: PartialMod, urqlClient: Client) => Promise<boolean> | boolean;
+  func: (mod: PartialMod) => boolean;
 }
 
 export const search = writable('');
@@ -45,20 +45,11 @@ export const visibleOrderByOptions = derived(
 );
 
 export const filterOptions = derived(
-  [favoriteMods, queuedMods, manifestMods, lockfileMods, selectedInstallMetadata], 
-  ([$favoriteMods, $queuedMods, $manifestMods, $lockfileMods, $selectedInstallMetadata]) => (
+  [favoriteMods, queuedMods, manifestMods, lockfileMods, compatibilityContext], 
+  ([$favoriteMods, $queuedMods, $manifestMods, $lockfileMods, $compatibilityContext]) => (
     {
       all: { func: () => true },
-      compatible: {
-        func: async (mod: PartialMod, urqlClient: Client) => { 
-          const installInfo = $selectedInstallMetadata.info;
-          if(!installInfo) {
-            return false;
-          }
-          const compatibility = await getCompatibility(mod.mod_reference, urqlClient);
-          return compatibility.state !== CompatibilityState.Broken;
-        }, 
-      },
+      compatible: { func: (mod: PartialMod) => getCompatibility(modCompatibilityQueryFor(mod), $compatibilityContext).state !== CompatibilityState.Broken },
       favorite: { func: (mod: PartialMod) => $favoriteMods.includes(mod.mod_reference) },
       queued: { func: (mod: PartialMod) => $queuedMods.some((q) => q.mod === mod.mod_reference) },
       installed: { func: (mod: PartialMod) => mod.mod_reference in $manifestMods },
@@ -89,6 +80,7 @@ export interface OfflineMod {
   name: string;
   logo?: string;
   authors: string[];
+  versions?: resolver.ModVersion[];
 }
 export interface MissingMod {
   missing: true;
@@ -109,3 +101,24 @@ export const filter = bindingTwoWayNoExcept<FilterField>('compatible',
   { initialGet: GetModFiltersFilter as () => Promise<FilterField> },
   { updateFunction: SetModFiltersFilter },
 );
+
+export function modCompatibilityQueryFor(mod: PartialMod): ModCompatibilityQuery {
+  if('offline' in mod) {
+    return { 
+      versions: mod.versions?.map((version) => ({
+        ...version,
+        targets: version.targets.map((target) => ({ targetName: target.target_name as TargetName })),
+      })) ?? [],
+    };
+  }
+  if('missing' in mod) {
+    return { versions: [] };
+  }
+  return { 
+    reported: mod.compatibility ?? undefined,
+    versions: mod.versions?.map((version) => ({
+      ...version,
+      targets: version.targets as { targetName: TargetName }[], // The target should never be null, but the schema allows it to be for some reason
+    })) ?? [],
+  };
+}

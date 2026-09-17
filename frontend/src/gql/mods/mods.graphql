@@ -4,6 +4,8 @@ query GetMods($offset: Int!, $limit: Int!) {
     mods {
       ...ModKey
       ...ModListData
+      ...ModReportedCompatibility
+      ...ModVersionCompatibility
     }
   }
 }
