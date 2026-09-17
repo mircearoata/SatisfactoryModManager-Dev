@@ -12,24 +12,16 @@
   import Tooltip from '$lib/components/Tooltip.svelte';
   import { CompatibilityState } from '$lib/generated';
   import { type PopupSettings, popup } from '$lib/skeletonExtensions';
-  import { addQueuedModAction, queuedMods, removeQueuedModAction } from '$lib/store/actionQueue';
   import {
-    canInstallMods,
-    favoriteMods,
-    lockfileMods,
-    manifestMods,
-    progress,
     progressMessage,
     progressPercent,
   } from '$lib/store/ficsitCLIStore';
-  import { error, siteURL } from '$lib/store/generalStore';
+  import { siteURL } from '$lib/store/generalStore';
   import { type PartialMod, modCompatibilityQueryFor, search } from '$lib/store/modFiltersStore';
+  import { favoriteState, modState } from '$lib/store/modState';
   import { largeNumberFormat } from '$lib/utils/dataFormats';
   import { getAuthor } from '$lib/utils/getModAuthor';
   import { compatibilityStore } from '$lib/utils/modCompatibility';
-  import { DisableMod, EnableMod, InstallMod, RemoveMod } from '$wailsjs/go/ficsitcli/ficsitCLI';
-  import { ficsitcli } from '$wailsjs/go/models';
-  import { FavoriteMod, UnFavoriteMod } from '$wailsjs/go/settings/settings';
 
   export let mod: PartialMod;
   export let index: number;
@@ -53,43 +45,33 @@
   $: renderedThumbhash = ('logo_thumbhash' in mod ? mod.logo_thumbhash : undefined) || '2/eFDQIsFmh9h4BreKeAeQqYBxd3d3J4Jw';
   $: author = ('offline' in mod || 'missing' in mod) ? mod.authors[0] : getAuthor(mod);
 
-  const modActions = [
-    ficsitcli.Action.INSTALL,
-    ficsitcli.Action.UNINSTALL,
-    ficsitcli.Action.ENABLE,
-    ficsitcli.Action.DISABLE,
-  ];
+  $: compatibility = compatibilityStore(modCompatibilityQueryFor(mod));
 
-  $: isInstalled = mod.mod_reference in $manifestMods;
-  $: isEnabled = $manifestMods[mod.mod_reference]?.enabled ?? mod.mod_reference in $lockfileMods;
-  $: isDependency = !isInstalled && isEnabled;
-  $: inProgress = !!$progress && modActions.includes($progress.action) && $progress.item.name === mod.mod_reference;
-  $: queued = $queuedMods.some((q) => q.mod === mod.mod_reference);
-  $: queuedInstall = $queuedMods.some((q) => q.mod === mod.mod_reference && (q.action === 'install' || q.action === 'remove'));
-  $: queuedEnable = $queuedMods.some((q) => q.mod === mod.mod_reference && (q.action === 'enable' || q.action === 'disable'));
-  $: explicitlyDisabled = isInstalled && !isEnabled;
+  $: state = modState(mod.mod_reference, compatibility);
+
+  $: explicitlyDisabled = $state.installed.state && !$state.enabled.state;
 
   $: installButtonDisplay = ((): ButtonDisplay => {
-    if (inProgress) {
+    if ($state.inProgress) {
       return {
         icon: mdiSync,
         iconHover: mdiSync,
         tooltip: $t('mod-list-item.wait', 'Wait for the current operation to complete.'),
       };
     }
-    if (isDependency) {
+    if ($state.isDependency) {
       return {
         icon: mdiLinkLock,
         iconHover: mdiLinkLock,
         tooltip: $t('mod-list-item.dependency', 'This mod is already installed as a dependency of another mod. It cannot be uninstalled as long as other mods depend on it.'),
       };
     }
-    if (queuedInstall) {
+    if ($state.installed.queued) {
       return {
         icon: mdiTrayFull,
         iconHover: mdiTrayMinus,
         iconHoverClass: 'text-red-500',
-        tooltip: isInstalled ?
+        tooltip: $state.installed.state ?
           $t('mod-list-item.queued-uninstall', 'This mod is queued to be uninstalled. Click to cancel the operation.') :
             $t('mod-list-item.queued-install', 'This mod is queued to be installed. Click to cancel the operation.'),
       };
@@ -101,7 +83,7 @@
       iconHoverClass: 'text-primary-600',
       tooltip: $t('mod-list-item.install', 'Click to install this mod.'),
     };
-    if (isInstalled) {
+    if ($state.installed.state) {
       display = {
         icon: mdiArchiveCheck,
         iconClass: 'text-primary-600',
@@ -122,7 +104,7 @@
         display.tooltip += $t('mod-list-item.compatibility-note-none', ' (None specified)');
       }
     }
-    if (queued) {
+    if ($state.installed.queued) {
       display.tooltip = $t('mod-list-item.queued', 'This mod is already queued for another operation.');
       delete display.tooltipMarkdown;
     }
@@ -130,12 +112,12 @@
   })();
 
   $: enableButtonDisplay = ((): ButtonDisplay => {
-    if (queuedEnable) {
+    if ($state.enabled.queued) {
       return {
         icon: mdiTrayFull,
         iconHover: mdiTrayMinus,
         iconHoverClass: 'text-red-500',
-        tooltip: isEnabled ?
+        tooltip: $state.enabled.state ?
           $t('mod-list-item.disable-queued', 'This mod is queued to be Disabled. Click to cancel the operation.') :
             $t('mod-list-item.enable-queued', 'This mod is queued to be Enabled. Click to cancel the operation.'),
       };
@@ -147,94 +129,35 @@
       iconHoverClass: 'text-primary-600',
       tooltip: $t('mod-list-item.enable', 'Click to enable this mod.'),
     };
-    if (isEnabled) {
+    if ($state.enabled.state) {
       display = {
         icon: mdiPlay,
         iconHover: mdiPauseCircle,
         tooltip: $t('mod-list-item.disable', 'This mod is Enabled on this profile. Click to Disable it, which prevents it from loading when you start the game, but still keeps it a part of this profile.'),
       };
     }
-    if (queued) {
+    if ($state.installed.queued) {
       display.tooltip = $t('mod-list-item.queued', 'This mod is already queued for another operation.');
     }
     return display;
   })();
+  
+  $: favorite = favoriteState(mod.mod_reference);
 
-  $: controlButtonsDisabled = !$canInstallMods || isDependency || ($compatibility.state === CompatibilityState.Broken && $compatibility.source === 'version' && !isInstalled);
-  $: installButtonDisabled = controlButtonsDisabled || queuedEnable || inProgress;
-  $: enableButtonDisabled = controlButtonsDisabled || queuedInstall || inProgress;
-
-  $: isFavorite = $favoriteMods.includes(mod.mod_reference);
-
-  $: favoriteButtonDisplay = ((): ButtonDisplay => {
-    if (isFavorite) {
-      return {
-        icon: mdiStar,
-        iconHover: mdiStarMinus,
-        iconClass: 'text-warning-500',
-        tooltip: $t('mod-list-item.unfavorite', 'Click to remove this mod from your Favorites.'),
-      };
-    }
-    return {
+  $: favoriteButtonDisplay = $favorite.state ? 
+    {
+      icon: mdiStar,
+      iconHover: mdiStarMinus,
+      iconClass: 'text-warning-500',
+      tooltip: $t('mod-list-item.unfavorite', 'Click to remove this mod from your Favorites.'),
+    } 
+    : {
       icon: mdiStarOutline,
       iconHover: mdiStarPlus,
       iconHoverClass: 'text-warning-500',
       tooltip: $t('mod-list-item.favorite', 'Click to add this mod to your Favorites. Having a mod Favorited is unrelated to whether or not it\'s installed - it\'s a way to keep track of a mod for later regardless of what Profile you have selected.'),
     };
-  })();
-
-  $: compatibility = compatibilityStore(modCompatibilityQueryFor(mod));
-
-  async function toggleModInstalled() {
-    // Svelte does not recreate the component, but reuse it, so the associated mod reference might change
-    const modReference = mod.mod_reference;
-    const action = isInstalled ? async () => RemoveMod(modReference).catch((e) => $error = e) : async () => InstallMod(modReference).catch((e) => $error = e);
-    const actionName = isInstalled ? 'remove' : 'install';
-    if(queued) {
-      removeQueuedModAction(modReference);
-      return;
-    }
-    return addQueuedModAction(
-      modReference,
-      actionName,
-      action,
-    );
-  }
-
-  async function toggleModEnabled() {
-    // Svelte does not recreate the component, but reuse it, so the associated mod reference might change
-    const modReference = mod.mod_reference;
-    const action = isEnabled ? async () => DisableMod(modReference).catch((e) => $error = e) : async () => EnableMod(modReference).catch((e) => $error = e);
-    const actionName = isEnabled ? 'disable' : 'enable';
-    if(queued) {
-      removeQueuedModAction(modReference);
-      return;
-    }
-    return addQueuedModAction(
-      modReference,
-      actionName,
-      action,
-    );
-  }
-
-  async function toggleModFavorite() {
-    try {
-      if(!isFavorite) {
-        await FavoriteMod(mod.mod_reference);
-      } else {
-        await UnFavoriteMod(mod.mod_reference);
-      }
-    } catch(e) {
-      if (e instanceof Error) {
-        $error = e.message;
-      } else if (typeof e === 'string') {
-        $error = e;
-      } else {
-        $error = 'Unknown error';
-      }
-    }
-  }
-
+    
   $: popupId = `mods-list-item-popup-${mod.mod_reference}-${index}`;
 
   $: popupHover = {
@@ -255,7 +178,7 @@
   tabindex="0"
   on:click={listingClick}
   on:keypress={listingClick}>
-  {#if inProgress}
+  {#if $state.inProgress}
     <div class="relative h-full">
       <ProgressBar
         class="h-full w-full"
@@ -265,7 +188,7 @@
         value={$progressPercent}/>
     </div>
   {/if}
-  <div class="flex relative h-full space-x-2" class:-top-full={inProgress}>
+  <div class="flex relative h-full space-x-2" class:-top-full={$state.inProgress}>
     <div
       class="logo h-full @md/mods-list:w-[5.5rem] w-[4.25rem]"
       class:grayscale={explicitlyDisabled}
@@ -322,7 +245,7 @@
           </div>
         </div>
       </div>
-      {#if inProgress}
+      {#if $state.inProgress}
         <span class="shrink-0 text-sm">{$progressMessage}</span>
       {/if}
     </div>
@@ -338,25 +261,25 @@
         id="enable-{mod.mod_reference}"
         class="w-8 h-8 @lg/mods-list:mx-1"
         buttonClass="w-full h-full"
-        disabled={enableButtonDisabled}
+        disabled={!$state.enabled.canToggle}
         display={enableButtonDisplay}
-        onClickAction={toggleModEnabled}
-        visible={isInstalled && !isDependency}
+        onClickAction={$state.enabled.toggle}
+        visible={$state.enabled.available}
       />
       <ResponsiveButton
         id="install-{mod.mod_reference}"
         class="w-8 h-8 @lg/mods-list:mx-1"
         buttonClass="w-full h-full"
-        disabled={installButtonDisabled}
+        disabled={!$state.installed.canToggle}
         display={installButtonDisplay}
-        onClickAction={toggleModInstalled}
+        onClickAction={$state.installed.toggle}
       />
       <ResponsiveButton
         id="favorite-{mod.mod_reference}"
         class="w-8 h-8 @lg/mods-list:mx-1"
         buttonClass="w-full h-full"
         display={favoriteButtonDisplay}
-        onClickAction={toggleModFavorite}
+        onClickAction={$favorite.toggle}
       />
     </div>
   </div>
@@ -365,7 +288,7 @@
 <Tooltip disabled={!explicitlyDisabled && $compatibility.state === CompatibilityState.Works} {popupId}>
   {#if explicitlyDisabled}
     <T defaultValue="This mod is Disabled. Click the pause icon to Enable it." keyName="mod-list-item.disabled-tooltip" />
-  {:else if 'hidden' in mod && mod.hidden && !isDependency}
+  {:else if 'hidden' in mod && mod.hidden && !$state.isDependency}
     <T defaultValue="This mod was hidden by the author." keyName="mod-list-item.hidden" />
   {:else if 'missing' in mod}
     <T defaultValue="This mod is no longer available on ficsit.app. You may want to remove it." keyName="mod-list-item.unavailable" />
