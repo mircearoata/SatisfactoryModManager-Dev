@@ -1,11 +1,11 @@
 <script lang="ts">
   import type { SizeOptions } from '@floating-ui/dom';
-  import { mdiAccessPoint, mdiAccessPointOff, mdiChatProcessing, mdiCheck, mdiChevronDown, mdiControllerClassic, mdiImport, mdiRobot, mdiRobotOff, mdiRocketLaunch, mdiTestTube, mdiWeb } from '@mdi/js';
+  import { mdiAccessPoint, mdiAccessPointOff, mdiChatProcessing, mdiCheck, mdiChevronDown, mdiControllerClassic, mdiRobot, mdiRobotOff, mdiRocketLaunch, mdiTestTube, mdiWeb } from '@mdi/js';
   import { getTranslate } from '@tolgee/svelte';
-  import { getContextClient, queryStore } from '@urql/svelte';
   import { SemVer, coerce, minVersion, parse, sort, validRange } from 'semver';
 
   import ModDetailsEntry from './ModDetailsEntry.svelte';
+  import type { PartialMod } from './helpers';
 
   import Markdown from '$lib/components/Markdown.svelte';
   import Marquee from '$lib/components/Marquee.svelte';
@@ -14,7 +14,7 @@
   import Thumbhash from '$lib/components/Thumbhash.svelte';
   import Tooltip from '$lib/components/Tooltip.svelte';
   import ModChangelog from '$lib/components/modals/ModChangelog.svelte';
-  import { AiUseDisclosureType, CompatibilityState, ControllerCompatibilityState, GetModDetailsDocument } from '$lib/generated';
+  import { AiUseDisclosureType, CompatibilityState, ControllerCompatibilityState } from '$lib/generated';
   import { type PopupSettings, getModalStore, popup } from '$lib/skeletonExtensions';
   import { addQueuedModAction } from '$lib/store/actionQueue';
   import { canInstallMods, lockfileMods, manifestMods } from '$lib/store/ficsitCLIStore';
@@ -23,68 +23,16 @@
   import { offline } from '$lib/store/settingsStore';
   import { bytesToAppropriate } from '$lib/utils/dataFormats';
   import { getAuthor } from '$lib/utils/getModAuthor';
-  import { InstallModVersion, OfflineGetMod } from '$wailsjs/go/ficsitcli/ficsitCLI';
-  import type { resolver } from '$wailsjs/go/models.js';
+  import { InstallModVersion } from '$wailsjs/go/ficsitcli/ficsitCLI';
   import { BrowserOpenURL } from '$wailsjs/runtime/runtime';
-
-  export let focusOnEntry: HTMLElement | undefined = undefined;
+  
+  export let mod: PartialMod | null | undefined;
 
   const { t } = getTranslate();
 
   const modalStore = getModalStore();
 
-  const client = getContextClient();
-
-  $: modQuery = queryStore(
-    {
-      query: GetModDetailsDocument,
-      client,
-      pause: !$expandedMod || !!$offline,
-      variables: {
-        modReference: $expandedMod ?? '',
-      },
-    },
-  );
-
-  interface OfflineMod {
-    offline: true;
-    mod_reference: string;
-    name: string;
-    authors: {
-      role: 'creator';
-      user: {
-        username: string;
-      }
-    }[];
-    logo?: string;
-    versions?: resolver.ModVersion[];
-  }
-  
-  let offlineMod: OfflineMod = {
-    offline: true,
-    mod_reference: '',
-    name: '',
-    versions: [],
-    authors: [],
-    logo: undefined,
-  };
-
-  $: if($offline && $expandedMod) {
-    OfflineGetMod($expandedMod).then((mod) => {
-      offlineMod = {
-        ...mod,
-        authors: mod.authors.map((author) => ({
-          role: 'creator',
-          user: {
-            username: author,
-          },
-        })),
-        offline: true,
-      };
-    });
-  }
-
-  $: mod = $offline ? offlineMod : ($modQuery.fetching ? null : $modQuery.data?.mod);
+  export let focusOnEntry: HTMLElement | undefined = undefined;
 
   $: actualLogo = (mod && 'offline' in mod) ? (mod?.logo ? `data:image/png;base64, ${mod?.logo}` : '/images/no_image.webp') : mod?.logo;
   $: renderedLogo = actualLogo || `${$siteURL}/images/no_image.webp`;
@@ -168,16 +116,12 @@
     );
   }
 
-  function close() {
-    $expandedMod = null;
-  }
-
-  $: authorClick = () => {
+  function authorClick() {
     if (!author) {
       return;
     }
     $search = `author:"${author}"`;
-  };
+  }
 
   const compatEAPopupId = 'mod-details-compat-ea';
 
@@ -293,328 +237,282 @@
   } satisfies PopupSettings;
 </script>
 
-<div class="@container/mod-details h-full flex w-full bg-surface-200-700-token @3xl/mod-details:text-base text-sm">
-  <div style="border-right-color: rgba(239, 239, 239, 0.12);" class="p-4 space-y-4 flex flex-col h-full @3xl/mod-details:w-64 w-52 overflow-y-auto">
-    <div class="flex flex-col flex-auto overflow-y-auto space-y-4">
-      <div class="flex flex-col">
+<div class="flex flex-col flex-auto overflow-y-auto space-y-4">
+  <div class="flex flex-col">
 
-        <div class="logo w-full aspect-square"
-        >
-          <Thumbhash
-            alt="{mod?.name} Logo"
-            image={renderedLogo}
-            thumbhash={renderedThumbhash}
-          />
-        </div>
-        <span 
-          class="font-bold @3xl/mod-details:text-lg mt-2 text-base break-words"
-          class:animate-pulse={!mod}
-          class:placeholder={!mod}
-        >
-          {mod?.name ?? ''}
-        </span>
-        <span class="font-light"><T defaultValue="A mod by:" keyName="mod-details.mod-author" /></span>
-        <span
-          bind:this={focusOnEntry}
-          class="font-medium text-primary-600 cursor-pointer"
-          class:animate-pulse={!mod}
-          class:placeholder={!mod}
-          role="button"
-          tabindex="0"
-          on:click={authorClick}
-          on:keypress={authorClick} 
-        >
-          {author ?? ''}
-        </span>
-      </div>
-    
-      <div use:popup={authorsMenu}>
-        <button class="btn px-4 h-10 text-sm w-full bg-secondary-600">
-          <span class="whitespace-break-spaces">
-            <T
-              defaultValue={'Contributors <1>({authors})</1>'}
-              keyName="mod-details.contributors"
-              params={{
-                authors: mod?.authors.length ?? 0,
-              }}
-              parts={[
-                translationElementPart('span', {
-                  class: [
-                    'text-primary-600',
-                    mod ? '' : 'animate-pulse placeholder',
-                  ].join(' '),
-                }),
-              ]}
-            />
+    <div class="logo w-full aspect-square"
+    >
+      <Thumbhash
+        alt="{mod?.name} Logo"
+        image={renderedLogo}
+        thumbhash={renderedThumbhash}
+      />
+    </div>
+    <span 
+      class="font-bold @3xl/mod-details:text-lg mt-2 text-base break-words"
+      class:animate-pulse={!mod}
+      class:placeholder={!mod}
+    >
+      {mod?.name ?? ''}
+    </span>
+    <span class="font-light"><T defaultValue="A mod by:" keyName="mod-details.mod-author" /></span>
+    <span
+      bind:this={focusOnEntry}
+      class="font-medium text-primary-600 cursor-pointer"
+      class:animate-pulse={!mod}
+      class:placeholder={!mod}
+      role="button"
+      tabindex="0"
+      on:click={authorClick}
+      on:keypress={authorClick} 
+    >
+      {author ?? ''}
+    </span>
+  </div>
+
+  <div use:popup={authorsMenu}>
+    <button class="btn px-4 h-10 text-sm w-full bg-secondary-600">
+      <span class="whitespace-break-spaces">
+        <T
+          defaultValue={'Contributors <1>({authors})</1>'}
+          keyName="mod-details.contributors"
+          params={{
+            authors: mod?.authors.length ?? 0,
+          }}
+          parts={[
+            translationElementPart('span', {
+              class: [
+                'text-primary-600',
+                mod ? '' : 'animate-pulse placeholder',
+              ].join(' '),
+            }),
+          ]}
+        />
+      </span>
+      <SvgIcon
+        class="h-5 w-5"
+        icon={mdiChevronDown}/>
+    </button>
+  </div>
+  <div class="card shadow-xl min-w-[11rem] z-10 duration-0 overflow-y-auto max-h-[95vh] !mt-0" data-popup={authorsMenuPopupId}>
+    <ul>
+      {#each mod?.authors ?? [] as author}
+        <li>
+          <button class="btn w-full h-full space-x-4" on:click={() => $search = `author:"${author.user.username}"`}>
+            <div class="h-12 w-12">
+              {#if 'avatar' in author.user}
+                <img class="rounded-full w-ful h-full" alt="{author.user.username} Avatar" src={author.user.avatar ? author.user.avatar : `${$siteURL}/images/no_image.webp`} />
+              {/if}
+            </div>
+            <div class="flex-auto flex flex-col text-left">
+              <span>{author.user.username}</span>
+              <span>{author.role}</span>
+            </div>
+          </button>
+        </li>
+      {/each}
+    </ul>
+  </div>
+
+  <div>
+    <span>Mod info:</span><br/>
+    <ModDetailsEntry label={$t('mod-details.size', 'Size')} loading={!mod}>{size ?? ''}</ModDetailsEntry>
+    {#if (!mod || !('offline' in mod)) && !$offline}
+      <ModDetailsEntry label={$t('mod-details.created', 'Created')} loading={!mod}>{mod ? new Date(mod.created_at).toLocaleDateString() : ''}</ModDetailsEntry>
+      <ModDetailsEntry label={$t('mod-details.updated', 'Updated')} loading={!mod}>{mod ? new Date(mod.last_version_date).toLocaleString() : ''}</ModDetailsEntry>
+      <ModDetailsEntry label={$t('mod-details.downloads', 'Total downloads')} loading={!mod}>{mod?.downloads.toLocaleString() ?? ''}</ModDetailsEntry>
+      <ModDetailsEntry label={$t('mod-details.views', 'Views')} loading={!mod}>{mod?.views.toLocaleString() ?? ''}</ModDetailsEntry>
+      <ModDetailsEntry label={$t('mod-details.compatibility', 'Compatibility')} loading={!mod}>
+        {#if mod?.compatibility}
+          <div class="flex pl-1">
+            <div use:popup={compatEAPopup}>
+              <SvgIcon class="{colorForCompatibilityState(mod.compatibility.EA.state)} w-5" icon={mdiRocketLaunch} />
+            </div>
+            <Tooltip popupId={compatEAPopupId}>
+              <span class="text-base">
+                <T defaultValue={'This mod has been reported as {state} on {branch}.'} keyName="mod-details.compatibility-branch" params={{ state: mod.compatibility.EA.state, branch: 'Stable' }} />
+              </span>
+              {#if mod.compatibility.EA.note}
+                <Markdown class="[&>p]:my-0" markdown={mod.compatibility.EA.note} />
+              {:else}
+                <T defaultValue="(No further notes provided)" keyName="mod.compatibility-no-notes" />
+              {/if}
+            </Tooltip>
+            <div use:popup={compatEXPPopup}>
+              <SvgIcon class="{colorForCompatibilityState(mod.compatibility.EXP.state)} w-5" icon={mdiTestTube} />
+            </div>
+            <Tooltip popupId={compatEXPPopupId}>
+              <span class="text-base">
+                <T defaultValue={'This mod has been reported as {state} on {branch}.'} keyName="mod-details.compatibility-branch" params={{ state: mod.compatibility.EXP.state, branch: 'Experimental' }} />
+              </span>
+              {#if mod.compatibility.EXP.note}
+                <Markdown class="[&>p]:my-0" markdown={mod.compatibility.EXP.note} />
+              {:else}
+                <T defaultValue="(No further notes provided)" keyName="mod.compatibility-no-notes" />
+              {/if}
+            </Tooltip>
+            <div use:popup={compatControllerPopup}>
+              <SvgIcon class="{colorForControllerCompatibilityState(mod.compatibility.Controller.state)} w-5" icon={mdiControllerClassic} />
+            </div>
+            <Tooltip popupId={compatControllerPopupId}>
+              <span class="text-base">
+                <T defaultValue={'This mod has been reported as {state} for controller support.'} keyName="mod-details.compatibility-controller" params={{ state: mod.compatibility.Controller.state }} />
+              </span>
+              {#if mod.compatibility.Controller.note}
+                <Markdown class="[&>p]:my-0" markdown={mod.compatibility.Controller.note} />
+              {:else}
+                <T defaultValue="(No further notes provided)" keyName="mod.compatibility-no-notes" />
+              {/if}
+            </Tooltip>
+          </div>
+        {:else if mod}
+          <span class="font-bold" use:popup={compatUnknownPopup}>
+            <T defaultValue="Unknown" keyName="mod-details.compatibility-unknown" />
           </span>
+          <Tooltip popupId={compatUnknownPopupId}>
+            <span class="text-base">                  
+              <T defaultValue="No compatibility information has been reported for this mod yet. Try it out and contact us on the Discord so it can be updated!" keyName="mod-details.compatibility-unknown-tooltip" />
+            </span>
+          </Tooltip>
+        {/if}
+      </ModDetailsEntry>
+      <ModDetailsEntry label={$t('mod-details.ai-disclosure', 'AI disclosure')} loading={!mod}>
+        {#if mod?.ai_use_disclosure}
+          <div class="flex pl-1">
+            <div class="flex" use:popup={aiDisclosurePopup}>
+              <SvgIcon class="h-5 w-5" icon={iconForAiUseDisclosure(mod.ai_use_disclosure.disclosure_type)} />
+              {#if mod.ai_use_disclosure.disclosure_type === AiUseDisclosureType.RuntimeAiUsage}
+                <SvgIcon class="h-5 w-5" icon={mdiChatProcessing} />
+              {/if}
+            </div>
+            <Tooltip popupId={aiDisclosurePopupId}>
+              <span class="text-base font-bold">
+                {labelForAiUseDisclosure(mod.ai_use_disclosure.disclosure_type)}
+              </span>
+              {#if mod.ai_use_disclosure.message}
+                <Markdown class="[&>p]:my-0" markdown={mod.ai_use_disclosure.message} />
+              {/if}
+            </Tooltip>
+          </div>
+        {:else if mod}
+          <span class="font-bold">
+            <T defaultValue="Unspecified" keyName="mod-details.ai-disclosure-unspecified" />
+          </span>
+        {/if}
+      </ModDetailsEntry>
+      <ModDetailsEntry label={$t('mod-details.network-use-disclosure', 'Network use')} loading={!mod}>
+        {#if mod?.network_use_disclosure !== null && mod?.network_use_disclosure !== undefined}
+          <div class="flex pl-1">
+            <div class="flex" use:popup={networkDisclosurePopup}>
+              <SvgIcon class="h-5 w-5" icon={iconForNetworkUseDisclosure(mod.network_use_disclosure)} />
+            </div>
+            <Tooltip popupId={networkDisclosurePopupId}>
+              <span class="text-base font-bold">
+                {labelForNetworkUseDisclosure(mod.network_use_disclosure)}
+              </span>
+              {#if mod.network_use_disclosure}
+                <Markdown class="[&>p]:my-0" markdown={mod.network_use_disclosure} />
+              {/if}
+            </Tooltip>
+          </div>
+        {:else if mod}
+          <span class="font-bold">
+            <T defaultValue="Unspecified" keyName="mod-details.network-use-disclosure-unspecified" />
+          </span>
+        {/if}
+      </ModDetailsEntry>
+    {/if}
+  </div>
+
+  <div>
+    <ModDetailsEntry label={$t('mod-details.latest-version', 'Latest version')} loading={!mod}>{latestVersion ?? ''}</ModDetailsEntry>
+    <ModDetailsEntry label={$t('mod-details.installed-version', 'Installed version')} loading={!mod}>{installedVersion ?? ''}</ModDetailsEntry>
+    <div class="pt-2" use:popup={changeVersionMenu}>
+      <button
+        class="btn px-4 h-10 text-sm w-full bg-secondary-600"
+        disabled={!$canInstallMods}
+      >
+        <Marquee>
+          <T defaultValue="Change version" keyName="mod-details.change-version" />
+        </Marquee>
+        <SvgIcon
+          class="h-5 w-5"
+          icon={mdiChevronDown}/>
+      </button>
+    </div>
+    <div class="card shadow-xl min-w-[11rem] z-10 duration-0 overflow-y-auto !mt-0" data-popup={changeVersionMenuPopupId}>
+      <ul>
+        <li>
+          <button class="btn variant-filled bg-surface-100-800-token text-token w-full h-full text-left" on:click={() => installVersion(null)}>
+            <div class="w-7 h-7 p-1">
+              {#if manifestVersion === '>=0.0.0'}
+                <SvgIcon class="h-full w-full" icon={mdiCheck} />
+              {/if}
+            </div>
+            <span class="flex-auto">
+              <T defaultValue="Any" keyName="mod-details.change-version-any" />
+            </span>
+          </button>
+        </li>
+        {#each mod?.versions ?? [] as version}
+          <li class="flex">
+            <button class="btn variant-filled bg-surface-100-800-token text-token w-full h-full text-left" on:click={() => installVersion(version.version)}>
+              <div class="w-7 h-7 p-1">
+                {#if manifestVersion === version.version}
+                  <SvgIcon class="h-full w-full" icon={mdiCheck} />
+                {/if}
+              </div>
+              <span class="flex-auto">{version.version}</span>
+            </button>
+            <div class="divider-vertical" />
+            <button class="btn variant-filled bg-surface-100-800-token text-token rounded-none w-full h-full text-left" on:click={() => installVersion(`>=${version.version}`)}>
+              <span class="flex-auto">
+                <T defaultValue="or newer" keyName="mod-details.change-version-or-newer" />
+              </span>
+              <div class="w-7 h-7 p-1">
+                {#if manifestVersion && manifestVersion !== version.version && validRange(manifestVersion) && minVersion(manifestVersion)?.format() === version.version}
+                  <SvgIcon class="h-full w-full" icon={mdiCheck} />
+                {/if}
+              </div>
+            </button>
+          </li>
+        {/each}
+      </ul>
+    </div>
+    {#if (!mod || !('offline' in mod)) && !$offline}
+      <div class="pt-2" use:popup={changelogMenu}>
+        <button class="btn px-4 h-10 text-sm w-full bg-secondary-600">
+          <Marquee>
+            <T defaultValue="Changelogs" keyName="mod-details.changelogs" />
+          </Marquee>
           <SvgIcon
             class="h-5 w-5"
             icon={mdiChevronDown}/>
         </button>
       </div>
-      <div class="card shadow-xl min-w-[11rem] z-10 duration-0 overflow-y-auto max-h-[95vh] !mt-0" data-popup={authorsMenuPopupId}>
+      <div class="card shadow-xl min-w-[11rem] z-10 duration-0 overflow-y-auto !mt-0" data-popup={changelogMenuPopupId}>
         <ul>
-          {#each mod?.authors ?? [] as author}
+          {#each mod?.versions ?? [] as version}
             <li>
-              <button class="btn w-full h-full space-x-4" on:click={() => $search = `author:"${author.user.username}"`}>
-                <div class="h-12 w-12">
-                  {#if 'avatar' in author.user}
-                    <img class="rounded-full w-ful h-full" alt="{author.user.username} Avatar" src={author.user.avatar ? author.user.avatar : `${$siteURL}/images/no_image.webp`} />
-                  {/if}
-                </div>
-                <div class="flex-auto flex flex-col text-left">
-                  <span>{author.user.username}</span>
-                  <span>{author.role}</span>
-                </div>
+              <button class="btn w-full h-full" on:click={() => modalStore.trigger({ type:'component', component: { ref: ModChangelog, props:{ mod: mod?.mod_reference, versionRange: version.version } } })}>
+                <span>{version.version}</span>
               </button>
             </li>
           {/each}
         </ul>
       </div>
-
-      <div>
-        <span>Mod info:</span><br/>
-        <ModDetailsEntry label={$t('mod-details.size', 'Size')} loading={!mod}>{size ?? ''}</ModDetailsEntry>
-        {#if (!mod || !('offline' in mod)) && !$offline}
-          <ModDetailsEntry label={$t('mod-details.created', 'Created')} loading={!mod}>{mod ? new Date(mod.created_at).toLocaleDateString() : ''}</ModDetailsEntry>
-          <ModDetailsEntry label={$t('mod-details.updated', 'Updated')} loading={!mod}>{mod ? new Date(mod.last_version_date).toLocaleString() : ''}</ModDetailsEntry>
-          <ModDetailsEntry label={$t('mod-details.downloads', 'Total downloads')} loading={!mod}>{mod?.downloads.toLocaleString() ?? ''}</ModDetailsEntry>
-          <ModDetailsEntry label={$t('mod-details.views', 'Views')} loading={!mod}>{mod?.views.toLocaleString() ?? ''}</ModDetailsEntry>
-          <ModDetailsEntry label={$t('mod-details.compatibility', 'Compatibility')} loading={!mod}>
-            {#if mod?.compatibility}
-              <div class="flex pl-1">
-                <div use:popup={compatEAPopup}>
-                  <SvgIcon class="{colorForCompatibilityState(mod.compatibility.EA.state)} w-5" icon={mdiRocketLaunch} />
-                </div>
-                <Tooltip popupId={compatEAPopupId}>
-                  <span class="text-base">
-                    <T defaultValue={'This mod has been reported as {state} on {branch}.'} keyName="mod-details.compatibility-branch" params={{ state: mod.compatibility.EA.state, branch: 'Stable' }} />
-                  </span>
-                  {#if mod.compatibility.EA.note}
-                    <Markdown class="[&>p]:my-0" markdown={mod.compatibility.EA.note} />
-                  {:else}
-                    <T defaultValue="(No further notes provided)" keyName="mod.compatibility-no-notes" />
-                  {/if}
-                </Tooltip>
-                <div use:popup={compatEXPPopup}>
-                  <SvgIcon class="{colorForCompatibilityState(mod.compatibility.EXP.state)} w-5" icon={mdiTestTube} />
-                </div>
-                <Tooltip popupId={compatEXPPopupId}>
-                  <span class="text-base">
-                    <T defaultValue={'This mod has been reported as {state} on {branch}.'} keyName="mod-details.compatibility-branch" params={{ state: mod.compatibility.EXP.state, branch: 'Experimental' }} />
-                  </span>
-                  {#if mod.compatibility.EXP.note}
-                    <Markdown class="[&>p]:my-0" markdown={mod.compatibility.EXP.note} />
-                  {:else}
-                    <T defaultValue="(No further notes provided)" keyName="mod.compatibility-no-notes" />
-                  {/if}
-                </Tooltip>
-                <div use:popup={compatControllerPopup}>
-                  <SvgIcon class="{colorForControllerCompatibilityState(mod.compatibility.Controller.state)} w-5" icon={mdiControllerClassic} />
-                </div>
-                <Tooltip popupId={compatControllerPopupId}>
-                  <span class="text-base">
-                    <T defaultValue={'This mod has been reported as {state} for controller support.'} keyName="mod-details.compatibility-controller" params={{ state: mod.compatibility.Controller.state }} />
-                  </span>
-                  {#if mod.compatibility.Controller.note}
-                    <Markdown class="[&>p]:my-0" markdown={mod.compatibility.Controller.note} />
-                  {:else}
-                    <T defaultValue="(No further notes provided)" keyName="mod.compatibility-no-notes" />
-                  {/if}
-                </Tooltip>
-              </div>
-            {:else if mod}
-              <span class="font-bold" use:popup={compatUnknownPopup}>
-                <T defaultValue="Unknown" keyName="mod-details.compatibility-unknown" />
-              </span>
-              <Tooltip popupId={compatUnknownPopupId}>
-                <span class="text-base">                  
-                  <T defaultValue="No compatibility information has been reported for this mod yet. Try it out and contact us on the Discord so it can be updated!" keyName="mod-details.compatibility-unknown-tooltip" />
-                </span>
-              </Tooltip>
-            {/if}
-          </ModDetailsEntry>
-          <ModDetailsEntry label={$t('mod-details.ai-disclosure', 'AI disclosure')} loading={!mod}>
-            {#if mod?.ai_use_disclosure}
-              <div class="flex pl-1">
-                <div class="flex" use:popup={aiDisclosurePopup}>
-                  <SvgIcon class="h-5 w-5" icon={iconForAiUseDisclosure(mod.ai_use_disclosure.disclosure_type)} />
-                  {#if mod.ai_use_disclosure.disclosure_type === AiUseDisclosureType.RuntimeAiUsage}
-                    <SvgIcon class="h-5 w-5" icon={mdiChatProcessing} />
-                  {/if}
-                </div>
-                <Tooltip popupId={aiDisclosurePopupId}>
-                  <span class="text-base font-bold">
-                    {labelForAiUseDisclosure(mod.ai_use_disclosure.disclosure_type)}
-                  </span>
-                  {#if mod.ai_use_disclosure.message}
-                    <Markdown class="[&>p]:my-0" markdown={mod.ai_use_disclosure.message} />
-                  {/if}
-                </Tooltip>
-              </div>
-            {:else if mod}
-              <span class="font-bold">
-                <T defaultValue="Unspecified" keyName="mod-details.ai-disclosure-unspecified" />
-              </span>
-            {/if}
-          </ModDetailsEntry>
-          <ModDetailsEntry label={$t('mod-details.network-use-disclosure', 'Network use')} loading={!mod}>
-            {#if mod?.network_use_disclosure !== null && mod?.network_use_disclosure !== undefined}
-              <div class="flex pl-1">
-                <div class="flex" use:popup={networkDisclosurePopup}>
-                  <SvgIcon class="h-5 w-5" icon={iconForNetworkUseDisclosure(mod.network_use_disclosure)} />
-                </div>
-                <Tooltip popupId={networkDisclosurePopupId}>
-                  <span class="text-base font-bold">
-                    {labelForNetworkUseDisclosure(mod.network_use_disclosure)}
-                  </span>
-                  {#if mod.network_use_disclosure}
-                    <Markdown class="[&>p]:my-0" markdown={mod.network_use_disclosure} />
-                  {/if}
-                </Tooltip>
-              </div>
-            {:else if mod}
-              <span class="font-bold">
-                <T defaultValue="Unspecified" keyName="mod-details.network-use-disclosure-unspecified" />
-              </span>
-            {/if}
-          </ModDetailsEntry>
-        {/if}
-      </div>
-
-      <div>
-        <ModDetailsEntry label={$t('mod-details.latest-version', 'Latest version')} loading={!mod}>{latestVersion ?? ''}</ModDetailsEntry>
-        <ModDetailsEntry label={$t('mod-details.installed-version', 'Installed version')} loading={!mod}>{installedVersion ?? ''}</ModDetailsEntry>
-        <div class="pt-2" use:popup={changeVersionMenu}>
-          <button
-            class="btn px-4 h-10 text-sm w-full bg-secondary-600"
-            disabled={!$canInstallMods}
-          >
-            <Marquee>
-              <T defaultValue="Change version" keyName="mod-details.change-version" />
-            </Marquee>
-            <SvgIcon
-              class="h-5 w-5"
-              icon={mdiChevronDown}/>
-          </button>
-        </div>
-        <div class="card shadow-xl min-w-[11rem] z-10 duration-0 overflow-y-auto !mt-0" data-popup={changeVersionMenuPopupId}>
-          <ul>
-            <li>
-              <button class="btn variant-filled bg-surface-100-800-token text-token w-full h-full text-left" on:click={() => installVersion(null)}>
-                <div class="w-7 h-7 p-1">
-                  {#if manifestVersion === '>=0.0.0'}
-                    <SvgIcon class="h-full w-full" icon={mdiCheck} />
-                  {/if}
-                </div>
-                <span class="flex-auto">
-                  <T defaultValue="Any" keyName="mod-details.change-version-any" />
-                </span>
-              </button>
-            </li>
-            {#each mod?.versions ?? [] as version}
-              <li class="flex">
-                <button class="btn variant-filled bg-surface-100-800-token text-token w-full h-full text-left" on:click={() => installVersion(version.version)}>
-                  <div class="w-7 h-7 p-1">
-                    {#if manifestVersion === version.version}
-                      <SvgIcon class="h-full w-full" icon={mdiCheck} />
-                    {/if}
-                  </div>
-                  <span class="flex-auto">{version.version}</span>
-                </button>
-                <div class="divider-vertical" />
-                <button class="btn variant-filled bg-surface-100-800-token text-token rounded-none w-full h-full text-left" on:click={() => installVersion(`>=${version.version}`)}>
-                  <span class="flex-auto">
-                    <T defaultValue="or newer" keyName="mod-details.change-version-or-newer" />
-                  </span>
-                  <div class="w-7 h-7 p-1">
-                    {#if manifestVersion && manifestVersion !== version.version && validRange(manifestVersion) && minVersion(manifestVersion)?.format() === version.version}
-                      <SvgIcon class="h-full w-full" icon={mdiCheck} />
-                    {/if}
-                  </div>
-                </button>
-              </li>
-            {/each}
-          </ul>
-        </div>
-        {#if (!mod || !('offline' in mod)) && !$offline}
-          <div class="pt-2" use:popup={changelogMenu}>
-            <button class="btn px-4 h-10 text-sm w-full bg-secondary-600">
-              <Marquee>
-                <T defaultValue="Changelogs" keyName="mod-details.changelogs" />
-              </Marquee>
-              <SvgIcon
-                class="h-5 w-5"
-                icon={mdiChevronDown}/>
-            </button>
-          </div>
-          <div class="card shadow-xl min-w-[11rem] z-10 duration-0 overflow-y-auto !mt-0" data-popup={changelogMenuPopupId}>
-            <ul>
-              {#each mod?.versions ?? [] as version}
-                <li>
-                  <button class="btn w-full h-full" on:click={() => modalStore.trigger({ type:'component', component: { ref: ModChangelog, props:{ mod: mod?.mod_reference, versionRange: version.version } } })}>
-                    <span>{version.version}</span>
-                  </button>
-                </li>
-              {/each}
-            </ul>
-          </div>
-        {/if}
-        <div class="pt-2">
-          <button
-            class="btn px-4 h-10 text-sm w-full bg-primary-900"
-            on:click={() => BrowserOpenURL(ficsitAppLink)}>
-            <span class="whitespace-break-spaces">
-              <T defaultValue="View on ficsit.app" keyName="mod-details.view-on-ficsit-app" />
-            </span>
-            <SvgIcon
-              class="h-5 w-5"
-              icon={mdiWeb}/>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <button
-      class="btn px-4 h-8 w-full bg-secondary-600 text-sm"
-      on:click={close}>
-      <SvgIcon
-        class="h-5 w-5 -scale-x-100"
-        icon={mdiImport}/>
-      <Marquee>
-        <T defaultValue="Close" keyName="common.close" />
-      </Marquee>
-    </button>
-  </div>
-  <div class="break-words overflow-wrap-anywhere flex-1 px-3 mr-3 my-4 overflow-y-scroll overflow-x-hidden w-0">
-    {#if $offline}
-      <div class="flex items-center justify-center h-full text-center font-bold">
-        <T defaultValue="Offline mode is enabled. Changelogs and descriptions are not available." keyName="mod-details.offline-mode" />
-      </div>
-    {:else if mod && 'full_description' in mod && mod.full_description}
-      <Markdown markdown={mod.full_description} />
-    {:else}
-      <div class="p-4 space-y-4 h-full flex flex-col">
-        <div class="placeholder" />
-        <div class="grid grid-cols-3 gap-4 md:gap-8">
-          <div class="placeholder" />
-          <div class="placeholder" />
-          <div class="placeholder" />
-        </div>
-        <div class="grid grid-cols-4 gap-2 md:gap-4">
-          <div class="placeholder" />
-          <div class="placeholder" />
-          <div class="placeholder" />
-          <div class="placeholder" />
-        </div>
-        <div class="placeholder grow" />
-      </div>
     {/if}
+    <div class="pt-2">
+      <button
+        class="btn px-4 h-10 text-sm w-full bg-primary-900"
+        on:click={() => BrowserOpenURL(ficsitAppLink)}>
+        <span class="whitespace-break-spaces">
+          <T defaultValue="View on ficsit.app" keyName="mod-details.view-on-ficsit-app" />
+        </span>
+        <SvgIcon
+          class="h-5 w-5"
+          icon={mdiWeb}/>
+      </button>
+    </div>
   </div>
 </div>
-
-<style>
-  .overflow-wrap-anywhere {
-    overflow-wrap: anywhere;
-  }
-</style>

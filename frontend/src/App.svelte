@@ -10,7 +10,7 @@
   import T from '$lib/components/T.svelte';
   import TitleBar from '$lib/components/TitleBar.svelte';
   import LeftBar from '$lib/components/left-bar/LeftBar.svelte';
-  import ModDetails from '$lib/components/mod-details/ModDetails.svelte';
+  import ModDetailsPage from '$lib/components/mod-details/ModDetailsPage.svelte';
   import ErrorDetails from '$lib/components/modals/ErrorDetails.svelte';
   import ErrorModal from '$lib/components/modals/ErrorModal.svelte';
   import ExternalInstallMod from '$lib/components/modals/ExternalInstallMod.svelte';
@@ -312,7 +312,7 @@
           </ModsList>
         </div>
         <div class="w-3/5" class:grow={!windowStateChanging} class:hidden={!$expandedMod || windowStateChanging}>
-          <ModDetails bind:focusOnEntry/>
+          <ModDetailsPage bind:focusOnEntry/>
         </div>
       </div>
     </div>
