@@ -71,7 +71,7 @@
 <!-- Intercepting mouse clicks for the link interrupter also seems to work for pressing Enter on the keyboard without a specific key handler added -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <div
-  {...$$props}
+  {...{ ...$$props, markdown: undefined }}
   class="{inline ? 'inline-markdown-content' : 'markdown-content'} {$$props.class}"
   role="article"
   on:click={handleDescriptionClick}>
