@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { SizeOptions } from '@floating-ui/dom';
-  import { mdiAccessPoint, mdiAccessPointOff, mdiChatProcessing, mdiCheck, mdiChevronDown, mdiControllerClassic, mdiRobot, mdiRobotOff, mdiRocketLaunch, mdiTestTube, mdiWeb } from '@mdi/js';
+  import { mdiAccessPoint, mdiAccessPointOff, mdiChatProcessing, mdiCheck, mdiChevronDown, mdiControllerClassic, mdiRobot, mdiRobotOff, mdiRocketLaunch, mdiStar, mdiStarMinus, mdiStarOutline, mdiStarPlus, mdiTestTube, mdiWeb } from '@mdi/js';
   import { getTranslate } from '@tolgee/svelte';
   import { SemVer, coerce, minVersion, parse, sort, validRange } from 'semver';
 
@@ -9,6 +9,7 @@
 
   import Markdown from '$lib/components/Markdown.svelte';
   import Marquee from '$lib/components/Marquee.svelte';
+  import ResponsiveButton from '$lib/components/ResponsiveButton.svelte';
   import SvgIcon from '$lib/components/SVGIcon.svelte';
   import T, { translationElementPart } from '$lib/components/T.svelte';
   import Thumbhash from '$lib/components/Thumbhash.svelte';
@@ -20,6 +21,7 @@
   import { canInstallMods, lockfileMods, manifestMods } from '$lib/store/ficsitCLIStore';
   import { error, expandedMod, siteURL } from '$lib/store/generalStore';
   import { search } from '$lib/store/modFiltersStore';
+  import { favoriteState } from '$lib/store/modState';
   import { offline } from '$lib/store/settingsStore';
   import { bytesToAppropriate } from '$lib/utils/dataFormats';
   import { getAuthor } from '$lib/utils/getModAuthor';
@@ -235,6 +237,22 @@
     },
     placement: 'bottom',
   } satisfies PopupSettings;
+  
+  $: favorite = favoriteState(mod?.mod_reference ?? '');
+
+  $: favoriteButtonDisplay = $favorite.state ? 
+    {
+      icon: mdiStar,
+      iconHover: mdiStarMinus,
+      iconClass: 'text-warning-500',
+      tooltip: $t('mod-list-item.unfavorite', 'Click to remove this mod from your Favorites.'),
+    } 
+    : {
+      icon: mdiStarOutline,
+      iconHover: mdiStarPlus,
+      iconHoverClass: 'text-warning-500',
+      tooltip: $t('mod-list-item.favorite', 'Click to add this mod to your Favorites. Having a mod Favorited is unrelated to whether or not it\'s installed - it\'s a way to keep track of a mod for later regardless of what Profile you have selected.'),
+    };
 </script>
 
 <div class="flex flex-col flex-auto overflow-y-auto space-y-4">
@@ -248,13 +266,20 @@
         thumbhash={renderedThumbhash}
       />
     </div>
-    <span 
-      class="font-bold @3xl/mod-details:text-lg mt-2 text-base break-words"
-      class:animate-pulse={!mod}
-      class:placeholder={!mod}
-    >
-      {mod?.name ?? ''}
-    </span>
+    <div class="flex w-full font-bold @3xl/mod-details:text-lg mt-2 text-base break-words items-center">
+      <span>{mod?.name ?? ''}</span>
+      {#if !mod}
+        <div class="grow animate-pulse placeholder"/>
+      {/if}
+      <ResponsiveButton
+        id="mod-details-favorite"
+        class="w-8 h-8 @lg/mods-list:mx-1"
+        buttonClass="w-full h-full"
+        display={favoriteButtonDisplay}
+        disabled={!mod}
+        onClickAction={$favorite.toggle}
+      />
+    </div>
     <span class="font-light"><T defaultValue="A mod by:" keyName="mod-details.mod-author" /></span>
     <span
       bind:this={focusOnEntry}
