@@ -1,12 +1,13 @@
 <script lang="ts">
   import { mdiOpenInNew, mdiTrayFull } from '@mdi/js';
-  import { getContextClient } from '@urql/svelte';
+  import { getContextClient, queryStore } from '@urql/svelte';
+  import { derived } from 'svelte/store';
 
   import Marquee from '$lib/components/Marquee.svelte';
   import SvgIcon from '$lib/components/SVGIcon.svelte';
   import T from '$lib/components/T.svelte';
   import Tooltip from '$lib/components/Tooltip.svelte';
-  import { type Compatibility, CompatibilityState } from '$lib/generated';
+  import { type Compatibility, CompatibilityState, GetModsCompatibilityDocument, type GetModsCompatibilityQuery, TargetName } from '$lib/generated';
   import { type PopupSettings, popup } from '$lib/skeletonExtensions';
   import { hasPendingProfileChange, queuedMods, startQueue } from '$lib/store/actionQueue';
   import {
@@ -15,39 +16,62 @@
     lockfileMods,
     progress,
     selectedInstallMetadata,
-    selectedProfile, selectedProfileTargets,
+    selectedProfile,
   } from '$lib/store/ficsitCLIStore';
   import { error, hasFetchedMods, isLaunchingGame } from '$lib/store/generalStore';
-  import { launchButton, queueAutoStart } from '$lib/store/settingsStore';
-  import { type CompatibilityWithSource, getCompatibility } from '$lib/utils/modCompatibility';
+  import { launchButton, offline, queueAutoStart } from '$lib/store/settingsStore';
+  import { type CompatibilityWithSource, type ModCompatibilityQuery, compatibilityStore } from '$lib/utils/modCompatibility';
   import { Apply, LaunchGame } from '$wailsjs/go/ficsitcli/ficsitCLI';
 
   $: isInstallLaunchable = !!$selectedInstallMetadata?.info?.launchPath;
 
   const client = getContextClient();
 
-  let compatibilities: Record<string, CompatibilityWithSource> = {};
-  $: {
-    const info = $selectedInstallMetadata?.info;
-    $selectedProfileTargets;
-    if (info && $hasFetchedMods) {
-      const newCompatibilities: typeof compatibilities = {};
-      Object.keys($lockfileMods).map(async (modReference) => {
-        newCompatibilities[modReference] = await getCompatibility(modReference, client);
-      });
-      compatibilities = newCompatibilities;
-    }
+  $: modCompatibilitiesQuery = queryStore({
+    query: GetModsCompatibilityDocument,
+    client,
+    pause: !$hasFetchedMods || $offline,
+    variables: {
+      modReferences: Object.keys($lockfileMods),
+    },
+  });
+
+  function compatibilityQueryFor(mod: GetModsCompatibilityQuery['getMods']['mods'][number]): ModCompatibilityQuery {
+    return {
+      reported: mod.compatibility ?? undefined,
+      versions: mod.versions?.map((version) => ({
+        ...version,
+        targets: version.targets as { targetName: TargetName }[], // The target should never be null, but the schema allows it to be for some reason
+      })) ?? [],
+    };
   }
 
+  $: compatibilityQueries = ($modCompatibilitiesQuery.data?.getMods.mods ?? []).map((mod) => ({
+    modReference: mod.mod_reference,
+    query: compatibilityQueryFor(mod),
+  }));
+
+  $: rawCompatibilities = derived([compatibilityStore(compatibilityQueries.map((q) => q.query))], ([$compatibilityStore]) => {
+    return compatibilityQueries.map(({ modReference }, i) => ({
+      modReference,
+      compatibility: $compatibilityStore[i],
+    }));
+  });
+
+  $: compatibilities = $rawCompatibilities.reduce((acc, { modReference, compatibility }) => {
+    acc[modReference] = compatibility;
+    return acc;
+  }, {} as Record<string, CompatibilityWithSource>);
+
   $: reportedCompatibilities = Object.entries(compatibilities).reduce((acc, [modReference, compatibility]) => {
-    if (compatibility?.source === 'reported') {
+    if (compatibility.source === 'reported') {
       acc[modReference] = compatibility;
     }
     return acc;
   }, {} as Record<string, Compatibility>);
 
   $: versionCompatibilities = Object.entries(compatibilities).reduce((acc, [modReference, compatibility]) => {
-    if (compatibility?.source === 'version') {
+    if (compatibility.source === 'version') {
       acc[modReference] = compatibility;
     }
     return acc;

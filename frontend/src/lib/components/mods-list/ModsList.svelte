@@ -128,18 +128,9 @@
 
   $: availableTags = _.sortBy(_.uniqBy(onlineMods?.map((mod) => mod.tags ?? []).flat() ?? [], 'id'), 'name');
 
-  let filteredMods: PartialMod[] = [];
-  let filteringMods = false;
+  $: filteredMods = mods.filter((mod) => $filterOptions[$filter].func(mod));
 
-  $: {
-    filteringMods = true;
-    Promise.all(mods.map((mod) => $filterOptions[$filter].func(mod, client)))
-      .then((results) => mods.filter((_, i) => results[i]))
-      .then((filtered) => {
-        filteredMods = (filtered.filter((mod) => !('tags' in mod) || !mod.tags || matchTags(mod.tags.map((t) => t.id), $selectedTags)));
-        filteringMods = false;
-      });
-  }
+  $: tagFilteredMods = (filteredMods.filter((mod) => !('tags' in mod) || !mod.tags || matchTags(mod.tags.map((t) => t.id), $selectedTags)));
 
   $: matchTags = (modTags: string[], tagIds: string[]): boolean => {
     if (tagIds.length === 0) return true;
@@ -153,11 +144,11 @@
   let searchedMods: PartialMod[] = [];
 
   $: if(!$search) {
-    searchedMods = filteredMods;
+    searchedMods = tagFilteredMods;
   } else {
     const modifiedSearchString = $search.replace(/(?:author:"(.+?)"|author:([^\s"]+))/g, '="$1$2"');
     
-    const fuse = new Fuse(filteredMods, {
+    const fuse = new Fuse(tagFilteredMods, {
       keys: [
         {
           name: 'name',
@@ -222,12 +213,12 @@
   {:else}
     <div style="position: relative;" class="py-4 grow h-0 mods-list @container/mods-list bg-surface-200-700-token">
       <div class="mr-4 h-full flex flex-col">
-        {#if fetchingMods || filteringMods}
+        {#if fetchingMods}
           <div class="flex items-center justify-center">
             <div class="animate-spin rounded-full aspect-square h-8 border-t-2 border-b-2 border-primary-500"/>
           </div>
         {/if}
-        {#if displayMods.length === 0 && !fetchingMods && !filteringMods && $hasFetchedMods}
+        {#if displayMods.length === 0 && !fetchingMods && $hasFetchedMods}
           <div class="flex flex-col h-full items-center justify-center">
             {#if mods.length !== 0}
               <p class="text-xl text-center text-surface-400-700-token"><T defaultValue="No mods matching your search" keyName="mods-list.no-mods-filtered"/></p>

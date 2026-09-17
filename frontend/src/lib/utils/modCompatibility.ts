@@ -1,12 +1,9 @@
-import { Client } from '@urql/svelte';
-import { coerce, compare, satisfies } from 'semver';
-import { get } from 'svelte/store';
+import { coerce, satisfies } from 'semver';
+import { type Readable, derived } from 'svelte/store';
 
 import {
   type Compatibility,
   CompatibilityState,
-  ModReportedCompatibilityDocument,
-  ModVersionsCompatibilityDocument,
   TargetName,
   type Version,
   type VersionTarget,
@@ -17,9 +14,17 @@ import {
   selectedProfile,
   selectedProfileTargets,
 } from '$lib/store/ficsitCLIStore';
-import { offline } from '$lib/store/settingsStore';
-import { OfflineGetMod } from '$wailsjs/go/ficsitcli/ficsitCLI';
-import { common } from '$wailsjs/go/models';
+import { common, ficsitcli } from '$wailsjs/go/models';
+
+export interface ModCompatibilityQuery {
+  reported?: ReportedCompatibility;
+  versions: ModVersion[];
+}
+
+export interface ReportedCompatibility {
+  EA: Compatibility;
+  EXP: Compatibility;
+}
 
 export interface CompatibilityWithSource extends Compatibility {
   source: 'reported' | 'version';
@@ -28,30 +33,56 @@ export interface CompatibilityWithSource extends Compatibility {
 const clientTargets = [TargetName.Windows];
 const serverTargets = [TargetName.LinuxServer, TargetName.WindowsServer];
 
-export async function getCompatibility(modReference: string, urqlClient: Client, offline = false): Promise<CompatibilityWithSource> {
-  const installInfo = get(selectedInstallMetadata).info;
+interface CompatibilityContext {
+  installsMetadata: Record<string, ficsitcli.installationMetadata>;
+  selectedInstallMetadata: ficsitcli.installationMetadata;
+  selectedProfile: string | null;
+  selectedProfileTargets: Record<string, string[]>;
+}
+
+export const compatibilityContext = derived([selectedInstallMetadata, installsMetadata, selectedProfile, selectedProfileTargets], ([$selectedInstallMetadata, $installsMetadata, $selectedProfile, $selectedProfileTargets]) => (
+  {
+    installsMetadata: $installsMetadata,
+    selectedInstallMetadata: $selectedInstallMetadata,
+    selectedProfile: $selectedProfile,
+    selectedProfileTargets: $selectedProfileTargets,
+  } as CompatibilityContext
+));
+
+export function compatibilityStore(query: ModCompatibilityQuery[]): Readable<CompatibilityWithSource[]>;
+export function compatibilityStore(query: ModCompatibilityQuery): Readable<CompatibilityWithSource>;
+export function compatibilityStore(query: ModCompatibilityQuery | ModCompatibilityQuery[]): Readable<CompatibilityWithSource | CompatibilityWithSource[]> {
+  return derived([compatibilityContext], ([$compatibilityContext]) => {
+    if (Array.isArray(query)) {
+      return query.map((mod) => getCompatibility(mod, $compatibilityContext));
+    }
+    return getCompatibility(query, $compatibilityContext);
+  });
+}
+
+export function getCompatibility(mod: ModCompatibilityQuery, compatibilityContext: CompatibilityContext): CompatibilityWithSource {
+  const installInfo = compatibilityContext.selectedInstallMetadata.info;
   if(!installInfo) {
     return { state: CompatibilityState.Broken, note: 'No game selected.', source: 'version' };
   }
 
-  const reportedCompatibility = !offline ? await getReportedCompatibility(modReference, installInfo.branch, urqlClient) : undefined;
+  const reportedCompatibility = mod.reported ? getReportedCompatibility(mod.reported, installInfo.branch) : undefined;
   if(reportedCompatibility && reportedCompatibility.state !== CompatibilityState.Works) {
     return { ...reportedCompatibility, source: 'reported' };
   }
 
-  const modVersions = await getModVersions(modReference, urqlClient);
-  if(!modVersions || modVersions.length === 0) {
+  if(!mod.versions || mod.versions.length === 0) {
     return { state: CompatibilityState.Broken, note: 'Mod has no versions uploaded.', source: 'version' };
   }
 
-  const compatibleModVersions = getVersionCompatibleVersions(modVersions);
+  const compatibleModVersions = getVersionCompatibleVersions(mod.versions, compatibilityContext);
   if (compatibleModVersions.length === 0) {
     return { state: CompatibilityState.Broken, note: 'This mod is incompatible with your game version.', source: 'version' };
   }
 
-  const targetCompatibility = getTargetCompatibilityFor(modVersions, compatibleModVersions);
+  const targetCompatibility = getTargetCompatibility(mod.versions, compatibleModVersions, compatibilityContext);
   if (targetCompatibility.state !== CompatibilityState.Works) {
-    return targetCompatibility;
+    return { ...targetCompatibility, source: 'version' };
   }
 
   if (reportedCompatibility) {
@@ -66,10 +97,10 @@ function friendlyInstallName(install: common.Installation) {
   return `${install.launcher} (${installType})`;
 }
 
-function getTargetCompatibilityFor(modVersions: ModVersion[], versionCompatibleVersions: ModVersion[]): CompatibilityWithSource {
-  const requiredTargets = Object.entries(get(selectedProfileTargets));
+function getTargetCompatibility(modVersions: ModVersion[], versionCompatibleVersions: ModVersion[], compatibilityContext: CompatibilityContext): Compatibility {
+  const requiredTargets = Object.entries(compatibilityContext.selectedProfileTargets);
   if (requiredTargets.length === 0) {
-    return { state: CompatibilityState.Works, source: 'version' };
+    return { state: CompatibilityState.Works };
   }
 
   const clientRequiredTargets = requiredTargets.filter(([target]) => clientTargets.includes(target as TargetName)).map(([target]) => target as TargetName);
@@ -82,20 +113,20 @@ function getTargetCompatibilityFor(modVersions: ModVersion[], versionCompatibleV
   const latestVersionCompatibility = versionCompatibility.filter(({ version }) => versionCompatibleVersions.includes(version))[0];
 
   if (latestVersionCompatibility.missingTargets.length === 0) {
-    return { state: CompatibilityState.Works, source: 'version' };
+    return { state: CompatibilityState.Works };
   }
 
   const missingTargets = requiredTargets.filter(([target]) => latestVersionCompatibility.missingTargets.includes(target as TargetName));
 
   const requiredTargetsWithInstall = missingTargets
     .map(([target, installs]) =>
-      `${target} required by: ${installs.map((install) => friendlyInstallName(get(installsMetadata)[install].info!)).join(',')}`)
+      `${target} required by: ${installs.map((install) => friendlyInstallName(compatibilityContext.installsMetadata[install].info!)).join(',')}`)
     .join('\n\n');
 
   if (hasEverBeenCompatible) {
-    return { state: CompatibilityState.Damaged, note: `An older version of this mod supports all your installs using profile \`${get(selectedProfile)}\`, but the latest version does not\n\n${requiredTargetsWithInstall}`, source: 'version' };
+    return { state: CompatibilityState.Damaged, note: `An older version of this mod supports all your installs using profile \`${compatibilityContext.selectedProfile}\`, but the latest version does not\n\n${requiredTargetsWithInstall}` };
   }
-  return { state: CompatibilityState.Broken, note: `This mod does not support one or more of your installs using profile \`${get(selectedProfile)}\`\n\n${requiredTargetsWithInstall}`, source: 'version' };
+  return { state: CompatibilityState.Broken, note: `This mod does not support one or more of your installs using profile \`${compatibilityContext.selectedProfile}\`\n\n${requiredTargetsWithInstall}` };
 }
 
 function checkTargetCompatibility(
@@ -120,25 +151,12 @@ function checkTargetCompatibility(
   return [...unsupportedClientTargets, ...unsupportedServerTargets];
 }
 
-function gameVersionToSemver(version: number): string {
-  return coerce(version)!.format();
-}
-
-export async function getReportedCompatibility(modReference: string, gameBranch: common.GameBranch, urqlClient: Client): Promise<Compatibility | undefined> {
-  const result = await urqlClient.query(ModReportedCompatibilityDocument, { modReference }).toPromise();
-  if(!result.data?.getModByReference) {
-    return undefined;
-  }
-  const mod = result.data.getModByReference;
-  if(mod.compatibility) {
-    switch(gameBranch) {
-      case common.GameBranch.STABLE:
-        return mod.compatibility.EA;
-      case common.GameBranch.EXPERIMENTAL:
-        return mod.compatibility.EXP;
-      default:
-        throw new Error('Invalid game branch');
-    }
+function getReportedCompatibility(reportedCompatibility: ReportedCompatibility, gameBranch: common.GameBranch): Compatibility | undefined {
+  switch(gameBranch) {
+    case common.GameBranch.STABLE:
+      return reportedCompatibility.EA;
+    case common.GameBranch.EXPERIMENTAL:
+      return reportedCompatibility.EXP;
   }
   return undefined;
 }
@@ -150,35 +168,13 @@ interface ModVersion {
   targets: { targetName: TargetName }[];
 }
 
-async function getModVersions(modReference: string, urqlClient: Client): Promise<ModVersion[] | undefined> {
-  if(get(offline)) {
-    try {
-      return (await OfflineGetMod(modReference)).versions.map((ver) => ({
-        ...ver,
-        targets: ver.targets.map((target) => ({ ...target, targetName: target.target_name as TargetName })),
-      })).sort((a, b) => {
-        const aVer = coerce(a.version);
-        const bVer = coerce(b.version);
-        if (!aVer || !bVer) {
-          return 0;
-        }
-        return compare(bVer, aVer);
-      });
-    } catch {
-      return undefined;
-    }
-  }
-  
-  const modQuery = await urqlClient.query(ModVersionsCompatibilityDocument, { modReference }, { requestPolicy: 'cache-first' }).toPromise();
-
-  // This cast can potentially cause issues later when ModVersion changes, but the API schema allows null for targets[number], even though it would never happen
-  return modQuery.data?.getModByReference?.versions as ModVersion[];
+function getVersionCompatibleVersions(modVersions: ModVersion[], compatibilityContext: CompatibilityContext): ModVersion[] {
+  const installsToCheck = Object.values(compatibilityContext.selectedProfileTargets).flat();
+  return modVersions.filter((version) =>
+    version.game_version === '' || installsToCheck.some((install) => satisfies(gameVersionToSemver(compatibilityContext.installsMetadata[install].info?.version ?? 0), version.game_version)),
+  );
 }
 
-function getVersionCompatibleVersions(modVersions: ModVersion[]): ModVersion[] {
-  const installsToCheck = Object.values(get(selectedProfileTargets)).flat();
-  const metadata = get(installsMetadata);
-  return modVersions.filter((version) =>
-    version.game_version === '' || installsToCheck.some((install) => satisfies(gameVersionToSemver(metadata[install].info?.version ?? 0), version.game_version)),
-  );
+function gameVersionToSemver(version: number): string {
+  return coerce(version)!.format();
 }

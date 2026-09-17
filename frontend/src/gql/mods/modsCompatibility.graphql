@@ -1,0 +1,9 @@
+query GetModsCompatibility($modReferences: [String!]!) {
+  getMods(filter: { references: $modReferences, hidden: true }) {
+    mods {
+      ...ModKey
+      ...ModReportedCompatibility
+      ...ModVersionCompatibility
+    }
+  }
+}
