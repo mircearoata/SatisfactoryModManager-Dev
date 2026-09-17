@@ -67,8 +67,8 @@
     "possibly-incompatible-mods" : "{versionPossiblyCompatible, plural, one {Un mod {versionPossiblyCompatible, plural, one {n'est} other {ne sont}} probablement pas compatibles avec votre jeu} other {# Des mods {versionPossiblyCompatible, plural, one {n'est} other {ne sont}} probablement pas compatibles avec votre jeu}}",
     "profile-change-queued" : "Les modifications n'ont pas encore été faites à vos fichiers. Cliquez sur le bouton ci-dessus pour appliquer les modification en attente. ",
     "ready" : "Vous êtes prêt pour jouer !\n\nNote : Le Gestionnaire de Mod à déjà fini d'installer les fichiers de mod pour vous. Vous pouvez désormais lancer le jeu avec votre lanceur habituel et vos mods se chargeront toujours.",
-    "reported-incompatible-mods" : "{reportedIncompatible, plural, one {Un mod} other {# mods}} {reportedIncompatible, plural, one {est} other {sont}} signalé.s en tant qu'incompatible.s. Lisez la description ou les notes de comptabilité {versionIncompatible, plural, one {du mod} other {des mods}} pour plus d'informations.",
-    "reported-possibly-compatible-mods" : "{reportedIncompatible, plural, one {Un mod} other {# mods}} {reportedIncompatible, plural, one {est} other {sont}} signalé.s en tant qu'endommagé.s. Lisez la description ou les notes de comptabilité {versionIncompatible, plural, one {du mod} other {des mods}} pour plus d'informations.",
+    "reported-incompatible-mods" : "{reportedIncompatible, plural, one {Un mod} other {# mods}} {reportedIncompatible, plural, one {est} other {sont}} signalé.s en tant qu'incompatible.s. Lisez la description ou les notes de comptabilité {reportedIncompatible, plural, one {du mod} other {des mods}} pour plus d'informations.",
+    "reported-possibly-compatible-mods" : "{reportedIncompatible, plural, one {Un mod} other {# mods}} {reportedIncompatible, plural, one {est} other {sont}} signalé.s en tant qu'endommagé.s. Lisez la description ou les notes de comptabilité {reportedPossiblyCompatible, plural, one {du mod} other {des mods}} pour plus d'informations.",
     "you-have-warning-mods" : "Vous avez :"
   },
   "left-bar" : {

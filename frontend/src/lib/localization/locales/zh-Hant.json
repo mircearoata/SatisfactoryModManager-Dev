@@ -67,8 +67,8 @@
     "possibly-incompatible-mods" : "{versionPossiblyCompatible, plural, other {# 個模組可能與您的遊戲不相容}}",
     "profile-change-queued" : "變更尚未套用，點擊套用按鈕以套用新設定",
     "ready" : "準備就緒！\n\n注意： 模組管理器已經為您完成了模組的安裝。您可以使用遊戲啟動器啟動遊戲，模組仍會載入。",
-    "reported-incompatible-mods" : "{reportedIncompatible}個模組被回報可能不相容於這個遊戲版本，請閱讀{versionIncompatible}模組的描述或相容性說明。\n",
-    "reported-possibly-compatible-mods" : "{reportedIncompatible}個模組被回報在這個遊戲版本中無法使用，請閱讀{versionIncompatible}模組的描述或相容性說明。\n",
+    "reported-incompatible-mods" : "{reportedIncompatible}個模組被回報可能不相容於這個遊戲版本，請閱讀{reportedIncompatible}模組的描述或相容性說明。\n",
+    "reported-possibly-compatible-mods" : "{reportedPossiblyCompatible}個模組被回報在這個遊戲版本中無法使用，請閱讀{reportedPossiblyCompatible}模組的描述或相容性說明。\n",
     "you-have-warning-mods" : "您有："
   },
   "left-bar" : {

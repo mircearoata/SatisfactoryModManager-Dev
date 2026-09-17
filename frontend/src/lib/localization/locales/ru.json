@@ -67,8 +67,8 @@
     "possibly-incompatible-mods" : "{versionPossiblyCompatible, plural, one {Один мод, который {versionPossiblyCompatible, plural, one {возможно} other {возможно}} несовместим с вашей игрой} other {# модов, которые {versionPossiblyCompatible, plural, one {возможно} other {возможно}} несовместимы с вашей игрой}}",
     "profile-change-queued" : "Изменения в файлы модов ещё не внесены. Нажмите кнопку ниже, чтобы применить новый профиль.\n\nВы в режиме \"Запуск вручную\"",
     "ready" : "Вы готовы к действию!\n\nПримечание: Менеджер модов уже завершил установку файлов модов. Вы можете запустить игру через обычный лаунчер, и моды всё равно будут загружены.",
-    "reported-incompatible-mods" : "{reportedIncompatible, plural, one {Один мод} other {# модов}} отмечен как неисправный для этой версии игры. Ознакомьтесь с описанием или примечаниями по совместимости {versionIncompatible, plural, one {этого мода} other {этих модов}} для получения дополнительной информации.",
-    "reported-possibly-compatible-mods" : "{reportedPossiblyCompatible, plural, one {Один мод} other {# модов}} отмечен как повреждённый для этой версии игры. Ознакомьтесь с описанием или примечаниями по совместимости {versionIncompatible, plural, one {этого мода} other {этих модов}} для получения дополнительной информации.",
+    "reported-incompatible-mods" : "{reportedIncompatible, plural, one {Один мод} other {# модов}} отмечен как неисправный для этой версии игры. Ознакомьтесь с описанием или примечаниями по совместимости {reportedIncompatible, plural, one {этого мода} other {этих модов}} для получения дополнительной информации.",
+    "reported-possibly-compatible-mods" : "{reportedPossiblyCompatible, plural, one {Один мод} other {# модов}} отмечен как повреждённый для этой версии игры. Ознакомьтесь с описанием или примечаниями по совместимости {reportedPossiblyCompatible, plural, one {этого мода} other {этих модов}} для получения дополнительной информации.",
     "you-have-warning-mods" : "У вас:"
   },
   "left-bar" : {

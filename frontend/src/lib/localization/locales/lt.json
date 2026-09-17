@@ -67,8 +67,8 @@
     "possibly-incompatible-mods" : "{versionPossiblyCompatible, plural, one {Vienas modas, kuris {versionPossiblyCompatible, plural, one {yra} other {yra}} greičiausiai nesuderinamas su jūsų žaidimu} other {# modai, kurie {versionPossiblyCompatible, plural, one {yra} other {yra}} greičiausiai nesuderinami su jūsų žaidimu.}}",
     "profile-change-queued" : "Pakeitimai dar nebuvo atlikti jūsų modų failuose. Spustelėkite žemiau esantį mygtuką, kad pritaikytumėte naują profilį.\n\n(Jūs esate „Pradėti rankiniu būdu“ režime)",
     "ready" : "Jūs esate pasiruošę veiksmui!\n\n\"Pastaba: Modų tvarkyklė jau baigė diegti modų failus už jus. Galite paleisti žaidimą naudodami savo įprastą žaidimo paleidiklį, o modai vis tiek bus įkelti.\"",
-    "reported-incompatible-mods" : "{reportedIncompatible, plural, one {Vienas modas praneštas} other {# modai pranešti}} kaip neveikiantys šioje žaidimo versijoje. Perskaitykite {versionIncompatible, plural, one {modo} other {modų}} aprašymą arba suderinamumo pastabas, kad sužinotumėte daugiau informacijos.",
-    "reported-possibly-compatible-mods" : "{reportedPossiblyCompatible, plural, one {Vienas modas praneštas} other {# modai pranešti}} kaip pažeisti šioje žaidimo versijoje. Perskaitykite {versionIncompatible, plural, one {modo} other {modų}} aprašymą arba suderinamumo pastabas, kad sužinotumėte daugiau informacijos.",
+    "reported-incompatible-mods" : "{reportedIncompatible, plural, one {Vienas modas praneštas} other {# modai pranešti}} kaip neveikiantys šioje žaidimo versijoje. Perskaitykite {reportedIncompatible, plural, one {modo} other {modų}} aprašymą arba suderinamumo pastabas, kad sužinotumėte daugiau informacijos.",
+    "reported-possibly-compatible-mods" : "{reportedPossiblyCompatible, plural, one {Vienas modas praneštas} other {# modai pranešti}} kaip pažeisti šioje žaidimo versijoje. Perskaitykite {reportedPossiblyCompatible, plural, one {modo} other {modų}} aprašymą arba suderinamumo pastabas, kad sužinotumėte daugiau informacijos.",
     "you-have-warning-mods" : "Jus turite:"
   },
   "left-bar" : {

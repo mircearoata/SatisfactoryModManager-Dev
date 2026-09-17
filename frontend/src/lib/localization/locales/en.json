@@ -67,8 +67,8 @@
     "possibly-incompatible-mods" : "{versionPossiblyCompatible, plural, one {One mod that {versionPossiblyCompatible, plural, one {is} other {are}} likely incompatible with your game} other {# mods that {versionPossiblyCompatible, plural, one {is} other {are}} likely incompatible with your game}}",
     "profile-change-queued" : "Changes have not yet been made to your mod files. Click the button below to apply the new profile.\n\n(You're in Queue \"Start manually\" mode)",
     "ready" : "You're ready to rumble!\n\nNote: The Mod Manager has already finished installing the mod files for you. You could launch the game using your usual game launcher and mods would still be loaded.",
-    "reported-incompatible-mods" : "{reportedIncompatible, plural, one {One mod} other {# mods}} that {reportedIncompatible, plural, one {is} other {are}} reported as Broken on this game version. Read the {versionIncompatible, plural, one {mod's} other {mods'}} description or compatibility notes for more information",
-    "reported-possibly-compatible-mods" : "{reportedPossiblyCompatible, plural, one {One mod} other {# mods}} that {reportedPossiblyCompatible, plural, one {is} other {are}} reported as Damaged on this game version. Read the {versionIncompatible, plural, one {mod's} other {mods'}} description or compatibility notes for more information",
+    "reported-incompatible-mods" : "{reportedIncompatible, plural, one {One mod} other {# mods}} that {reportedIncompatible, plural, one {is} other {are}} reported as Broken on this game version. Read the {reportedIncompatible, plural, one {mod's} other {mods''}} description or compatibility notes for more information",
+    "reported-possibly-compatible-mods" : "{reportedPossiblyCompatible, plural, one {One mod} other {# mods}} that {reportedPossiblyCompatible, plural, one {is} other {are}} reported as Damaged on this game version. Read the {reportedPossiblyCompatible, plural, one {mod's} other {mods''}} description or compatibility notes for more information",
     "you-have-warning-mods" : "You have:"
   },
   "left-bar" : {

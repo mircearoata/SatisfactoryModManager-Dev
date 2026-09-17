@@ -261,7 +261,7 @@
         <li>
           <span>
             <T
-              defaultValue={'{reportedIncompatible, plural, one {One mod} other {# mods}} that {reportedIncompatible, plural, one {is} other {are}} reported as Broken on this game version. Read the {versionIncompatible, plural, one {mod\'s} other {mods\'}} description or compatibility notes for more information'}
+              defaultValue={'{reportedIncompatible, plural, one {One mod} other {# mods}} that {reportedIncompatible, plural, one {is} other {are}} reported as Broken on this game version. Read the {reportedIncompatible, plural, one {mod\'s} other {mods\'\'}} description or compatibility notes for more information'}
               keyName="launch-button.reported-incompatible-mods"
               params={{ reportedIncompatible: reportedIncompatible.length }}/>
           </span>
@@ -281,7 +281,7 @@
         <li>
           <span>
             <T
-              defaultValue={'{reportedPossiblyCompatible, plural, one {One mod} other {# mods}} that {reportedPossiblyCompatible, plural, one {is} other {are}} reported as Damaged on this game version. Read the {versionIncompatible, plural, one {mod\'s} other {mods\'}} description or compatibility notes for more information'}
+              defaultValue={'{reportedPossiblyCompatible, plural, one {One mod} other {# mods}} that {reportedPossiblyCompatible, plural, one {is} other {are}} reported as Damaged on this game version. Read the {reportedPossiblyCompatible, plural, one {mod\'s} other {mods\'\'}} description or compatibility notes for more information'}
               keyName="launch-button.reported-possibly-compatible-mods"
               params={{ reportedPossiblyCompatible: reportedPossiblyCompatible.length }}/>
           </span>

@@ -67,8 +67,8 @@
     "possibly-incompatible-mods" : "{versionPossiblyCompatible, plural, one {Oyununuzla büyük olasılıkla uyumsuz olan bir mod var} other {Oyununuzla büyük olasılıkla uyumsuz olan {versionPossiblyCompatible} mod var}}",
     "profile-change-queued" : "Değişiklikler henüz mod dosyalarınıza uygulanmadı. Yeni profili uygulamak için aşağıdaki düğmeye tıklayın.\n\n(Kuyruk “Elle başlat” modundasınız.)",
     "ready" : "Başlamaya hazırsınız!\n\nNot: Mod Yöneticisi mod dosyalarını yüklemeyi zaten tamamladı. Oyunu kullandığınız oyun başlatıcısından da başlatabilirsiniz; modlar yine yüklenecektir.",
-    "reported-incompatible-mods" : "Bu oyun sürümünde {reportedIncompatible, plural, one {# mod} other {# mod}} bozuk olarak bildirilmiş. Daha fazla bilgi için {versionIncompatible, plural, one {modun} other {modların}} açıklamasını veya uyumluluk notlarını okuyun.",
-    "reported-possibly-compatible-mods" : "Bu oyun sürümünde {reportedPossiblyCompatible, plural, one {# mod} other {# mod}} hasarlı olarak bildirilmiş. Daha fazla bilgi için {versionIncompatible, plural, one {modun} other {modların}} açıklamasını veya uyumluluk notlarını okuyun.",
+    "reported-incompatible-mods" : "Bu oyun sürümünde {reportedIncompatible, plural, one {# mod} other {# mod}} bozuk olarak bildirilmiş. Daha fazla bilgi için {reportedIncompatible, plural, one {modun} other {modların}} açıklamasını veya uyumluluk notlarını okuyun.",
+    "reported-possibly-compatible-mods" : "Bu oyun sürümünde {reportedPossiblyCompatible, plural, one {# mod} other {# mod}} hasarlı olarak bildirilmiş. Daha fazla bilgi için {reportedPossiblyCompatible, plural, one {modun} other {modların}} açıklamasını veya uyumluluk notlarını okuyun.",
     "you-have-warning-mods" : "Şunlara sahipsiniz:"
   },
   "left-bar" : {
