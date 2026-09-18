@@ -106,15 +106,17 @@ function getTargetCompatibility(modVersions: ModVersion[], versionCompatibleVers
   const clientRequiredTargets = requiredTargets.filter(([target]) => clientTargets.includes(target as TargetName)).map(([target]) => target as TargetName);
   const serverRequiredTargets = requiredTargets.filter(([target]) => serverTargets.includes(target as TargetName)).map(([target]) => target as TargetName);
 
-  const versionCompatibility = modVersions.map((version) => ({ version, missingTargets: checkTargetCompatibility(version, clientRequiredTargets, serverRequiredTargets) }));
-  const hasEverBeenCompatible = versionCompatibility.some((comp) => comp.missingTargets.length === 0);
+  const targetCompatibility = modVersions.map((version) => ({ version, missingTargets: checkTargetCompatibility(version, clientRequiredTargets, serverRequiredTargets) }));
+  const targetCompatibleVersions = targetCompatibility.filter((comp) => comp.missingTargets.length === 0);
 
   // The versions should be sorted by newest first
-  const latestVersionCompatibility = versionCompatibility.filter(({ version }) => versionCompatibleVersions.includes(version))[0];
+  const latestVersionCompatibility = targetCompatibility.filter(({ version }) => versionCompatibleVersions.includes(version))[0];
 
   if (latestVersionCompatibility.missingTargets.length === 0) {
     return { state: CompatibilityState.Works };
   }
+
+  const bothCompatibleVersions = targetCompatibleVersions.filter((comp) => versionCompatibleVersions.includes(comp.version));
 
   const missingTargets = requiredTargets.filter(([target]) => latestVersionCompatibility.missingTargets.includes(target as TargetName));
 
@@ -123,7 +125,11 @@ function getTargetCompatibility(modVersions: ModVersion[], versionCompatibleVers
       `${target} required by: ${installs.map((install) => friendlyInstallName(compatibilityContext.installsMetadata[install].info!)).join(',')}`)
     .join('\n\n');
 
-  if (hasEverBeenCompatible) {
+  if (bothCompatibleVersions.length === 0 && targetCompatibleVersions.length > 0) {
+    return { state: CompatibilityState.Broken, note: `A newer version of this mod is available that supports all your installs using profile \`${compatibilityContext.selectedProfile}\`, but your game version is not compatible with it.\n\n${requiredTargetsWithInstall}` };
+  }
+    
+  if (targetCompatibleVersions.length > 0) {
     return { state: CompatibilityState.Damaged, note: `An older version of this mod supports all your installs using profile \`${compatibilityContext.selectedProfile}\`, but the latest version does not\n\n${requiredTargetsWithInstall}` };
   }
   return { state: CompatibilityState.Broken, note: `This mod does not support one or more of your installs using profile \`${compatibilityContext.selectedProfile}\`\n\n${requiredTargetsWithInstall}` };
