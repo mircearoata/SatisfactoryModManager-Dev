@@ -47,9 +47,6 @@ importers:
       async:
         specifier: ^3.2.6
         version: 3.2.6
-      cookie:
-        specifier: ^0.6.0
-        version: 0.6.0
       dompurify:
         specifier: ^3.3.0
         version: 3.3.0
@@ -138,9 +135,6 @@ importers:
       '@types/async':
         specifier: ^3.2.25
         version: 3.2.25
-      '@types/cookie':
-        specifier: ^0.6.0
-        version: 0.6.0
       '@types/lodash':
         specifier: ^4.17.20
         version: 4.17.20
@@ -156,24 +150,15 @@ importers:
       '@typescript-eslint/parser':
         specifier: ^6.21.0
         version: 6.21.0(eslint@8.57.1(supports-color@5.5.0))(supports-color@5.5.0)(typescript@5.3.3)
-      dotenv:
-        specifier: ^16.6.1
-        version: 16.6.1
       eslint:
         specifier: ^8.57.1
         version: 8.57.1(supports-color@5.5.0)
-      eslint-config-prettier:
-        specifier: ^9.1.2
-        version: 9.1.2(eslint@8.57.1(supports-color@5.5.0))
       eslint-plugin-import:
         specifier: ^2.32.0
         version: 2.32.0(@typescript-eslint/parser@6.21.0(eslint@8.57.1(supports-color@5.5.0))(supports-color@5.5.0)(typescript@5.3.3))(eslint@8.57.1(supports-color@5.5.0))(supports-color@5.5.0)
       eslint-plugin-svelte:
         specifier: ^2.46.1
         version: 2.46.1(eslint@8.57.1(supports-color@5.5.0))(svelte@4.2.20)
-      nodemon:
-        specifier: ^3.1.10
-        version: 3.1.10
       npm-run-all:
         specifier: ^4.1.5
         version: 4.1.5
@@ -186,12 +171,6 @@ importers:
       postcss-preset-env:
         specifier: ^9.6.0
         version: 9.6.0(postcss@8.5.6)
-      prettier:
-        specifier: ^3.6.2
-        version: 3.6.2
-      prettier-plugin-svelte:
-        specifier: ^3.4.0
-        version: 3.4.0(prettier@3.6.2)(svelte@4.2.20)
       svelte:
         specifier: ^4.2.20
         version: 4.2.20
@@ -204,9 +183,6 @@ importers:
       tailwindcss:
         specifier: ^3.4.18
         version: 3.4.18
-      tslib:
-        specifier: ^2.8.1
-        version: 2.8.1
       typescript:
         specifier: ~5.3.3
         version: 5.3.3
@@ -1607,9 +1583,6 @@ packages:
   '@types/async@3.2.25':
     resolution: {integrity: sha512-O6Th/DI18XjrL9TX8LO9F/g26qAz5vynmQqlXt/qLGrskvzCKXKc5/tATz3G2N6lM8eOf3M8/StB14FncAmocg==}
 
-  '@types/cookie@0.6.0':
-    resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
-
   '@types/eslint@8.56.12':
     resolution: {integrity: sha512-03ruubjWyOHlmljCVoxSuNDdmfZDzsrrz0P2LeJsOXr+ZwFQ+0yQIwNCwt/GYhV7Z31fgtXJTAEs+FYlEL851g==}
 
@@ -2070,10 +2043,6 @@ packages:
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
 
-  cookie@0.6.0:
-    resolution: {integrity: sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==}
-    engines: {node: '>= 0.6'}
-
   cosmiconfig@8.3.6:
     resolution: {integrity: sha512-kcZ6+W5QzcJ3P1Mt+83OUv/oHFqZHIx8DuxG6eZ5RGMERoLqp4BuGjhHLYGK+Kf5XVkQvqBSmAy/nGWN3qDgEA==}
     engines: {node: '>=14'}
@@ -2321,12 +2290,6 @@ packages:
     engines: {node: '>=12'}
     peerDependencies:
       eslint: '>=6.0.0'
-
-  eslint-config-prettier@9.1.2:
-    resolution: {integrity: sha512-iI1f+D2ViGn+uvv5HuHVUamg8ll4tN+JRHGc6IJi4TP9Kl976C57fzPXgseXNs8v0iA8aSJpHsTWjDb9QJamGQ==}
-    hasBin: true
-    peerDependencies:
-      eslint: '>=7.0.0'
 
   eslint-import-resolver-node@0.3.9:
     resolution: {integrity: sha512-WFj2isz22JahUv+B788TlO3N6zL3nNJGU8CcZbPZvVEkBPaJdCV4vy5wyghty5ROFbCRnm132v8BScu5/1BQ8g==}
@@ -2695,9 +2658,6 @@ packages:
 
   ieee754@1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
-
-  ignore-by-default@1.0.1:
-    resolution: {integrity: sha512-Ius2VYcGNk7T90CppJqcIkS5ooHUZyIQK+ClZfMfMNFEF9VSE73Fq+906u/CWu92x4gzZMWOwfFYckPObzdEbA==}
 
   ignore@5.3.2:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}
@@ -3181,11 +3141,6 @@ packages:
   node-releases@2.0.27:
     resolution: {integrity: sha512-nmh3lCkYZ3grZvqcCH+fjmQ7X+H0OeZgP40OierEaAptX4XofMh5kwNbWh7lBduUzCcV/8kZ+NDLCwm2iorIlA==}
 
-  nodemon@3.1.10:
-    resolution: {integrity: sha512-WDjw3pJ0/0jMFmyNDp3gvY2YizjLmmOUQo6DEBY+JgdvW/yQ9mEeSw6H5ythl5Ny2ytb7f9C2nIbjSxMNzbJXw==}
-    engines: {node: '>=10'}
-    hasBin: true
-
   normalize-package-data@2.5.0:
     resolution: {integrity: sha512-/5CMN3T0R4XTj4DcGaexo+roZSdSFW/0AOOTROrjxzCG1wrWXEsGbRKevjlIL+ZDE4sZlJr5ED4YW0yqmkK+eA==}
 
@@ -3624,22 +3579,8 @@ packages:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
 
-  prettier-plugin-svelte@3.4.0:
-    resolution: {integrity: sha512-pn1ra/0mPObzqoIQn/vUTR3ZZI6UuZ0sHqMK5x2jMLGrs53h0sXhkVuDcrlssHwIMk7FYrMjHBPoUSyyEEDlBQ==}
-    peerDependencies:
-      prettier: ^3.0.0
-      svelte: ^3.2.0 || ^4.0.0-next.0 || ^5.0.0-next.0
-
-  prettier@3.6.2:
-    resolution: {integrity: sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==}
-    engines: {node: '>=14'}
-    hasBin: true
-
   promise@7.3.1:
     resolution: {integrity: sha512-nolQXZ/4L+bP/UGlkfaIujX9BKxGwmQ9OT4mOt5yvy8iK1h3wqTEJCijzGANTCCl9nWjY41juyAn2K3Q1hLLTg==}
-
-  pstree.remy@1.1.8:
-    resolution: {integrity: sha512-77DZwxQmxKnu3aR542U+X8FypNzbfJ+C5XQDk3uWjWxn6151aIMGthWYRXTqT1E5oJvg+ljaa2OJi+VfvCOQ8w==}
 
   punycode@1.4.1:
     resolution: {integrity: sha512-jmYNElW7yvO7TV33CjSmvSiE2yco3bV2czu/OzDKdMNVZQWfxCblURLhf+47syQRBntjfLdd/H0egrzIG+oaFQ==}
@@ -3875,10 +3816,6 @@ packages:
     resolution: {integrity: sha512-XBoU1ljCsWjw59IVkaQ1nKc0PiaDAAKNFVx59ueC0tBy4WY/I4Q040sGj6ok2cZRLT8zBzL1HaTubi8MRqmojQ==}
     engines: {node: '>=0.12.18'}
 
-  simple-update-notifier@2.0.0:
-    resolution: {integrity: sha512-a2B9Y0KlNXl9u/vsW6sTIu9vGEpfKu2wRV6l1H3XEas/0gUIzGzBoP/IouTcUQbm9JWZLH3COxyn03TYlFax6w==}
-    engines: {node: '>=10'}
-
   slash@3.0.0:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
     engines: {node: '>=8'}
@@ -4107,10 +4044,6 @@ packages:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
 
-  touch@3.1.1:
-    resolution: {integrity: sha512-r0eojU4bI8MnHr8c5bNo7lJDdI2qXlWWJk6a9EAFG7vbhTjElYhBVS3/miuE0uOuoLdb8Mc/rVfsmm6eo5o9GA==}
-    hasBin: true
-
   tr46@0.0.3:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
 
@@ -4185,9 +4118,6 @@ packages:
   unc-path-regex@0.1.2:
     resolution: {integrity: sha512-eXL4nmJT7oCpkZsHZUOJo8hcX3GbsiDOa0Qu9F646fi8dT3XuSVopVqAcEiVzSKKH7UoDti23wNX3qGFxcW5Qg==}
     engines: {node: '>=0.10.0'}
-
-  undefsafe@2.0.5:
-    resolution: {integrity: sha512-WxONCrssBM8TSPRqN5EmsjVrsv4A8X12J4ArBiiayv3DyyG3ZlIg6yysuuSYdZsVz3TKcTg2fd//Ujd4CHV1iA==}
 
   undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
@@ -6069,8 +5999,6 @@ snapshots:
 
   '@types/async@3.2.25': {}
 
-  '@types/cookie@0.6.0': {}
-
   '@types/eslint@8.56.12':
     dependencies:
       '@types/estree': 1.0.8
@@ -6645,8 +6573,6 @@ snapshots:
 
   convert-source-map@2.0.0: {}
 
-  cookie@0.6.0: {}
-
   cosmiconfig@8.3.6(typescript@5.3.3):
     dependencies:
       import-fresh: 3.3.1
@@ -6953,10 +6879,6 @@ snapshots:
     dependencies:
       eslint: 8.57.1(supports-color@5.5.0)
       semver: 7.7.3
-
-  eslint-config-prettier@9.1.2(eslint@8.57.1(supports-color@5.5.0)):
-    dependencies:
-      eslint: 8.57.1(supports-color@5.5.0)
 
   eslint-import-resolver-node@0.3.9(supports-color@5.5.0):
     dependencies:
@@ -7404,8 +7326,6 @@ snapshots:
 
   ieee754@1.2.1: {}
 
-  ignore-by-default@1.0.1: {}
-
   ignore@5.3.2: {}
 
   immutable@3.7.6: {}
@@ -7842,19 +7762,6 @@ snapshots:
   node-int64@0.4.0: {}
 
   node-releases@2.0.27: {}
-
-  nodemon@3.1.10:
-    dependencies:
-      chokidar: 3.6.0
-      debug: 4.4.3(supports-color@5.5.0)
-      ignore-by-default: 1.0.1
-      minimatch: 3.1.2
-      pstree.remy: 1.1.8
-      semver: 7.7.3
-      simple-update-notifier: 2.0.0
-      supports-color: 5.5.0
-      touch: 3.1.1
-      undefsafe: 2.0.5
 
   normalize-package-data@2.5.0:
     dependencies:
@@ -8342,18 +8249,9 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier-plugin-svelte@3.4.0(prettier@3.6.2)(svelte@4.2.20):
-    dependencies:
-      prettier: 3.6.2
-      svelte: 4.2.20
-
-  prettier@3.6.2: {}
-
   promise@7.3.1:
     dependencies:
       asap: 2.0.6
-
-  pstree.remy@1.1.8: {}
 
   punycode@1.4.1: {}
 
@@ -8623,10 +8521,6 @@ snapshots:
   signedsource@1.0.0: {}
 
   simple-icons@10.4.0: {}
-
-  simple-update-notifier@2.0.0:
-    dependencies:
-      semver: 7.7.3
 
   slash@3.0.0: {}
 
@@ -8912,8 +8806,6 @@ snapshots:
     dependencies:
       is-number: 7.0.0
 
-  touch@3.1.1: {}
-
   tr46@0.0.3: {}
 
   ts-api-utils@1.4.3(typescript@5.3.3):
@@ -8992,8 +8884,6 @@ snapshots:
       which-boxed-primitive: 1.1.1
 
   unc-path-regex@0.1.2: {}
-
-  undefsafe@2.0.5: {}
 
   undici-types@5.26.5: {}
 
