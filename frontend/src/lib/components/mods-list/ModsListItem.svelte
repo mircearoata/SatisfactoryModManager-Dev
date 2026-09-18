@@ -56,6 +56,7 @@
       return {
         icon: mdiSync,
         iconHover: mdiSync,
+        iconClass: 'animate-spin [animation-direction:reverse]',
         tooltip: $t('mod-list-item.wait', 'Wait for the current operation to complete.'),
       };
     }
