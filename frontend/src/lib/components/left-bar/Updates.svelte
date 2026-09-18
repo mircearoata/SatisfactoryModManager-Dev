@@ -70,6 +70,6 @@
     {/if}
   </Marquee>
   <SvgIcon
-    class="h-5 w-5 {$updateCheckInProgress ? 'update-check' : ''}"
+    class="h-5 w-5 {$updateCheckInProgress ? 'animate-spin [animation-direction:reverse]' : ''}"
     icon={mdiSync} />
 </button>

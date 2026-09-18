@@ -477,14 +477,3 @@
   </div>
   <LaunchButton />
 </div>
-
-<style>
-  :global(.update-check) {
-    animation: spin 4s linear infinite;
-  }
-  @keyframes spin {
-    100% {
-      transform: rotate(-360deg);
-    }
-  }
-</style>
