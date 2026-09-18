@@ -1,5 +1,5 @@
 fragment ModVersionCompatibility on Mod {
-  versions {
+  versions(filter: {limit: 100}) {
     id
     version
     game_version
