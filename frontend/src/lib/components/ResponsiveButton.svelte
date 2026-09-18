@@ -43,10 +43,10 @@
       {disabled}
       on:click={onClickAction}>
       <SvgIcon
-        class="!p-1 !m-0 !w-full !h-full group-hover:!hidden {display.iconClass}"
+        class="!p-1 !m-0 !w-full !h-full group-hover:!hidden {display.iconClass ?? ''}"
         icon={display.icon}/>
       <SvgIcon
-        class="!p-1 !m-0 !w-full !h-full group-hover:!inline-block !hidden {display.iconHoverClass}"
+        class="!p-1 !m-0 !w-full !h-full group-hover:!inline-block !hidden {display.iconHoverClass ?? ''}"
         icon={display.iconHover}/>
     </button>
   </div>
