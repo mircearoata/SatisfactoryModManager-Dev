@@ -3,6 +3,7 @@
   import { getContextClient, queryStore } from '@urql/svelte';
 
   import ModDetails from './ModDetails.svelte';
+  import ModDetailsButtons from './ModDetailsButtons.svelte';
   import type { OfflineMod } from './helpers';
 
   import Markdown from '$lib/components/Markdown.svelte';
@@ -74,30 +75,35 @@
       </Marquee>
     </button>
   </div>
-  <div class="break-words overflow-wrap-anywhere flex-1 px-3 overflow-y-scroll overflow-x-hidden w-full">
-    {#if $offline}
-      <div class="flex items-center justify-center h-full text-center font-bold">
-        <T defaultValue="Offline mode is enabled. Changelogs and descriptions are not available." keyName="mod-details.offline-mode" />
-      </div>
-    {:else if mod && 'full_description' in mod && mod.full_description}
-      <Markdown markdown={mod.full_description} />
-    {:else}
-      <div class="p-4 space-y-4 h-full flex flex-col">
-        <div class="placeholder" />
-        <div class="grid grid-cols-3 gap-4 md:gap-8">
-          <div class="placeholder" />
-          <div class="placeholder" />
-          <div class="placeholder" />
+  <div class="flex flex-col flex-1 mr-3 my-4 min-w-0">
+    <div class="break-words overflow-wrap-anywhere flex-1 px-3 overflow-y-scroll overflow-x-hidden w-full">
+      {#if $offline}
+        <div class="flex items-center justify-center h-full text-center font-bold">
+          <T defaultValue="Offline mode is enabled. Changelogs and descriptions are not available." keyName="mod-details.offline-mode" />
         </div>
-        <div class="grid grid-cols-4 gap-2 md:gap-4">
+      {:else if mod && 'full_description' in mod && mod.full_description}
+        <Markdown markdown={mod.full_description} />
+      {:else}
+        <div class="p-4 space-y-4 h-full flex flex-col">
           <div class="placeholder" />
-          <div class="placeholder" />
-          <div class="placeholder" />
-          <div class="placeholder" />
+          <div class="grid grid-cols-3 gap-4 md:gap-8">
+            <div class="placeholder" />
+            <div class="placeholder" />
+            <div class="placeholder" />
+          </div>
+          <div class="grid grid-cols-4 gap-2 md:gap-4">
+            <div class="placeholder" />
+            <div class="placeholder" />
+            <div class="placeholder" />
+            <div class="placeholder" />
+          </div>
+          <div class="placeholder grow" />
         </div>
-        <div class="placeholder grow" />
-      </div>
-    {/if}
+      {/if}
+    </div>
+    <div class="shrink-0 flex flex-col items-end justify-center mt-4 h-12">
+      <ModDetailsButtons {mod} />
+    </div>
   </div>
 </div>
 

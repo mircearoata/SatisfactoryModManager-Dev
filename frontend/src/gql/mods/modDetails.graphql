@@ -1,6 +1,8 @@
 query GetModDetails($modReference: ModReference!) {
   mod: getModByReference(modReference: $modReference) {
     ...ModKey
+    ...ModReportedCompatibility
+    ...ModVersionCompatibility
     name
     logo
     logo_thumbhash
