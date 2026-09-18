@@ -1,5 +1,5 @@
 <script generics="T" lang="ts">
-  import { createVirtualizer, measureElement } from '@tanstack/svelte-virtual';
+  import { createVirtualizer } from '@tanstack/svelte-virtual';
 
   // eslint-disable-next-line no-undef
   export let items: T[];
@@ -14,15 +14,7 @@
   let virtualizer = createVirtualizer<HTMLDivElement, HTMLDivElement>({
     count: items.length,
     getScrollElement: () => virtualListEl,
-    estimateSize: () => itemHeight ?? 100,
-    measureElement: (el, entry, instance) => {
-      const measurement = measureElement(el, entry, instance);
-      // If the measurement is 0, the element is not visible, so we don't want to lose the cached value
-      if (measurement > 0) {
-        return measurement;
-      }
-      return instance.measurementsCache[instance.indexFromElement(el)]?.size ?? itemHeight;
-    },
+    estimateSize: () => itemHeight,
     overscan,
   });
 
@@ -32,7 +24,7 @@
     $virtualizer.setOptions({
       count: items.length,
       getScrollElement: () => virtualListEl,
-      estimateSize: () => itemHeight ?? 100,
+      estimateSize: () => itemHeight,
       overscan,
     });
     virtualizerUpdateWrapper = virtualizer;
@@ -48,14 +40,10 @@
   }
 
   $: vitems = $virtualizerUpdateWrapper.getVirtualItems();
-
-  function measure(el: HTMLDivElement) {
-    $virtualizerUpdateWrapper.measureElement(el);
-  }
-
+  
   let virtualItemEls: HTMLDivElement[] = [];
   $: if (virtualItemEls.length) {
-    virtualItemEls.forEach(measure);
+    virtualItemEls.forEach((el) =>$virtualizer.measureElement(el));
   }
 </script>
 
