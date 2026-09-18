@@ -52,7 +52,7 @@
   $: explicitlyDisabled = $state.installed.state && !$state.enabled.state;
 
   $: installButtonDisplay = ((): ButtonDisplay => {
-    if ($state.inProgress) {
+    if ($state.inProgress && $state.installed.queued) {
       return {
         icon: mdiSync,
         iconHover: mdiSync,
@@ -113,6 +113,15 @@
   })();
 
   $: enableButtonDisplay = ((): ButtonDisplay => {
+    if ($state.inProgress && $state.enabled.queued) {
+      return {
+        icon: mdiSync,
+        iconHover: mdiSync,
+        iconClass: 'animate-spin [animation-direction:reverse]',
+        tooltip: $t('mod-list-item.wait', 'Wait for the current operation to complete.'),
+      };
+    }
+
     if ($state.enabled.queued) {
       return {
         icon: mdiTrayFull,
