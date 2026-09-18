@@ -258,7 +258,8 @@ export function popup(triggerNode: HTMLElement, args: PopupSettings) {
   window.addEventListener('keydown', onWindowKeyDown, true);
 
   // Render popup on initialization
-  render();
+  // Doesn't seem to be necessary (will render on open) and causes hitches when scrolling
+  // render();
 
   // Lifecycle
   return {

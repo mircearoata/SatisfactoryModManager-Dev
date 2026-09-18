@@ -2,13 +2,18 @@
   import { fade } from 'svelte/transition';
   import { thumbHashToDataURL } from 'thumbhash';
 
+  import { thumbhashCache } from './store';
+
   export let image: string;
   export let thumbhash: string;
   export let alt: string;
 
-  $: thumbHashData = (() => {
+  let thumbHashData: string | undefined;
+  $: if (thumbhash in thumbhashCache) {
+    thumbHashData = thumbhashCache[thumbhash];
+  } else {
     try {
-      return thumbHashToDataURL(
+      thumbHashData = thumbHashToDataURL(
         new Uint8Array(
           atob(thumbhash)
             .split('')
@@ -18,7 +23,8 @@
     } catch (e) {
       console.error(e);
     }
-  })();
+    thumbhashCache[thumbhash] = thumbHashData;
+  }
 
   let imageLoaded = false;
   let thumbnailLoaded = false;
@@ -33,6 +39,7 @@
     thumbnailLoaded = false;
   }
 </script>
+
 <div class="relative min-h-full min-w-full max-h-full max-w-full">
   <img
     class="absolute max-h-full min-h-full min-w-full max-w-full transition-opacity delay-100 duration-200 ease-linear"

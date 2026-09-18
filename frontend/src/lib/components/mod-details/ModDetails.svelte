@@ -12,9 +12,9 @@
   import ResponsiveButton from '$lib/components/ResponsiveButton.svelte';
   import SvgIcon from '$lib/components/SVGIcon.svelte';
   import T, { translationElementPart } from '$lib/components/T.svelte';
-  import Thumbhash from '$lib/components/Thumbhash.svelte';
   import Tooltip from '$lib/components/Tooltip.svelte';
   import ModChangelog from '$lib/components/modals/ModChangelog.svelte';
+  import Thumbhash from '$lib/components/thumbhash/Thumbhash.svelte';
   import { AiUseDisclosureType, CompatibilityState, ControllerCompatibilityState } from '$lib/generated';
   import { type PopupSettings, getModalStore, popup } from '$lib/skeletonExtensions';
   import { addQueuedModAction } from '$lib/store/actionQueue';
