@@ -275,8 +275,8 @@
         id="mod-details-favorite"
         class="w-8 h-8 @lg/mods-list:mx-1"
         buttonClass="w-full h-full"
-        display={favoriteButtonDisplay}
         disabled={!mod}
+        display={favoriteButtonDisplay}
         onClickAction={$favorite.toggle}
       />
     </div>
@@ -296,13 +296,13 @@
   </div>
 
   <div use:popup={authorsMenu}>
-    <button class="btn px-4 h-10 text-sm w-full bg-secondary-600">
+    <button class="btn px-4 h-10 text-sm w-full bg-secondary-600" disabled={!mod || !mod.authors || mod.authors.length === 0}>
       <span class="whitespace-break-spaces">
         <T
           defaultValue={'Contributors <1>({authors})</1>'}
           keyName="mod-details.contributors"
           params={{
-            authors: mod?.authors.length ?? 0,
+            authors: mod?.authors.length ?? '\u00A0\u00A0',
           }}
           parts={[
             translationElementPart('span', {
@@ -455,7 +455,7 @@
     <div class="pt-2" use:popup={changeVersionMenu}>
       <button
         class="btn px-4 h-10 text-sm w-full bg-secondary-600"
-        disabled={!$canInstallMods}
+        disabled={!$canInstallMods || !mod || !mod.versions || mod.versions.length === 0}
       >
         <Marquee>
           <T defaultValue="Change version" keyName="mod-details.change-version" />
@@ -506,7 +506,7 @@
     </div>
     {#if (!mod || !('offline' in mod)) && !$offline}
       <div class="pt-2" use:popup={changelogMenu}>
-        <button class="btn px-4 h-10 text-sm w-full bg-secondary-600">
+        <button class="btn px-4 h-10 text-sm w-full bg-secondary-600" disabled={!mod || !mod.versions || mod.versions.length === 0}>
           <Marquee>
             <T defaultValue="Changelogs" keyName="mod-details.changelogs" />
           </Marquee>
@@ -530,7 +530,9 @@
     <div class="pt-2">
       <button
         class="btn px-4 h-10 text-sm w-full bg-primary-900"
-        on:click={() => BrowserOpenURL(ficsitAppLink)}>
+        disabled={!mod}
+        on:click={() => BrowserOpenURL(ficsitAppLink)}
+      >
         <span class="whitespace-break-spaces">
           <T defaultValue="View on ficsit.app" keyName="mod-details.view-on-ficsit-app" />
         </span>
