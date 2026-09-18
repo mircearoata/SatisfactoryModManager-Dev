@@ -104,7 +104,7 @@
         display.tooltip += $t('mod-list-item.compatibility-note-none', ' (None specified)');
       }
     }
-    if ($state.installed.queued) {
+    if ($state.enabled.queued) {
       display.tooltip = $t('mod-list-item.queued', 'This mod is already queued for another operation.');
       delete display.tooltipMarkdown;
     }
