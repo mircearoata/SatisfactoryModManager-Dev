@@ -8,8 +8,8 @@
   import ResponsiveButton, { type ButtonDisplay } from '$lib/components/ResponsiveButton.svelte';
   import SvgIcon from '$lib/components/SVGIcon.svelte';
   import T from '$lib/components/T.svelte';
-  import Thumbhash from '$lib/components/Thumbhash.svelte';
   import Tooltip from '$lib/components/Tooltip.svelte';
+  import Thumbhash from '$lib/components/thumbhash/Thumbhash.svelte';
   import { CompatibilityState } from '$lib/generated';
   import { type PopupSettings, popup } from '$lib/skeletonExtensions';
   import {
