@@ -6,6 +6,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"howett.net/plist"
 
@@ -81,7 +82,7 @@ func getWhiskyBottlesPath() (string, error) {
 
 	defaultBottlesPath := filepath.Join(homeDir, whiskyDefaultBottlesRelativePath)
 
-	var bottlesPath string
+	bottlesPath := defaultBottlesPath
 
 	configPath := filepath.Join(homeDir, whiskyConfigRelativePath)
 	configBytes, err := os.ReadFile(configPath)
@@ -96,13 +97,12 @@ func getWhiskyBottlesPath() (string, error) {
 		_, err := plist.Unmarshal(configBytes, &config)
 		if err != nil {
 			slog.Error("failed to parse Whisky config file", slog.Any("error", err))
-		} else {
+		} else if config.DefaultBottleLocation != "" {
 			bottlesPath = config.DefaultBottleLocation
+			if strings.HasPrefix(bottlesPath, "~/") {
+				bottlesPath = filepath.Join(homeDir, bottlesPath[2:])
+			}
 		}
-	}
-
-	if bottlesPath == "" {
-		bottlesPath = defaultBottlesPath
 	}
 
 	return bottlesPath, nil
