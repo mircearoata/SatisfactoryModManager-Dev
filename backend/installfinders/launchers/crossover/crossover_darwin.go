@@ -41,12 +41,24 @@ func crossover() ([]*common.Installation, []error) {
 	installations := make([]*common.Installation, 0)
 	errors := make([]error, 0)
 	for _, bottle := range bottles {
-		if !bottle.IsDir() {
+		bottleRoot := filepath.Join(bottlesPath, bottle.Name())
+		realBottleRoot, err := filepath.EvalSymlinks(bottleRoot)
+		if err != nil {
+			slog.Warn("failed to evaluate symlink for bottle path, using original path", slog.String("path", bottleRoot), slog.Any("error", err))
+			realBottleRoot = bottleRoot
+		}
+
+		stat, err := os.Stat(realBottleRoot)
+		if err != nil {
+			errors = append(errors, fmt.Errorf("failed to stat Crossover bottle %s: %w", realBottleRoot, err))
 			continue
 		}
-		bottleRoot := filepath.Join(bottlesPath, bottle.Name())
+		if !stat.IsDir() {
+			continue
+		}
+
 		search := func(finder func(winePrefix string, launcher string, launchPath []string) ([]*common.Installation, []error)) {
-			bottleInstalls, bottleErrs := finder(bottleRoot, "CrossOver", nil)
+			bottleInstalls, bottleErrs := finder(realBottleRoot, "CrossOver", nil)
 			installations = append(installations, bottleInstalls...)
 			if bottleErrs != nil {
 				errors = append(errors, bottleErrs...)

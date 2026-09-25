@@ -46,14 +46,24 @@ func cxpatcher() ([]*common.Installation, []error) {
 		}
 
 		for _, bottle := range bottles {
-			if bottle.IsDir() {
+			bottleRoot := filepath.Join(bottlesPath, bottle.Name())
+			realBottleRoot, err := filepath.EvalSymlinks(bottleRoot)
+			if err != nil {
+				slog.Warn("failed to evaluate symlink for bottle path, using original path", slog.String("path", bottleRoot), slog.Any("error", err))
+				realBottleRoot = bottleRoot
+			}
+
+			stat, err := os.Stat(realBottleRoot)
+			if err != nil {
+				errors = append(errors, fmt.Errorf("failed to stat CXPatcher bottle %s: %w", realBottleRoot, err))
+				continue
+			}
+			if !stat.IsDir() {
 				continue
 			}
 
-			bottleRoot := filepath.Clean(filepath.Join(bottlesPath, bottle.Name()))
-
 			search := func(finder func(winePrefix string, launcher string, launchPath []string) ([]*common.Installation, []error)) {
-				bottleInstalls, bottleErrs := finder(bottleRoot, "CXPatcher", nil)
+				bottleInstalls, bottleErrs := finder(realBottleRoot, "CXPatcher", nil)
 				installations = append(installations, bottleInstalls...)
 				if bottleErrs != nil {
 					errors = append(errors, bottleErrs...)
@@ -110,8 +120,13 @@ func getCXPatcherBottlesPaths() ([]string, error) {
 		if expanded == "" {
 			continue
 		}
-		if stat, err := os.Stat(expanded); err == nil && stat.IsDir() {
-			existingDirs = append(existingDirs, expanded)
+		realPath, err := filepath.EvalSymlinks(expanded)
+		if err != nil {
+			slog.Warn("failed to evaluate symlink for bottle path, using original path", slog.String("path", expanded), slog.Any("error", err))
+			realPath = expanded
+		}
+		if stat, err := os.Stat(realPath); err == nil && stat.IsDir() {
+			existingDirs = append(existingDirs, realPath)
 		}
 	}
 
