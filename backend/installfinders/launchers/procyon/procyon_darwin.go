@@ -69,6 +69,9 @@ func procyon() ([]*common.Installation, []error) {
 
 	realBottlePath, err := filepath.EvalSymlinks(bottlePath)
 	if err != nil {
+		if os.IsNotExist(err) {
+			return nil, nil
+		}
 		slog.Warn("failed to evaluate symlink for Procyon bottle path, using original path", slog.String("path", bottlePath), slog.Any("error", err))
 		realBottlePath = bottlePath
 	}

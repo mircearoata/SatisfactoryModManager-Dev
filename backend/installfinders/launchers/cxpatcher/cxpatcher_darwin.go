@@ -49,6 +49,9 @@ func cxpatcher() ([]*common.Installation, []error) {
 			bottleRoot := filepath.Join(bottlesPath, bottle.Name())
 			realBottleRoot, err := filepath.EvalSymlinks(bottleRoot)
 			if err != nil {
+				if os.IsNotExist(err) {
+					continue
+				}
 				slog.Warn("failed to evaluate symlink for bottle path, using original path", slog.String("path", bottleRoot), slog.Any("error", err))
 				realBottleRoot = bottleRoot
 			}
@@ -122,6 +125,9 @@ func getCXPatcherBottlesPaths() ([]string, error) {
 		}
 		realPath, err := filepath.EvalSymlinks(expanded)
 		if err != nil {
+			if os.IsNotExist(err) {
+				continue
+			}
 			slog.Warn("failed to evaluate symlink for bottle path, using original path", slog.String("path", expanded), slog.Any("error", err))
 			realPath = expanded
 		}

@@ -2,6 +2,7 @@ package common
 
 import (
 	"log/slog"
+	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -19,7 +20,9 @@ func OsPathEqual(path1, path2 string) bool {
 func realPath(path string) string {
 	newPath, err := filepath.EvalSymlinks(path)
 	if err != nil {
-		slog.Warn("failed to evaluate symlink, using original path", slog.String("path", path), slog.Any("error", err))
+		if !os.IsNotExist(err) {
+			slog.Warn("failed to evaluate symlink, using original path", slog.String("path", path), slog.Any("error", err))
+		}
 		return path
 	}
 	return newPath
