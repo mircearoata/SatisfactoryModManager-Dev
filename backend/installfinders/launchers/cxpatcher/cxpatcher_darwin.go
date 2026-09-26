@@ -136,7 +136,7 @@ func getCXPatcherBottlesPaths() ([]string, error) {
 		}
 	}
 
-	return deduplicatePaths(existingDirs), nil
+	return common.UniquePaths(existingDirs), nil
 }
 
 func parseCrossOverConf(content []byte) []string {
@@ -182,22 +182,4 @@ func expandBottlePath(rawPath, homeDir, username string) string {
 	}
 
 	return filepath.Clean(res)
-}
-
-func deduplicatePaths(paths []string) []string {
-	var unique []string
-	for _, p := range paths {
-		cleaned := filepath.Clean(p)
-		exists := false
-		for _, u := range unique {
-			if common.OsPathEqual(cleaned, u) {
-				exists = true
-				break
-			}
-		}
-		if !exists {
-			unique = append(unique, cleaned)
-		}
-	}
-	return unique
 }

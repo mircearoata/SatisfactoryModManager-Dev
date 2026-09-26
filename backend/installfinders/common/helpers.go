@@ -17,6 +17,25 @@ func OsPathEqual(path1, path2 string) bool {
 	return path1 == path2
 }
 
+func UniquePaths(paths []string) []string {
+	unique := make([]string, 0, len(paths))
+	for _, path := range paths {
+		exists := false
+		for _, u := range unique {
+			path1 := realPath(path)
+			path2 := realPath(u)
+			if OsPathEqual(path1, path2) {
+				exists = true
+				break
+			}
+		}
+		if !exists {
+			unique = append(unique, path)
+		}
+	}
+	return unique
+}
+
 func realPath(path string) string {
 	newPath, err := filepath.EvalSymlinks(path)
 	if err != nil {

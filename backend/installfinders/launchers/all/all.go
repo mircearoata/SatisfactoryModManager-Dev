@@ -9,6 +9,8 @@ import (
 	_ "github.com/satisfactorymodding/SatisfactoryModManager/backend/installfinders/launchers/legendary" // register legendary
 	_ "github.com/satisfactorymodding/SatisfactoryModManager/backend/installfinders/launchers/lutris"    // register lutris
 	_ "github.com/satisfactorymodding/SatisfactoryModManager/backend/installfinders/launchers/procyon"   // register procyon
+	_ "github.com/satisfactorymodding/SatisfactoryModManager/backend/installfinders/launchers/sikarugir" // register sikarugir
 	_ "github.com/satisfactorymodding/SatisfactoryModManager/backend/installfinders/launchers/steam"     // register steam
 	_ "github.com/satisfactorymodding/SatisfactoryModManager/backend/installfinders/launchers/whisky"    // register whisky
+	_ "github.com/satisfactorymodding/SatisfactoryModManager/backend/installfinders/launchers/wineskin"  // register wineskin
 )
