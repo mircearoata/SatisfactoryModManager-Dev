@@ -11,7 +11,7 @@ import (
 func OsPathEqual(path1, path2 string) bool {
 	path1 = realPath(path1)
 	path2 = realPath(path2)
-	if runtime.GOOS == "windows" {
+	if runtime.GOOS == "windows" || runtime.GOOS == "darwin" {
 		return strings.EqualFold(path1, path2)
 	}
 	return path1 == path2

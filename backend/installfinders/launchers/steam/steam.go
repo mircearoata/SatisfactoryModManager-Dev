@@ -36,7 +36,7 @@ func FindInstallationsSteam(steamPath string, launcher string, platform common.L
 	for _, libraryFolder := range rawLibraryFolders {
 		found := false
 		for _, existingLibraryFolder := range libraryFolders {
-			if common.OsPathEqual(existingLibraryFolder, libraryFolder) {
+			if common.OsPathEqual(platform.ProcessPath(existingLibraryFolder), platform.ProcessPath(libraryFolder)) {
 				found = true
 				break
 			}
