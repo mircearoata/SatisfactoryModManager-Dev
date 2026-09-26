@@ -4,8 +4,6 @@ import (
 	"log/slog"
 	"strings"
 
-	"golang.org/x/exp/maps"
-
 	"github.com/satisfactorymodding/SatisfactoryModManager/backend/installfinders/common"
 	"github.com/satisfactorymodding/SatisfactoryModManager/backend/installfinders/launchers"
 
@@ -15,7 +13,14 @@ import (
 func FindInstallations() ([]*common.Installation, []error) {
 	registrations := launchers.GetInstallFinders()
 
-	slog.Debug("finding installations", slog.String("launchers", strings.Join(maps.Keys(registrations), ",")))
+	names := make([]string, 0, len(registrations))
+	finders := make([]common.InstallFinderFunc, 0, len(registrations))
+	for _, registration := range registrations {
+		names = append(names, registration.ID)
+		finders = append(finders, registration.Finder)
+	}
 
-	return common.FindAll(maps.Values(registrations)...)
+	slog.Debug("finding installations", slog.String("launchers", strings.Join(names, ",")))
+
+	return common.FindAll(finders...)
 }

@@ -25,7 +25,9 @@ type procyonPlist struct {
 }
 
 func init() {
-	launchers.Add("Procyon", procyon)
+	// Before CXPatcher, because CXPatcher will detect Procyon's Crossover_patched.app
+	// Before CrossOver, because Procyon seems to be in the process of using the default CrossOver bottles path, rather than its custom one
+	launchers.AddOrdered("Procyon", procyon, -1)
 }
 
 func procyon() ([]*common.Installation, []error) {
