@@ -57,15 +57,15 @@ func crossover() ([]*common.Installation, []error) {
 			continue
 		}
 
-		search := func(finder func(winePrefix string, launcher string, launchPath []string) ([]*common.Installation, []error)) {
-			bottleInstalls, bottleErrs := finder(realBottleRoot, "CrossOver", nil)
+		search := func(finder func(winePrefix string, launcher string, launchPath []string) ([]*common.Installation, []error), launcherName string) {
+			bottleInstalls, bottleErrs := finder(realBottleRoot, fmt.Sprintf("CrossOver - %s", launcherName), nil)
 			installations = append(installations, bottleInstalls...)
 			if bottleErrs != nil {
 				errors = append(errors, bottleErrs...)
 			}
 		}
-		search(steam.FindInstallationsWine)
-		search(epic.FindInstallationsWine)
+		search(steam.FindInstallationsWine, "Steam")
+		search(epic.FindInstallationsWine, "Epic")
 	}
 
 	return installations, errors
